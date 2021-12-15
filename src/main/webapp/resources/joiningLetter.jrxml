@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.17.0.final using JasperReports Library version 6.17.0-6d93193241dd8cc42629e188b94f9e0bc5722efd  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="joiningLetter" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49027b52-a67e-4172-a6a2-5fec507a37e1">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="joiningLetter" class="java.lang.String"/>
+	<parameter name="name" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="183" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="570" height="50" uuid="dbca8ccc-d8b4-40a7-9934-1d686b792c47"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Goverment of haryana Ministry of Home and Administration of Justice]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="50" width="570" height="30" uuid="223ca39f-fd01-46e0-8749-4f0c5ff8d455"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Joining Letter]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="130" width="100" height="20" uuid="65a6aa00-cb46-4d1a-bc86-55126bece12c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[The Head HR,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="150" width="190" height="30" uuid="2c1c7da1-bd1a-4f7f-b0f1-e685b174b17d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[Goverment of Haryana Ministry of Home and Administration of justice]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="570" height="124" uuid="bbfd4605-dfc9-4cb5-9973-c4a1abe048bd"/>
+				<textFieldExpression><![CDATA[$P{joiningLetter}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="108" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="160" height="20" uuid="e67f7f83-d8ab-4dfa-b82b-ed6c688f863e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[Submitted Document]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="10" width="160" height="20" uuid="c6cd8c0d-9239-420a-a581-3ade2293e505">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[Signature of the joinee]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="40" width="110" height="20" uuid="4d16d5c8-5438-47d3-9e2b-e02c71b26d29">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[Employee Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="60" width="110" height="20" uuid="f2354cbd-7bfc-4cb1-8559-52a788d69e61">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="80" width="110" height="20" uuid="67dd3c73-b369-4ec0-82fd-155d15cb5572">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[Place]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="380" y="40" width="100" height="20" uuid="2fa79268-1984-4c09-a8e9-4a2d1dc8a3cf">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

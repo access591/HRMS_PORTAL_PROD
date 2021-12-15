@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Other</h1>
+
+
+					</div>
+
+					<div class="row">
+
+						<div class="col-12">
+							<div class="card">
+							<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Track all Enquiries</h5>
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}"
+											style="color: red"></div>
+									</div>
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/updateTrackallEnquiries}"
+										th:object="${trackallEnquiries}" method="post">
+										<div class="form-row">
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Emp Enquiry ID. </label> <input
+													type="text" id="id" name="id"
+													th:value="${trackallEnquiriesEdit.id}" class="form-control" title="Emp Enquiry ID"
+													readonly>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Employee Name</label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" name="empCode.empCode"
+													id="empCode.empCode" title="Employee name" disabled="disabled">
+													<option value="">Select Employee</option>
+													<option th:each="e :${listEmployee}"
+														th:value="${e.getEmpCode()}" th:text="${e.getEmpName()}"
+														th:field="${trackallEnquiriesEdit.empCode.empCode}"></option>
+												</select>
+
+											</div>
+											
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Category Code </label> <label
+													style="color: red">*</label> <select title="Category Code"
+													class="form-control select2"
+													name="categoryCode.categoryCode"
+													id="categoryCode.categoryCode" disabled="disabled">
+													<option value="">Select Employee</option>
+													<option th:each="c :${listCategory}"
+														th:value="${c.getCategoryCode()}"
+														th:text="${c.getCategoryName()}"
+														th:field="${trackallEnquiriesEdit.categoryCode.categoryCode}"></option>
+												</select>
+
+											</div>
+											
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Designation Code </label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" name="desgCode.desgCode" title="Designation Code"
+													id="desgCode.desgCode" disabled="disabled">
+													<option value="">Select Employee</option>
+													<option th:each="d :${listDesignation}"
+														th:value="${d.getDesgCode()}" th:text="${d.getDesgName()}"
+														th:field="${trackallEnquiriesEdit.desgCode.desgCode}"></option>
+												</select>
+
+											</div>
+
+										
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Present posting</label> <input
+													type="text" id="prsentPosting" name="prsentPosting"
+													title="Present posting"
+													th:value="${trackallEnquiriesEdit.prsentPosting}"
+													class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Date Of Birth</label> <input
+													type="date" id="dob" name="dob" title="Date Of Birth"
+													th:value="${#dates.format(trackallEnquiriesEdit.dob,'yyyy-MM-dd')}"
+													class="form-control">
+											</div>
+
+									
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Deputation File No</label> <input
+													type="text" id="depuFileNo" name="depuFileNo"
+													title="Deputation File No"
+													th:value="${trackallEnquiriesEdit.depuFileNo}"
+													class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Deputation Period</label> <input
+													type="text" id="deputationPeriod" name="deputationPeriod"
+													title="Deputation Period"
+													th:value="${trackallEnquiriesEdit.deputationPeriod}"
+													class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Deputation Date </label> <input
+													type="date" id="deputationDate" name="deputationDate"
+													title="Deputation date"
+													th:value="${#dates.format(trackallEnquiriesEdit.deputationDate,'yyyy-MM-dd')}"
+													class="form-control">
+											</div>
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Under Rule7 File No </label> <input
+													type="text" id="underRule7FileNo" name="underRule7FileNo"
+													title="Under Rule7 File No"
+													th:value="${trackallEnquiriesEdit.underRule7FileNo}"
+													class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Under Rule8 File No</label> <input
+													type="text" id="underRule8FileNo" name="underRule8FileNo"
+													title="Under Rule8 File No"
+													th:value="${trackallEnquiriesEdit.underRule8FileNo}"
+													class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Under Rule8 Period </label> <input
+													type="date" id="underRule8Period" name="underRule8Period"
+													title="Under Rule8 Period"
+													th:value="${#dates.format(trackallEnquiriesEdit.underRule8Period,'yyyy-MM-dd')}"
+													class="form-control">
+											</div>
+
+										
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Under Rule8 Date</label> <input
+													type="date" id="underRule8Date" name="underRule8Date"
+													th:value="${#dates.format(trackallEnquiriesEdit.underRule8Date,'yyyy-MM-dd')}"
+													title="under Rule8 Date" class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Vigilance INQ File No</label> <input
+													type="text" id="vigilanceFileNo" name="vigilanceFileNo"
+													th:value="${trackallEnquiriesEdit.vigilanceFileNo}"
+													title="vigilance File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Vigilance INQ Period </label> <input
+													type="date" id="vigilanceInqPeriod"
+													name="vigilanceInqPeriod" title="vigilance Inq Period"
+													th:value="${#dates.format(trackallEnquiriesEdit.vigilanceInqPeriod,'yyyy-MM-dd')}"
+													class="form-control">
+											</div>
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Vigilance INQ Date </label> <input
+													type="date" id="vigilanceInqDate" name="vigilanceInqDate"
+													title="vigilance Inq Date"
+													th:value="${#dates.format(trackallEnquiriesEdit.vigilanceInqDate,'yyyy-MM-dd')}"
+													class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Suspention File No</label> <input
+													type="text" id="suspentionFileNo" name="suspentionFileNo"
+													title="suspention File No"
+													th:value="${trackallEnquiriesEdit.suspentionFileNo}"
+													class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Suspention File Period </label> <input
+													type="date" id="suspentionFilePeriod"
+													name="suspentionFilePeriod" title="suspention File Period"
+													th:value="${#dates.format(trackallEnquiriesEdit.suspentionFilePeriod,'yyyy-MM-dd')}"
+													class="form-control">
+											</div>
+
+								
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Suspention File Date </label> <input
+													type="date" id="suspentionFileDate"
+													name="suspentionFileDate"
+													th:value="${#dates.format(trackallEnquiriesEdit.suspentionFileDate,'yyyy-MM-dd')}"
+													title="suspention File Date" class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Promotion File No</label> <input
+													type="text" id="promtionFileNo" name="promtionFileNo"
+													th:value="${trackallEnquiriesEdit.promtionFileNo}"
+													title="promtion File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Promotion File Date </label> <input
+													type="date" id="promtionFileDate" name="promtionFileDate"
+													th:value="${#dates.format(trackallEnquiriesEdit.promtionFileDate,'yyyy-MM-dd')}"
+													title="promtionFileDate" class="form-control">
+											</div>
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">ACP File No</label> <input
+													type="text" id="acpFileNo" name="acpFileNo"
+													th:value="${trackallEnquiriesEdit.acpFileNo}"
+													title="Acp File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">ACP File Date</label> <input
+													type="date" id="acpFileDate" name="acpFileDate"
+													th:value="${#dates.format(trackallEnquiriesEdit.acpFileDate,'yyyy-MM-dd')}"
+													title="Acp File Date" class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">ARP File No </label> <input
+													type="text" id="arpFileNo" name="arpFileNo"
+													th:value="${trackallEnquiriesEdit.arpFileNo}"
+													title="Arp File No" class="form-control noHTML">
+											</div>
+
+									
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">ARP File Date</label> <input
+													type="date" id="arpFileDate" name="arpFileDate"
+													th:value="${#dates.format(trackallEnquiriesEdit.arpFileDate,'yyyy-MM-dd')}"
+													title="arp File Date" class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">ACR File No</label> <input
+													type="text" id="acrFileNo" name="acrFileNo"
+													th:value="${trackallEnquiriesEdit.acrFileNo}"
+													title="acr File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">ACR File Date </label> <input
+													type="date" id="acrFileDate" name="acrFileDate"
+													th:value="${#dates.format(trackallEnquiriesEdit.acrFileDate,'yyyy-MM-dd')}"
+													title="acr File Date" class="form-control">
+											</div>
+
+									
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Training File No</label> <input
+													type="text" id="trainingFileNo" name="trainingFileNo"
+													th:value="${trackallEnquiriesEdit.trainingFileNo}"
+													title="training File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Training File Date </label> <input
+													type="date" id="trainingFileDate" name="trainingFileDate"
+													th:value="${#dates.format(trackallEnquiriesEdit.trainingFileDate,'yyyy-MM-dd')}"
+													title="training File Date" class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">LTC File No </label> <input
+													type="text" id="ltcFileNo" name="ltcFileNo"
+													th:value="${trackallEnquiriesEdit.ltcFileNo}"
+													title="ltc File No" class="form-control noHTML">
+											</div>
+									
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">LTC File Date </label> <input
+													type="date" id="ltcFileDate" name="ltcFileDate"
+													th:value="${#dates.format(trackallEnquiriesEdit.ltcFileDate,'yyyy-MM-dd')}"
+													title="ltc File Date" class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Leave ACC File No </label> <input
+													type="text" id="leaveAccFileNo" name="leaveAccFileNo"
+													th:value="${trackallEnquiriesEdit.leaveAccFileNo}"
+													title="leave Acc FileNo" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Leave ACC File Date </label> <input
+													type="date" id="leaveAccFileDate" name="leaveAccFileDate"
+													th:value="${#dates.format(trackallEnquiriesEdit.leaveAccFileDate,'yyyy-MM-dd')}"
+													title="leave Acc File Date" class="form-control">
+											</div>
+									
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Award </label> <input type="text"
+													id="award" name="award" title="award"
+													th:value="${trackallEnquiriesEdit.award}"
+													class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Award Date</label> <input
+													type="date" id="awardDate" name="awardDate"
+													th:value="${#dates.format(trackallEnquiriesEdit.awardDate,'yyyy-MM-dd')}"
+													title="Award Date" class="form-control">
+											</div>
+
+
+										</div>
+
+
+
+
+										<button type="submit" class="btn btn-primary"><em class="fas fa-check"></em> &nbsp; Update</button>
+										&nbsp;
+										<button type="button" class="btn btn-outline-primary"
+											onclick="window.location.href='../trackallEnquiries';"><em class="fas fa-times"></em> &nbsp;Cancel</button>
+
+									</form>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+
+			$('#example').DataTable({
+
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+
+		});
+	</script>
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+
+</body>
+</html>

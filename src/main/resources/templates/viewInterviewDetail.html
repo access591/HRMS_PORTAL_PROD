@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script  src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<style>
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+bottom: .5em;
+}
+
+body {
+	opacity: 0;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+
+</style>
+
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+<div class="wrapper">
+<nav id="sidebar" class="sidebar"aria-label="Site sidebar">
+ <div th:replace="/fragments/sidebar :: div"></div>
+ </nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title"> HRMS</h1>
+						<nav aria-label="breadcrumb">
+						</nav>
+					</div>
+					
+					<form id="validation-form" action="#" th:action="@{/addInterviewDetail}" th:object="${interviewMaster}" method="post">
+					
+					<div class="row">
+					
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title">VIEW IINTERVIEW DETAIL </h5>
+								<div class="alert-outline">
+									<div th:if="${message}" th:text="${message}" style="color: red">
+									</div> 
+									</div>	
+								</div>
+								<div class="card-body">
+									
+											<table id="example1"
+												class="table table-striped table-bordered table-sm" style="width: 100%">
+												<thead>
+													<tr>
+														<th scope="col" class="text-center">Interview Code</th>
+														<th scope="col" class="text-center">Interview Date</th>
+														<th scope="col" class="text-center">Application Code</th>
+														<th scope="col" class="text-center">Application Date</th>
+														<th scope="col" class="text-center">Remarks</th>
+														<th scope="col">Overall Rating<label
+													style="color: red">*</label></th>
+														
+														
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+
+
+														<td><input type="text" class="form-control text-center" th:field="*{interviewCode}" readonly></td>
+
+														<td><input type="date" class="form-control" id="theDate" th:field="*{interviewDate}"></td>
+
+														<td>
+															<select class="form-control text-center" id = "applicantCode" onchange="chooseAppliCode()"
+																th:field="*{applicantCode.applicantCode}" style="width: auto;">
+																<option value="">Select</option>
+																<option th:each="applicantCode : ${listApplicantInfo}"
+																	th:text="${applicantCode.applicantName}" th:value="${applicantCode.applicantCode}"></option>
+															</select>
+														</td>
+														
+														<td><input type="date" class="form-control text-center" id="applicantDate" th:field = "*{applicantCode.applicantDate}"></td>
+
+														<td><input type="text" class="form-control text-center" th:field="*{remarks}"></td>
+														
+														<td><select class="form-control text-center" th:field="*{overAllRating}" ><option value="">Rating</option><option value="A+">A+</option> <option value="A">A</option> <option value="B">B</option> <option value="C">C</option> <option value="D">D</option></select></td>
+														
+														
+													</tr>
+													
+													
+												</tbody>
+
+											</table>
+											
+										
+										
+									
+								</div>
+							</div>
+						</div>
+	      
+					</div>
+					
+					
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-body">
+								
+									<table id="example2"
+												class="table table-striped table-bordered table-sm" style="width: 100%">
+												<thead>
+													<tr>
+														<th scope="col" class="text-center">Round 1 (Rating)<label
+													style="color: red">*</label></th>
+														<th scope="col" class="text-center">Round-1 Details </th>
+														<th scope="col" class="text-center">Round-2(Rating)</th>
+														<th scope="col" class="text-center">Round-2 Details</th>
+														<th scope="col" class="text-center">Round-3 Rating</th>
+														<th scope="col" class="text-center">Round-3 Details</th>
+														
+														
+													</tr>
+												</thead>
+												<tbody>
+													<tr id="adds0">
+
+
+														<td><select class="form-control text-center" th:field="*{rating1}" ><option value="">Rating</option> <option value="A+">A+</option> <option value="A">A</option> <option value="B">B</option> <option value="C">C</option> <option value="D">D</option></select></td>
+
+														<td><input type="text" class="form-control text-center" th:field="*{round1}"></td>
+
+														<td><select class="form-control text-center" th:field="*{rating2}" > <option value="">Rating</option> <option value="A+">A+</option> <option value="A">A</option> <option value="B">B</option> <option value="C">C</option> <option value="D">D</option></select></td>
+														
+														<td><input type="text" class="form-control text-center" th:field="*{round2}"></td>
+
+														<td><select class="form-control text-center" th:field="*{rating3}" > <option value="">Rating</option> <option value="A+">A+</option> <option value="A">A</option> <option value="B">B</option> <option value="C">C</option> <option value="D">D</option></select></td>
+														
+														<td><input type="text" class="form-control text-center" th:field="*{round3}"></td>
+														
+														
+													</tr>
+													
+													
+												</tbody>
+
+											</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					
+					
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-body">
+									<table id="example3"
+												class="table table-striped table-bordered table-sm" style="width: 100%">
+												<thead>
+													<tr>
+														<th scope="col" class="text-center">Round 4 (Rating)</th>
+														<th scope="col" class="text-center">Round-4 Details</th>
+														<th scope="col" class="text-center">Round 5 (Rating)</th>
+														<th scope="col" class="text-center">Round-5 Details</th>
+														<th scope="col" class="text-center">Round 6 (Rating)</th>
+														<th scope="col" class="text-center">Round-6 Details</th>
+														
+														
+													</tr>
+												</thead>
+												<tbody>
+													<tr id="addt0">
+
+
+														<td><select class="form-control text-center" th:field="*{rating4}" > <option value="">Rating</option> <option value="A+">A+</option> <option value="A">A</option> <option value="B">B</option> <option value="C">C</option> <option value="D">D</option></select></td>
+
+														<td><input type="text" class="form-control text-center" th:field="*{round4}"></td>
+
+														<td><select class="form-control text-center" th:field="*{rating5}" > <option value="">Rating</option> <option value="A+">A+</option> <option value="A">A</option> <option value="B">B</option> <option value="C">C</option> <option value="D">D</option></select></td>
+														
+														<td><input type="text" class="form-control text-center" th:field="*{round5}"></td>
+
+														<td><select class="form-control text-center" th:field="*{rating6}" > <option value="">Rating</option> <option value="A+">A+</option> <option value="A">A</option> <option value="B">B</option> <option value="C">C</option> <option value="D">D</option></select></td>
+														
+														<td><input type="text" class="form-control text-center" th:field="*{round6}"></td>
+														
+														
+													</tr>
+													
+													
+												</tbody>
+
+											</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<input
+    							onclick="window.history.go(-1); return false;"
+    							type="submit" class="btn btn-primary"
+    							value="Back"
+							/>
+					
+					</form>
+					
+				</div>
+				
+
+			</main>
+
+		<footer class="footer">
+		<div th:replace="/fragments/footer :: div"></div>
+		</footer>
+		</div>
+		</div>
+	
+	
+	
+	<script>
+	
+	$(document).ready(function(){
+		console.log("click function...");
+		var i=1;
+		counter = i;
+		$("#add_row").click(function(){
+		$('#addr'+i).html(
+				"<td><input type='text' name='interviewForm["+i+"].interviewCode' class='form-control'></td>"+
+				"<td><input type='date' class='form-control' name='interviewForm["+i+"].interviewDate'></td>"+
+				"<td><select class='form-control' name='interviewForm["+i+"].applicantCode'style='width: 107px;'><option value=''>Select </option></select></td>"+
+				"<td><input type='date' class='form-control' id='applicantDate["+i+"]'name='interviewForm["+i+"].applicantDate'</td>"+
+				"<td><input type='tex' class='form-control' name='interviewForm["+i+"].remarks'></td>"+
+				"<td><select class='form-control text-center' name='interviewForm["+i+"].overAllRating' ><option value=''>Rating</option><option value='A+'>A+</option> <option value='A'>A</option> <option value='B'>B</option> <option value='C'>C</option> <option value='D'>D</option></select></td>"+
+				"<td><a href='#'><i class='fas fa-eye'></i></a></td>");
+
+		$('#example1').append('<tr id="addr'+(i+1)+'"></tr>');
+		
+		
+		$('#adds'+i).html(
+				"<td><select class='form-control text-center' name='interviewForm["+i+"].rating1' ><option value=''>Rating</option><option value='A+'>A+</option> <option value='A'>A</option> <option value='B'>B</option> <option value='C'>C</option> <option value='D'>D</option></select></td>"+
+				"<td><input type='text' class='form-control' name='interviewForm["+i+"].round1'></td>"+
+				
+				"<td><select class='form-control text-center' name='interviewForm["+i+"].rating2' ><option value=''>Rating</option><option value='A+'>A+</option> <option value='A'>A</option> <option value='B'>B</option> <option value='C'>C</option> <option value='D'>D</option></select></td>"+
+				"<td><input type='text' class='form-control' name='interviewForm["+i+"].round2'></td>"+
+				"<td><select class='form-control text-center' name='interviewForm["+i+"].rating3' ><option value=''>Rating</option><option value='A+'>A+</option> <option value='A'>A</option> <option value='B'>B</option> <option value='C'>C</option> <option value='D'>D</option></select></td>"+
+				"<td><input type='text' class='form-control' name='interviewForm["+i+"].round3'></td>"+
+				"<td><a href='#'><i class='fas fa-eye'></i></a></td>");
+
+		$('#example2').append('<tr id="adds'+(i+1)+'"></tr>');
+		
+		
+		$('#addt'+i).html(
+				"<td><select class='form-control text-center' name='interviewForm["+i+"].rating4' ><option value=''>Rating</option><option value='A+'>A+</option> <option value='A'>A</option> <option value='B'>B</option> <option value='C'>C</option> <option value='D'>D</option></select></td>"+
+				"<td><input type='text' class='form-control' name='interviewForm["+i+"].round4'></td>"+
+				
+				"<td><select class='form-control text-center' name='interviewForm["+i+"].rating5' ><option value=''>Rating</option><option value='A+'>A+</option> <option value='A'>A</option> <option value='B'>B</option> <option value='C'>C</option> <option value='D'>D</option></select></td>"+
+				"<td><input type='text' class='form-control' name='interviewForm["+i+"].round5'></td>"+
+				"<td><select class='form-control text-center' name='interviewForm["+i+"].rating6' ><option value=''>Rating</option><option value='A+'>A+</option> <option value='A'>A</option> <option value='B'>B</option> <option value='C'>C</option> <option value='D'>D</option></select></td>"+
+				"<td><input type='text' class='form-control' name='interviewForm["+i+"].round6'></td>"+
+				"<td><a href='#'><i class='fas fa-eye'></i></a></td>");
+
+		$('#example3').append('<tr id="addt'+(i+1)+'"></tr>');
+		
+		
+		i++; 
+	});
+		
+
+	
+
+		
+		
+		
+		
+		$("#delete_row").click(function(){
+		 	 if(i>1){
+				 $("#addr"+(i-1)).html('');
+				 $("#adds"+(i-1)).html('');
+				 $("#addt"+(i-1)).html('');
+				 
+				 i--;
+				 }
+			 });
+		
+		
+
+	});
+	
+	
+
+	
+	</script>
+	
+	<script>
+	$(document).ready(function () {
+		$('#example1').DataTable({
+		"scrollY": "200px",
+		"scrollCollapse": true, 
+		});
+		$('.dataTables_length').addClass('bs-select');
+		});
+	</script>
+	
+	<script>
+	
+	function chooseAppliCode(){
+		var applicantCode = document.getElementById("applicantCode").value;
+		
+		console.log("applicant code "+ applicantCode);
+	    const xhr = new XMLHttpRequest();
+	    xhr.open('GET','getApplicantDate/'+applicantCode,true);
+	    xhr.getResponseHeader('content-type','application/json');
+	    xhr.onload = function(){
+	        if(this.status===200){
+	        	let obj = JSON.parse(this.responseText);
+	            console.log(obj);
+
+				
+				
+				$('#applicantDate').val(obj);				
+				
+	        }
+	        else{
+	            console.error("some error occured");
+	        }
+		
+	    }
+	    xhr.send();
+	}
+	</script>
+	
+	<script>
+	$(document).ready(function(){
+		  var date = new Date();
+
+		  var day = ("0" + date.getDate()).slice(-2); var month = ("0" + (date.getMonth() + 1)).slice(-2);
+
+		  var today = date.getFullYear()+"-"+(month)+"-"+(day) ;
+		  
+		  $('#theDate').val(today);
+		  
+		});
+	
+	$(document).ready(function(){
+		  var date = new Date();
+
+		  var day = ("0" + date.getDate()).slice(-2); var month = ("0" + (date.getMonth() + 1)).slice(-2);
+
+		  var today = date.getFullYear()+"-"+(month)+"-"+(day) ;
+		  
+		  $('#theDate2').val(today);
+		  
+		});
+
+		
+	</script>
+	
+		<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+   
+
+		
+</body>
+</html>

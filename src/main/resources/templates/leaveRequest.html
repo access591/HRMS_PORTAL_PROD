@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script type="text/javascript" th:src="@{/js/ajax_leaveRequest.js}"></script>
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+
+
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	jQuery(document).ready(function($) {
+
+		$('#validation-form').validate({
+			errorClass : "my-error-class",
+			submitHandler : function(form) { // for demo
+				//alert('valid form');
+				return true
+			}
+		});
+
+		jQuery.validator.addMethod("noHTML", function(value, element) {
+			return this.optional(element) || /^([a-zA-Z0-9]+)$/.test(value);
+		}, "No HTML tags are allowed!");
+
+	});
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">
+										Leave Request</h5>
+										<input type="hidden" id="mess" name="mess"th:value="${message}">
+								</div>
+
+
+
+
+								<div class="card-body">
+
+
+									<div class="row">
+										<div th:if="${session.message}"
+											class="alert alert-primary alert-dismissible fade show">
+											<p class="text-center" th:text="${session.message.content}"></p>
+											<button type="button" class="close" data-dismiss="alert">&times;</button>
+											<th:block th:text="${#session.removeAttribute('message')}"></th:block>
+
+										</div>
+									</div>
+
+									<form action="#" th:action="@{/saveLeaveRequest}"
+										th:object="${leaveRequest}" method="post">
+
+
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Department Code </label> <label style="color: red">*</label>
+													<input class="form-control" id="leaveRequestDeptCode"
+														value="" title="Department Code" readonly />
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+												<label class="form-label">Select Department</label> <label
+													style="color: red">*</label> <select class="form-control"
+													id="employeeDropDownDepartment"
+													onchange="changeDepartment()" required
+													title="Department Name"
+													th:field="*{department.departmentCode}">
+													<option value="">Select Department</option>
+													<option th:each="dept : ${departmentList}"
+														th:text="${dept.deptName}"
+														th:value=" ${dept.departmentCode}"></option>
+												</select> <input type="hidden" name="" value="" id="hiddenField">
+											</div>
+
+										</div>
+
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Employee Code </label> <label style="color: red">*</label>
+													<input type="text" class="form-control" id="leaveEmpId"
+														value="" title="Employee Code" readonly>
+												</div>
+											</div>
+
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label">Employee</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" id="leaveEmpName"
+														title="Employee" onchange="changeEmployee()"
+														th:field="*{employee.empCode}" required>
+														<option value=''>--Select--</option>
+
+
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Type of Leave </label> <label style="color: red">*</label>
+													<select class="form-control select2" id="leave_type_id"
+														th:field="*{requestType}" onchange="leaveTypeFun()"
+														required>
+														<option value="">Select</option>
+														<option value="single">Single</option>
+														<option value="multiple">Multiple</option>
+													</select>
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+												<label class="form-label">Apply Date</label> <label
+													style="color: red">*</label> <input type="date"
+													class="form-control" id='applyDate' th:field="*{applyDate}"
+													data-toggle="tooltip" title="Select date" required>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<label class="form-label">From Date</label> <label
+													style="color: red">*</label> <input type="date"
+													id="from_date" class="form-control" th:field="*{fromDate}"
+													onchange="getFromDate(this.value)" data-toggle="tooltip"
+													title="Select date" required>
+											</div>
+											<div class="col-12 col-lg-6">
+												<label class="form-label">To Date</label> <label
+													style="color: red">*</label> <input type="date"
+													id="to_date" class="form-control" th:field="*{toDate}"
+													onchange="getToDate(this.value)" data-toggle="tooltip"
+													title="Select date" required>
+											</div>
+										</div>
+
+										<!-- from and to type of leave  -->
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<label class="form-label">From Leave </label> <select
+													class="form-control" th:field="*{fromDateType}"
+													id="from_date_type" title="Select From Leave"
+													onchange="fromDayTypeValue(this.value)">
+
+													<option value=" f">Full</option>
+													<option value="fh">First Half</option>
+													<option value="sh">Second Half</option>
+													<option value="s">Short</option>
+												</select>
+											</div>
+											<div class="col-12 col-lg-6">
+												<label class="form-label">To Leave </label> <select
+													class="form-control" th:field="*{toDateType}"
+													id="to_date_type" onchange="toDayTypeValue(this.value)"
+													title="Select To Leave">
+													<option value="f">Full</option>
+													<option value="fh">First Half</option>
+													<option value="sh">Second Half</option>
+													<option value="s">Short</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="row">
+
+											<div class="col-12 col-lg-6">
+												<label class="form-label">Leave type</label> <select
+													class="form-control" th:field="*{leave.levCode}"
+													title="Type of Leave" required id="leavetype">
+													<option value="">Leave Type</option>
+
+												</select>
+											</div>
+
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Leave(days) </label> <input type="text"
+														id="leave_for" class="form-control noHTML" name="leaveFor"
+														th:field="*{leaveFor}" readonly title="Total Leave">
+												</div>
+											</div>
+
+										</div>
+
+
+										<div class="row">
+
+											<div class="col-12 col-lg-6">
+
+												<label class="form-label">Order Number</label> <input
+													type="text" name="orderNumber" value="" id=""
+													class="form-control noHTML" th:field="*{orderNo}">
+
+											</div>
+
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Order Date </label> <input type="date" id=""
+														class="form-control" title="Total Leave"
+														th:field="*{orderDate}">
+												</div>
+											</div>
+
+										</div>
+
+
+										<div class="row">
+
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+
+													<label> Contact </label> <input type="text" id=""
+														class="form-control noHTML" title="Total Leave"
+														th:field="*{contact}" name="contact">
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Reason </label>
+													<textarea class="form-control noHTML" th:field="*{reason}"
+														title="Post Your Reason" name="reason"></textarea>
+												</div>
+											</div>
+										</div>
+
+
+
+										<!-- leave detail card  -->
+										<div class="card">
+
+											<div class="card-header">
+												<h5 class="card-title">Leave Status</h5>
+											</div>
+											<div class="card-body">
+
+
+												<div class="row container">
+
+													<div class="col-12 col-lg-4">
+														<div class="form-group">
+															<label> Leave Granted </label> <input type="text"
+																class="form-control" title="Leave taken"
+																name="leaveGrant" id="leavegrant" readonly>
+														</div>
+													</div>
+
+													<div class="col-12 col-lg-4">
+														<div class="form-group">
+															<label> Leave Taken </label> <input type="text"
+																class="form-control noHTMLtags" title="Leave taken"
+																th:field="*{reason}" id="leavetaken" name="leaveTaken"
+																readonly>
+
+														</div>
+													</div>
+
+
+													<div class="col-12 col-lg-4">
+														<div class="form-group">
+															<label> Leave Availed </label> <input type="text"
+																class="form-control noHTMLtags" title="Leave Availed"
+																th:field="*{reason}" name="leaveAvailed"
+																id="leaveavailed" readonly>
+
+														</div>
+													</div>
+
+
+												</div>
+
+
+											</div>
+										</div>
+
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+
+									</form>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="datatables-buttons"
+										class="table table-striped display" style="width: 100%">
+										<thead>
+											<tr>
+												<th scope="col" class="text-center">Emp Code</th>
+												<th scope="col" class="text-center">Name</th>
+												<th scope="col" class="text-center">Apply Date</th>
+												<th scope="col" class="text-center">From</th>
+												<th scope="col" class="text-center">To</th>
+												<th scope="col" class="text-center">Reason</th>
+												<th scope="col" class="text-center">Status</th>
+												<th scope="col" class="text-center">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="leave : ${listRequest}">
+												<td class="text-left" th:text="${leave.employee.empCode}"></td>
+												<td class="text-left" th:text="${leave.employee.empName}">testing</td>
+												<td class="text-left"
+													th:text="${#dates.format(leave.applyDate, 'dd-MM-yyyy')}"></td>
+
+												<td class="text-left"
+													th:text="${#dates.format(leave.fromDate, 'dd-MM-yyyy')}"></td>
+
+												<td class="text-left"
+													th:text="${#dates.format(leave.toDate, 'dd-MM-yyyy')}"></td>
+
+
+												<td class="text-left" th:text="${leave.reason}"></td>
+												<th:block th:switch="${leave.status}">
+													<td th:case="'Y'" class="text-left">Approved</td>
+													<td th:case="'C'" class="text-left">Cancel</td>
+													<td th:case="'N'" class="text-left">Pending</td>
+												</th:block>
+
+												<td class="text-left"><a
+													th:href="@{/viewLeaveRequest/{id}
+															(id=${leave.leaveRequestId})}"><em
+														class="align-middle fas fa-fw fa-pen" title="View Detail"></em></a>
+													<a
+													th:href="@{/deleteLeaveRequest/{id}(id=${leave.leaveRequestId})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="align-middle fas fa-fw fa-trash" title="Delete"></em></a></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+	from_date
+
+	<script>
+		$('#applyDate').val(new Date().toJSON().slice(0, 10));
+		$('#from_date').val(new Date().toJSON().slice(0, 10));
+		$('#to_date').val(new Date().toJSON().slice(0, 10));
+	</script>
+
+
+	<script>
+		$(function() {
+
+			$(document).ready(
+					function() {
+						var datatablesButtons = $('#example').DataTable(
+								{
+									"scrollY" : 200,
+									"scrollX" : true,
+									deferRender : true,
+									lengthChange : false,
+									buttons : [ 'copy', 'csv', 'excel', 'pdf',
+											'print' ],
+									scrollCollapse : true,
+
+								});
+
+						datatablesButtons.buttons().container().appendTo(
+								"#example_wrapper .col-md-6:eq(0)")
+
+					});
+			
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+			
+
+		});
+	</script>
+
+	<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 5, 10, 15, -1 ],
+										[ '5 rows', '10 rows', '15 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+	<script>
+		function changeDepartment() {
+
+			var deptCode = document
+					.getElementById("employeeDropDownDepartment").value;
+			$('#leaveRequestDeptCode').val(deptCode);
+
+			var x = document.getElementById("leaveEmpName");
+
+			var length = x.options.length;
+			for (i = length - 1; i >= 1; i--) {
+				x.options[i] = null;
+			}
+
+			console.log("ajax request : " + deptCode);
+
+			if (deptCode != "") {
+				const xhr = new XMLHttpRequest();
+				xhr.open('GET', 'getEmployeeByDeptCode/' + deptCode, true);
+				xhr.getResponseHeader('content-type', 'application/json');
+				xhr.onload = function() {
+					if (this.status === 200) {
+						let obj = JSON.parse(this.responseText);
+						console.log(obj);
+
+						$.each(obj, function(i, item) {
+							console.log(" i " + i + " item : " + item.empName);
+
+							$('#leaveEmpName').append(
+									$('<option>').val(this.empCode).text(
+											this.empName));
+						});
+
+						//$('#leaveDepartmentId').val(obj.departmentCode);
+
+					} else {
+						console.error("some error occured");
+					}
+
+				}
+				xhr.send();
+			}
+
+		}
+
+		function changeEmployee() {
+			var empCode = document.getElementById("leaveEmpName").value;
+			$('#leaveEmpId').val(empCode);
+
+			$
+					.ajax({
+						type : "GET",
+						url : "/employee/leaveGrant/" + empCode,
+
+						success : function(data) {
+
+							console.log("response data : ");
+							$("#leavegrant").val(data.lv.noOfLeavesGranted);
+							$("#leavetaken").val(data.lv.takenLeave)
+							$("#leaveavailed").val(data.lv.leaveAvailed)
+
+							$
+									.each(
+											data,
+											function(i, item) {
+
+												console
+														.log("item value : "
+																+ data[i].leaveGrants[i])
+												$('#leavetype')
+														.append(
+																$('<option>')
+																		.val(
+																				data.leaveGrants[i].levCode.levCode)
+																		.text(
+																				data.leaveGrants[i].levName.levName));
+											});
+
+						},
+						error : function() {
+							console.log("Error");
+						}
+					});
+		}
+	</script>
+
+
+</body>
+
+</html>

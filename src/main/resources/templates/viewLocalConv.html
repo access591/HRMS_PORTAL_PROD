@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script  src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+
+<style>
+
+
+body {
+	opacity: 0;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+
+#loading {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  display: block;
+  opacity: 0.7;
+  background-color: #676565;
+  z-index: 99;
+  text-align: center;
+}
+
+#loading-image {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  z-index: 100;
+}
+</style>
+<script>
+$(document).ready(function(){
+
+    var i=1;
+   $("#add_row").click(function(){
+    $('#addr'+i).html("<td><input name='locDate"+i+"' type='Date'  class='form-control txt input-md'/> "+
+    		"</td><td><input  name='startPlace"+i+"' type='text' placeholder='Start Place'  class='form-control input-md'>"+
+    		"</td><td><input  name='vistPlace"+i+"' type='text'  placeholder='Visit Place'class='form-control input-md'>"+
+    		"</td><td><input  name='purposeOfVist"+i+"' type='text' placeholder='Purpose Of Vist'  class='pas form-control input-md'></td>"+
+    		
+    		"<td><select class=' form-control input-md' id='modeOfTravel0''name='modeOfTravel"+i+"''><option value=' '>Select</option><option value='taxi'>Taxi</option><option value='car'>Car</option></select></td>"+
+    		
+    		"<td><input  name='distanceKm"+i+"' type='text' placeholder='Distance In Km'  class='form-control input-md'></td>"+
+    		"<td><input  name='ltaRate"+i+"' type='text' placeholder='Lta Rate'  class='form-control input-md'></td>"+
+    		"<td><input  name='actualAmount"+i+"' type='text' placeholder='Actual Amount'  class=' txt form-control input-md'></td>"+
+    		"<td><input  name='claimedAmount"+i+"' type='text' placeholder='claimed Amount '  class='pas form-control input-md'></td>"+
+    		
+    		
+    		"");
+
+    $('#tab1').append('<tr id="addr'+(i+1)+'"></tr>');
+    $('#_cr').val(i+1);
+    
+    i++; 
+});
+   
+   
+   $("#delete_row").click(function(){
+	  	 if(i>1){
+			 $("#addr"+(i-1)).html('');
+			 $('#_cr2').val(i - 1);
+			 i--;
+			 calculateSum(),calculateSumtotalPassing()
+			 }
+		 });
+   
+   
+  
+  
+   
+   
+  
+function calculateSum() {
+
+    var sum = 0;
+    //iterate through each textboxes and add the values
+    $(".txt").each(function () {
+
+        //add only if the value is number
+        if (!isNaN(this.value) && this.value.length != 0) {
+            sum += parseFloat(this.value);
+        }
+
+    });
+    //.toFixed() method will roundoff the final sum to 2 decimal places
+   var fds=sum;
+   //$("#").html(sum.toFixed(2));
+   $("#totalClaim").val(sum);
+    
+}
+
+$("table").on("keyup", ".txt", function () {
+    calculateSum();
+});
+
+
+function calculateSumtotalPassing() {
+
+    var sum = 0;
+    //iterate through each textboxes and add the values
+    $(".pas").each(function () {
+
+        //add only if the value is number
+        if (!isNaN(this.value) && this.value.length != 0) {
+            sum += parseFloat(this.value);
+        }
+
+    });
+    //.toFixed() method will roundoff the final sum to 2 decimal places
+   var fds=sum;
+   //$("#").html(sum.toFixed(2));
+   $("#totalPas").val(sum);
+    
+}
+
+$("table").on("keyup", ".pas", function () {
+	calculateSumtotalPassing();
+});
+
+
+
+
+
+
+
+});
+
+</script>
+<script>
+
+
+
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	 gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+ 
+<body>
+
+<div class="wrapper">
+<nav id="sidebar" class="sidebar">
+ <div th:replace="/fragments/sidebar :: div"></div>
+ </nav>
+ 		
+		<div class="main">
+		<div th:replace="/fragments/header ::div"></div>
+		<main class="content">
+		<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">
+							Personal
+						</h1>
+						
+					
+					</div>
+					<form id="validation-form" action="#"  th:action="@{/conveyanceApproval}" th:object="${localConvyenceEdit}" method="GET">
+					<div class="row">
+					
+							<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;"> View Local Conveyance  </h5>
+								<div class="alert-outline">
+									<div th:if="${message}" th:text="${message}" style="color: red">
+									</div> 
+									</div>	
+								</div>
+								<div class="card-body">
+									<div class="form-row">
+												<div class="form-group sm col-md-4">
+												
+													<label class="form-label">Local Conveyance id <span
+														class="text-danger">*</span>
+													</label> <input name="localConvId" type="text" id="localConvId"th:field="*{localConvId}"
+														class="form-control"readonly>
+												</div>
+												
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Employee Code</label>
+												<label style="color: red">*</label>
+												<select class="form-control select2" name="empCode" id="empCode" onchange="myFunctionEmpCode()" th:field="*{empCode.empCode}"required aria-required="true"disabled>
+												 <option value="">Select Employee</option>
+												<option th:each="e :${listEmployee}"th:value="${e.getEmpCode()}" th:text="${e.getEmpName()}"></option>
+											     	</select>
+
+												</div>
+											<div class="form-group sm col-md-4">
+											 <label class="form-label">Employee Name  </label>
+							                 <input  type="text"id="empName"name="empName" title="Name" class="form-control" th:field="*{empCode.empName}"readonly>
+										     </div>
+										     	
+											
+												
+												
+								</div>
+							
+												<div class="form-row">
+												
+												
+												<div class="form-group sm col-md-4">
+											       <label class="form-label">Date</label>
+											       <span class="text-danger">*</span>
+											       <input  type="text"id="localConvDate"name="localConvDate" th:field="*{localConvDate}" class="form-control required"readonly>
+											      </div>
+												</div>
+												
+												
+												
+												
+												
+												
+							</div>
+						      </div>
+	                      </div>
+	                     <div class="col-12">
+	                     	<div class="card">
+	                      <div class="card-header">
+								</div>
+								<div class="card-body">
+								<input id="_cr" name="_cr" type="hidden"value="1">
+								
+								<table id="tab1" class="table table-striped display"
+															style="width: 100%" aria-describedby="datatables-buttons">
+															<thead>
+																<tr>
+																<th scope="col">id</th>
+																	<th scope="col">Date</th>
+																	<th scope="col">Start Place.</th>
+																	<th scope="col">Visit Place</th>
+                                                                    <th scope="col">Purpose Of Visit</th>
+																	<th scope="col">Mode Of Travel</th>
+
+																	<th scope="col">Distance In Km</th>
+																	<th scope="col">Lta Rate</th>
+																	<th scope="col">Actual Amount </th>
+																   <th scope="col">Claimed  Amount </th>
+																	
+																	
+																	
+
+
+																</tr>
+															</thead>
+															<tbody>
+																<tr id='addr0'th:each="row, stat :${localConvyenceEdit.localConvyenceDetail}">
+ 																	 <td><input type="text" name='id0'placeholder='Start Place' class="form-control" th:field="*{localConvyenceDetail[__${stat.index}__].id}" readonly /></td>
+																	<td><input type="text" name='locDate0'placeholder='Date' class="assigned_date form-control"th:field="*{localConvyenceDetail[__${stat.index}__].locDate}" readonly /></td>
+																	<td><input type="text" name='startPlace0'placeholder='Start Place' class="form-control" th:field="*{localConvyenceDetail[__${stat.index}__].startPlace}" readonly/></td>
+																	<td><input type="text" name='vistPlace0'placeholder='visit Place' class="form-control" th:field="*{localConvyenceDetail[__${stat.index}__].vistPlace}" readonly/></td>
+																	<td><input type="text" name='purposeOfVist0'placeholder='Purpose Of Vist' class="form-control"th:field="*{localConvyenceDetail[__${stat.index}__].purposeOfVist}" readonly /></td>
+																	
+																	<td><select class="form-control"
+																		name="modeOfTravel0" id="modeOfTravel0"th:field="*{localConvyenceDetail[__${stat.index}__].modeOfTravel}"disabled>
+																			<option value="">Select Type</option>
+																			<option th:Value="taxi">Taxi</option>
+																			<option th:Value="car">Car</option>
+																			<option th:Value="bus">Bus</option>
+																			<option th:Value="train">Train</option>
+																	</select></td>
+
+
+																	<td><input type="text" name='distanceKm0'placeholder='Distance In Km' class="form-control"th:field="*{localConvyenceDetail[__${stat.index}__].distanceKm}" readonly/></td>
+																	<td><input type="text" name='ltaRate0'placeholder='Lta Rate' class="form-control"th:field="*{localConvyenceDetail[__${stat.index}__].ltaRate}" readonly/></td>
+																	<td><input type="text" name='actualAmount0'placeholder='Actual Amount' class="form-control txt"th:field="*{localConvyenceDetail[__${stat.index}__].actualAmount}" readonly /></td>
+																	<td><input type="text" name='claimedAmount0'placeholder='Claimed  Amount' class="form-control pas" th:field="*{localConvyenceDetail[__${stat.index}__].claimedAmount}" readonly/></td>
+																</tr>
+																<tr id='addr1'></tr>
+
+															</tbody>
+															
+															
+															
+
+														</table>
+														<hr>
+								 <button type="submit"class="btn btn-pill btn-secondary" value="Back">Back</button>	
+								
+								</div>
+								
+								
+	                     
+	                     
+	                     </div>
+	                     </div>
+					</div>
+					
+							
+</form>
+
+				</div>
+			
+		</main>
+		<footer class="footer">
+		<div th:replace="/fragments/footer :: div"></div>
+		</footer>
+		</div>
+		</div>
+	<script>
+		$(function() {
+
+			$("input[name='localConvDate']").daterangepicker({
+				singleDatePicker: true,
+			    autoApply: true,
+				locale: {
+					 format: 'YYYY/MM/DD'
+		        },
+				showDropdowns: true
+			});
+			
+			
+		
+			$(".assigned_date").daterangepicker({
+				singleDatePicker: true,
+			    autoApply: true,
+				locale: {
+					 format: 'YYYY/MM/DD'
+		        },
+				showDropdowns: true
+			});
+			
+
+
+			
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive: true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons').DataTable({
+				  deferRender:true,
+		            scrollCollapse: true,
+		            scroller: false,
+				   responsive: true,
+				   lengthMenu :[[10,20,30,-1 ],['10 rows', '20 rows', '30 rows', 'Show all' ] ],
+					buttons :[]
+			});
+			datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+		
+	</script>
+	
+
+	
+
+	<script>
+	function myFunctionEmpCode(){
+/* 		 var empCode= $('#empCode option:selected').value; */
+		 var empCode= document.getElementById('empCode').value
+	    console.log("ajax request : "+ empCode);
+	    const xhr = new XMLHttpRequest();
+	    xhr.open('GET','/viewEmployeeDetails/'+empCode,true);
+	    xhr.getResponseHeader('content-type','application/json');
+	    xhr.onload = function(){
+	        if(this.status===200){
+	            let obj = JSON.parse(this.responseText);
+	            console.log(obj);
+	            $('#empName').val(obj.empName);
+	            $('#deptName').val(obj.deptName);
+	            $('#desgName').val(obj.desgName);
+	            $('#empPayCode').val(obj.empPayCode);
+	        }
+	        else{
+	            console.error("some error occured");
+	        }
+		
+	    }
+	    xhr.send();
+	}
+
+
+
+	
+	</script>
+	
+
+
+
+
+
+
+	<script>
+	$(document).ready(function(){
+		 var myDate = document.querySelector(locDate);
+		 alert(myDate);
+		});
+
+	
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+</body>
+</html>

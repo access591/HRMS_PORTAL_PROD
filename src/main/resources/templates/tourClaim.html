@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	$(document)
+			.ready(
+					function() {
+
+						var i = 1;
+						$("#add_row")
+								.click(
+										function() {
+											$('#addr' + i)
+													.html(
+															"<td><input name='fromDate"+i+"' type='Date'  class='form-control  input-md'/> "
+																	+ "</td><td><input  name='startPlace"+i+"' type='text' placeholder='Start Place'  class='form-control input-md' noHTML>"
+																	+ "</td><td><input  name='toDate"+i+"' type='Date'class='form-control input-md'>"
+																	+ "</td><td><input  name='visitPlace"+i+"' type='text' placeholder='Vist Place'  class='form-control input-md noHTML'></td>"
+																	+ "<td><select class=' form-control input-md' id='modeOfTravel'name='modeOfTravel"+i+"'><option value=' '>Select</option><option value='taxi'>Taxi</option><option value='car'>Car</option></select></td>"
+																	+ "<td><input  name='ticketNo"+i+"' type='text' placeholder='Ticket No'  class='form-control input-md noHTML'></td>"
+																	+ "<td><input  name='paidCompany"+i+"' type='text' placeholder='Company Paid'  class='txt form-control input-md noHTML'></td>"
+																	+ "<td><input  name='paidSelf"+i+"' type='text' placeholder='Self Paid'  class='pas form-control input-md noHTML'></td>"
+																	+ "");
+
+											$('#tab1').append(
+													'<tr id="addr' + (i + 1)
+															+ '"></tr>');
+											$('#_cr').val(i + 1);
+
+											i++;
+										});
+
+						$("#delete_row").click(
+								function() {
+									if (i > 1) {
+										$("#addr" + (i - 1)).html('');
+										$('#_cr').val(i - 1);
+										i--;
+										calculateSum(),
+												calculateSumtotalPassing(),
+												totaltravalex()
+									}
+
+								});
+
+						var J = 1;
+
+						$("#tab2_AddRow")
+								.click(
+										function() {
+
+											$('#addrtabsecond' + J)
+													.html(
+															"<td><input name='medStDr"+J+"' type='Date'  class='form-control txt input-md'/> "
+																	+ "</td><td><input  name='startPlace"+J+"' type='text' placeholder='Start Place'  class='form-control input-md noHTML'>"
+																	+ "</td><td><input  name='toDate"+J+"' type='Date'class='form-control input-md'>"
+																	+ "</td><td><input  name='visitPlace"+J+"' type='text' placeholder='Vist Place'  class='form-control input-md noHTML'></td>"
+																	+ "<td><select class=' form-control input-md' id='modeOfTravel'name='modeOfTravel"+J+"'><option value=' '>Select</option><option value='taxi'>Taxi</option><option value='car'>Car</option></select></td>"
+																	+ "<td><input  name='convExpAmount"+J+"' type='text' placeholder='Amount'  class='nbt form-control input-md noHTML'></td>"
+																	+ "");
+											$('#tab2').append(
+													'<tr id="addrtabsecond'
+															+ (J + 1)
+															+ '"></tr>');
+											$('#_cr2').val(J + 1);
+
+											J++;
+										});
+						var J = 1;
+						$("#tab2_delete").click(function() {
+
+							if (J > 1) {
+								$("#addrtabsecond" + (J - 1)).html('');
+								$('#_cr2').val(J - 1);
+								J--;
+								conveysm()
+
+							}
+						});
+						var K = 1;
+						$("#tab3_AddRow")
+								.click(
+										function() {
+											$('#addrowthired' + K)
+													.html(
+															"<td><input name='noDays"+K+"' type='text'  class='form-control  input-md'/> "
+																	+ "</td><td><input  name='stayDate"+K+"' type='Date' placeholder='Case Memo No'  class='form-control input-md noHTML'>"
+																	+ "</td><td><input  name='ataAmt"+K+"' type='text' placeholder='Expenses'  class='pas form-control input-md noHTML'></td>"
+																	+ "");
+
+											$('#tab3').append(
+													'<tr id="addrowthired'
+															+ (K + 1)
+															+ '"></tr>');
+											$('#_cr3').val(K + 1);
+
+											K++;
+											
+										});
+
+						$("#tab3_delete").click
+						(function() {
+							if (K>1) {
+								$("#addrowthired" + (K - 1)).html('');
+								$('#_cr3').val(K - 1);
+								K--;
+							}
+						});
+						
+						
+
+						function conveysm() {
+
+							var sum = 0;
+							//iterate through each textboxes and add the values
+							$(".nbt").each(
+									function() {
+
+										//add only if the value is number
+										if (!isNaN(this.value)
+												&& this.value.length != 0) {
+											sum += parseFloat(this.value);
+										}
+
+									});
+							//.toFixed() method will roundoff the final sum to 2 decimal places
+							var fds = sum;
+							//$("#").html(sum.toFixed(2));
+							$("#totalConv").val(sum);
+
+						}
+
+						$("table").on("keyup", ".nbt", function() {
+							conveysm();
+
+						});
+
+						function calculateSum() {
+
+							var sum = 0;
+							//iterate through each textboxes and add the values
+							$(".txt").each(
+									function() {
+
+										//add only if the value is number
+										if (!isNaN(this.value)
+												&& this.value.length != 0) {
+											sum += parseFloat(this.value);
+										}
+
+									});
+							//.toFixed() method will roundoff the final sum to 2 decimal places
+							var fds = sum;
+							//$("#").html(sum.toFixed(2));
+							$("#totalClaim").val(sum);
+
+						}
+
+						$("table").on("keyup", ".txt", function() {
+							calculateSum();
+							totaltravalex();
+						});
+
+						function calculateSumtotalPassing() {
+
+							var sum = 0;
+							//iterate through each textboxes and add the values
+							$(".pas").each(
+									function() {
+
+										//add only if the value is number
+										if (!isNaN(this.value)
+												&& this.value.length != 0) {
+											sum += parseFloat(this.value);
+										}
+
+									});
+							//.toFixed() method will roundoff the final sum to 2 decimal places
+							var fds = sum;
+							//$("#").html(sum.toFixed(2));
+							$("#totalPas").val(sum);
+
+						}
+
+						$("table").on("keyup", ".pas", function() {
+							calculateSumtotalPassing();
+							totaltravalex();
+						});
+
+						function totaltravalex() {
+							var totalClaim = parseInt($('#totalClaim').val());
+							var totalPas = parseInt($('#totalPas').val());
+							var t3 = totalClaim + totalPas;
+							$('#totalTravel').val(t3);
+
+						}
+
+					});
+</script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+
+
+					</div>
+					<form id="validation-form" action="#" th:action="@{/saveTourClaim}"
+						th:object="${tourClaim}" method="post">
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header" style="background: #f4f7fc;">
+										<h5 class="card-title"
+											style="text-decoration: underline; color: #dc2eaf;">Tour
+											Claim</h5>
+										<input type="hidden" id="mess" name="mess"th:value="${message}">
+									</div>
+									<div class="card-body">
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+
+												<label class="form-label">Tour ID </label> <input
+													name="tourClaimId" type="text" id="tourClaimId"
+													class="form-control" readonly>
+											</div>
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Tour Claim Date <span
+													class="text-danger">*</span></label> <input type="date"
+													id="tourClaimDate" name="tourClaimDate"title="Tour Claim Date"
+													class="form-control required">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Employee Name</label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" name="empCode" id="empCode"title="Employee Name"
+													onchange="myFunctionEmpCode()" required
+													aria-required="true">
+													<option value="">Select Employee</option>
+													<option th:each="e :${listEmployee}"
+														th:value="${e.getEmpCode()}" th:text="${e.getEmpName()}"></option>
+												</select>
+
+											</div>
+
+
+										</div>
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Designation</label> <input
+													type="text" id="desgName" name="desgName" 
+													title="Designation" maxlength="50" pattern="^[a-zA-Z\s]*$"
+													class="form-control noHTML">
+
+
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Department</label> <input
+													type="text" id="deptName" name="deptName"
+													title="Department" maxlength="50" pattern="^[a-zA-Z\s]*$"
+													class="form-control noHTML">
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Tour Plan Id</label> <span
+													class="text-danger">*</span> <select class="form-control"
+													name="tourPlanId" id="tourPlanId" title="Tour Plan Id" required>
+													<option value="">Select Type</option>
+													<option th:each="TourPL :${ListTourPlan}"
+														th:value="${TourPL.getTourPlanId()}"
+														th:text="${TourPL.getTourPlanId()}"></option>
+
+												</select>
+
+											</div>
+
+										</div>
+
+
+										<div class="form-row">
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Tour Plan Date</label> <span
+													class="text-danger">*</span> <input type="date" title="Tour Plan Date"
+													id="tourPlanDate" name="tourPlanDate"
+													class="form-control required">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Start Place</label> <input
+													type="text" id="startPlace" name="startPlace" title="Start Place"
+													class="form-control noHTML">
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Visit Place </label> <input
+													type="text" id="visitPlace" name="visitPlace" title="Visit Place"
+													class="form-control noHTML">
+											</div>
+										</div>
+
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Advance Paid </label> <input
+													type="text" id="advancePaid" name="advancePaid" title="Advance Paid"
+													class="form-control noHTML" value="0">
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Visit Purpose </label> <input
+													type="text" id="visitPurpose" name="visitPurpose" title="Visit Purpose"
+													class="form-control noHTML">
+											</div>
+
+
+										</div>
+
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-12">
+								<div id="smartwizard">
+
+									<ul>
+										<li><a href="#validation-step-1"><br />
+											<small>Traveling Expenses</small></a></li>
+										<li><a href="#validation-step-2"><br />
+											<small>Conveyance Expenses </small></a></li>
+										<li><a href="#validation-step-3"><br />
+											<small>Staying Expenses </small></a></li>
+
+									</ul>
+									<div>
+
+										<div id="validation-step-1">
+
+											<div class="form-row">
+												<div class="card">
+													<div class="card-header"></div>
+													<div class="card-body">
+														<input id="_cr" name="_cr" type="text" value="1">
+														<div class="col-sm-12" style="text-align: right;">
+															<a id="add_row" class="fa fa-plus" aria-hidden="true"
+																style="font-size: 28px; color: #001080"></a>&nbsp;&nbsp;&nbsp;
+															<a id='delete_row' class="fa fa-trash"
+																style="font-size: 28px; color: #399490fc"
+																aria-hidden="true"></a>
+														</div>
+
+														<div class="table-responsive">
+															<table id="tab1" class="table table-striped display"
+																style="width: 100%"
+																aria-describedby="datatables-buttons">
+																<thead>
+																	<tr>
+																		<th class="text-center" scope="col">From Date</th>
+																		<th class="text-center" scope="col">Start Place.</th>
+																		<th class="text-center" scope="col">To Date.</th>
+																		<th class="text-center" scope="col">Visit Place</th>
+																		<th class="text-center" scope="col">Mode Of
+																			Travel</th>
+																		<th class="text-center" scope="col">Ticket No</th>
+																		<th class="text-center" scope="col">Company Paid</th>
+																		<th class="text-center" scope="col">Self Paid</th>
+
+
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr id='addr0'>
+
+																		<td><input type="Date" name='fromDate0'
+																			placeholder='From Date'/></td>
+																		<td><input type="text" name='startPlace0'size="7"
+																			placeholder='Start Place' class="noHTML" />
+																		</td>
+																		<td><input type="Date" name='toDate0'
+																			placeholder='To Date'/></td>
+																		<td><input type="text" name='visitPlace0'size="7"
+																			placeholder='Vist palce' class="noHTML" /></td>
+																		<td><select 
+																			name="modeOfTravel0" id="modeOfTravel0">
+																				<option value="">Select Type</option>
+																				<option th:Value="taxi">Taxi</option>
+																				<option th:Value="car">Car</option>
+																				<option th:Value="bus">Bus</option>
+																				<option th:Value="train">Train</option>
+																		</select></td>
+
+
+																		<td><input type="text" name='ticketNo0'
+																			placeholder='Ticket No' class="noHTML"size="7" /></td>
+
+
+																		<td><input type="text" name='paidCompany0'
+																			placeholder='Company Paid'size="7"
+																			class="txt noHTML" /></td>
+																		<td><input type="text" name='paidSelf0'
+																			placeholder='Self Paid'size="7"
+																			class="pas noHTML" /></td>
+																	</tr>
+																	<tr id='addr1'></tr>
+
+																</tbody>
+																<tr>
+																	<td colspan="4"></td>
+
+																	<td><label class="form-label">Total Amount</label></td>
+																	<td><input type="text" id="totalTravel"
+																		name='totalTravel' value='0' placeholder='Total Claim'
+																		class="form-control noHTML" /></td>
+																	<td><input type="text" id="totalClaim"
+																		name='totalClaim' placeholder='Total Claim'
+																		class="form-control noHTML" /></td>
+																	<td><input type="text" id="totalPas"
+																		name='totalPas' placeholder='Total Pas'
+																		class="form-control noHTML" /></td>
+
+																	<td></td>
+
+																</tr>
+
+															</table>
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+
+
+										</div>
+										<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+										<div id="validation-step-2">
+
+
+
+											<div class="form-row">
+												<div class="card">
+													<div class="card-header"></div>
+													<div class="card-body">
+														<input id="_cr2" name="_cr2" type="text" value="1">
+														<div class="col-sm-12" style="text-align: right;">
+															<a id="tab2_AddRow" class="fa fa-plus" aria-hidden="true"
+																style="font-size: 28px; color: #001080"></a>&nbsp;&nbsp;&nbsp;
+															<a id='tab2_delete' class="fa fa-trash"
+																style="font-size: 28px; color: #399490fc"
+																aria-hidden="true"></a>
+														</div>
+														<div class="table-responsive">
+															<table id="tab2" class="table table-striped display"
+																style="width: 100%"
+																aria-describedby="datatables-buttons">
+																<thead>
+																	<tr>
+																		<th scope="col">From Date</th>
+																		<th scope="col">Start Place.</th>
+																		<th scope="col">To Date.</th>
+																		<th scope="col">Visit Place</th>
+																		<th scope="col">Mode Of Travel</th>
+																		<th scope="col">Amount</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr id='addrtabsecond0'>
+
+																		<td><input type="Date" name='fromDate0'placeholder='From Date' value="" /></td>
+																		<td><input type="text" name='startPlace0'size="7"
+																			placeholder='Start Place' class="noHTML" />
+																		</td>
+																		<td><input type="Date" name='toDate0'
+																			placeholder='To Date' /></td>
+																		<td><input type="text" name='visitPlace0'
+																			placeholder='Vist palce' size="7" class="noHTML" /></td>
+																		<td><select 
+																			name="modeOfTravel0" id="modeOfTravel0">
+																				<option value="">Select Type</option>
+																				<option th:Value="taxi">Taxi</option>
+																				<option th:Value="car">Car</option>
+																				<option th:Value="bus">Bus</option>
+																				<option th:Value="train">Train</option>
+																		</select></td>
+
+																		<td><input type="text" name='convExpAmount0'size="7"
+																			placeholder='Amount' class=" nbt noHTML" /></td>
+
+
+
+																	</tr>
+																	<tr id='addrtabsecond1'></tr>
+
+																</tbody>
+																<tr>
+																	<td colspan="4"></td>
+																	<td><label >Total Amount</label></td>
+																	<td>
+																	 <input type="text" id="totalConv" name='totalConv' size="7" value='0' placeholder='Total Amount'
+																				class=" noHTML" />
+																		
+																	</td>
+
+																</tr>
+
+															</table>
+														</div>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+
+										<!-- third >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. -->
+										<div id="validation-step-3">
+											<div class="form-row">
+												<div class="card">
+													<div class="card-header"></div>
+													<div class="card-body">
+														<input id="_cr3" name="_cr3" type="text" value="1"
+															class="noHTML">
+														<div class="col-sm-12" style="text-align: right;">
+															<a id="tab3_AddRow" class="fa fa-plus" aria-hidden="true"
+																style="font-size: 28px; color: #001080"></a>&nbsp;&nbsp;&nbsp;
+															<a id='tab3_delete' class="fa fa-trash"
+																style="font-size: 28px; color: #399490fc"
+																aria-hidden="true"></a>
+														</div>
+														<table id="tab3" class="table table-striped display"
+															style="width: 100%" aria-describedby="datatables-buttons">
+															<thead>
+																<tr>
+																	<th scope="col">Days</th>
+																	<th scope="col">Stay Date.</th>
+																	<th scope="col">Expenses</th>
+
+																</tr>
+															</thead>
+															<tbody>
+																<tr id='addrowthired0'>
+																	<td><input type="text" name='noDays0'
+																		placeholder='Days' class="noHTML" /></td>
+																	<td><input type="Date" name='stayDate0'
+																		placeholder='Stay Date.' class="" value="" /></td>
+																	<td><input type="text" name='ataAmt0'
+																		placeholder='Expenses' class="noHTML" /></td>
+																</tr>
+																<tr id='addrowthired1'></tr>
+
+															</tbody>
+
+														</table>
+													</div>
+
+												</div>
+											</div>
+											<button type="submit" class="btn btn-primary">Save</button>
+										</div>
+
+
+									</div>
+
+
+								</div>
+							</div>
+						</div>
+
+
+						<!-- 	table data you are start here  -->
+						
+						
+						
+						
+				<!-- 		
+								<div class="row">
+						&nbsp; &nbsp;&nbsp; &nbsp;
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="example2" class="table table-striped display"
+										style="width: 100%" aria-describedby="example">
+										<thead>
+											<tr>
+												<th scope="col">Tour Claim ID</th>
+													<th scope="col">Tour Plan ID</th>
+												<th scope="col">Employee Name</th>
+												
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="tourClaim : ${listTourClaim}">
+												<td th:text="${tourClaim.tourClaimId}"></td>
+													<td th:text="${tourClaim.tourPlanId.tourPlanId}"></td>
+												<td th:text="${tourClaim.empCode.empName}"></td>
+											
+
+												<td><th:block th:switch="${tourClaim.approvalStatus}">
+														<div th:case="'N'">
+															<a
+																th:href="@{/editTourPlan/{id}(id=${tourClaim.tourPlanId})}"><em
+																class="fa fa-edit"></em></a>	&nbsp; <a
+																th:href="@{/deleteTourPlan/{id}(id=${tourClaim.tourPlanId})}"
+																onclick="return confirm('Are you sure?')"><em
+																class="fa fa-times" style="color: orangered;"></em></a>
+														</div>
+														<div th:case="'Y'">
+														 <a th:href="@{/viewTourPlan/{id}/(id=${tourClaim.tourPlanId})}"><em class="fa fa-eye"></em></a>
+															&nbsp;
+															
+															<a
+																th:href="@{/deleteTourPlan/{id}(id=${tourClaim.tourPlanId})}"
+																onclick="return confirm('Are you sure?')"><em
+																class="fa fa-times" style="color: orangered;"></em></a>
+														</div>
+													</th:block></td>
+
+											</tr>
+
+
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+ -->
+
+
+
+
+
+
+					</form>
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function() {
+
+		
+
+			
+
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+
+			// SmartWizard initialize
+			$('#smartwizard').smartWizard();
+			$('#smartwizard').smartWizard("loader", "show");
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+			
+
+		});
+	</script>
+
+	<script type="text/javascript">
+		function changetextbox() {
+			if (document.getElementById("onDeputation").value === "Y")
+
+			{
+				document.getElementById("empDeputation").disabled = 'true';
+
+			} else {
+
+				document.getElementById("empDeputation").disabled = '';
+			}
+
+		}
+	</script>
+
+
+	<script type='text/javascript'>
+		function preview_image(event) {
+			var reader = new FileReader();
+			reader.onload = function() {
+				var output = document.getElementById('output_image');
+				output.src = reader.result;
+			}
+			reader.readAsDataURL(event.target.files[0]);
+		}
+	</script>
+
+	<script>
+		function sync() {
+			var n1 = document.getElementById('empName');
+			var n2 = document.getElementById('name');
+			n2.value = n1.value;
+		}
+	</script>
+	<script>
+		function syncAddress() {
+			var n1 = document.getElementById('address1');
+			var n2 = document.getElementById('addressArms');
+			n2.value = n1.value;
+		}
+	</script>
+	<script>
+		function myFunctionState() {
+			$('#stateCode').click(function() {
+				var name = $('#stateCode option:selected').text();
+				$('#state').val(name);
+			});
+		}
+	</script>
+
+	<script>
+		function myFunctionCity() {
+			$('#cityCode').click(function() {
+				var name = $('#cityCode option:selected').text();
+				$('#district').val(name);
+			});
+		}
+	</script>
+
+	<script>
+		function myFunctionEmpCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var empCode = document.getElementById('empCode').value
+			console.log("ajax request : " + empCode);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewEmployeeTourClaim/' + empCode, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+					$('#deptName').val(obj.deptName);
+					$('#desgName').val(obj.desgName);
+
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+
+</body>
+</html>

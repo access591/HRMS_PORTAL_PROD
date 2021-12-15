@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script  src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<style>
+
+
+body {
+	opacity: 0;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+
+#loading {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  display: block;
+  opacity: 0.7;
+  background-color: #676565;
+  z-index: 99;
+  text-align: center;
+}
+
+#loading-image {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  z-index: 100;
+}
+</style>
+
+
+<script>
+
+
+
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	 gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+ 
+<body>
+
+<div class="wrapper">
+<nav id="sidebar" class="sidebar">
+ <div th:replace="/fragments/sidebar :: div"></div>
+ </nav>
+ 		
+		<div class="main">
+		<div th:replace="/fragments/header ::div"></div>
+		<main class="content">
+		<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">
+							Personal
+						</h1>
+						
+					
+					</div>
+				
+					<div class="row">
+					
+							<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">View  Loan Request  </h5>
+								<div class="alert-outline">
+									<div th:if="${message}" th:text="${message}" style="color: red">
+									</div> 
+									</div>	
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#" th:action="@{/loanApproval}" th:object="${LoanRequest}" method="GET">
+									<div class="form-row">
+												
+												<div class="form-group sm col-md-4">
+											       <label class="form-label">Application NO.
+											       <span class="text-danger">*</span></label>
+							                 <input  type="text"id="appNo"name="appNo" class="form-control" th:value="${loanRequestEdit.appNo}"readonly>
+										     </div>
+												
+												<div class="form-group sm col-md-4">
+											       <label class="form-label">Application   Date
+											       <span class="text-danger">*</span></label>
+							                 <input  type="text"id="appDate"name="appDate" th:value=${loanRequestEdit.appDate} title="Application   Date" class="form-control required"disabled>
+										     </div>
+										    	<div class="form-group sm col-md-4">
+													<label class="form-label">Employee Code</label>
+												<label style="color: red">*</label>
+												<select class="form-control select2" name="empCode" id="empCode" onchange="myFunctionEmpCode()" required aria-required="true"disabled>
+												 <option value="">Select Employee</option>
+												<option th:each="e :${listEmployee}"th:value="${e.getEmpCode()}" th:text="${e.getEmpName()}"th:field="${loanRequestEdit.empCode.empCode}"disabled></option>
+											     	</select>
+
+												</div>
+								                </div>
+												
+												<div class="form-row">
+												
+									
+												<div class="form-group sm col-md-4">
+											       <label class="form-label">Loan Type
+											      </label>
+												<select class="form-control required"
+																		name="loanType" id="loanType"disabled>
+																			<option value="">Select Type</option>
+																			<option th:Value="H" th:selected="${loanRequestEdit.loanType}==H">Home</option>
+																			<option th:Value="P" th:selected="${loanRequestEdit.loanType}==P">personal </option>
+																			<option th:Value="T" th:selected="${loanRequestEdit.loanType}==T">Car</option>
+																			<option th:Value="W" th:selected="${loanRequestEdit.loanType}==W">Two-Wheeler</option>
+																	</select>
+												
+												</div>
+												<div class="form-group sm col-md-4">
+												<label class="form-label">Loan Code</label>
+												 <span class="text-danger">*</span> 
+												 <select
+														class="form-control required" name="loanCode" id="loanCode"disabled>
+														<option value="">Select Type</option>
+														<option th:each="lo :${listLoan}" th:value="${lo.getLoanCode()}"th:field="${loanRequestEdit.loanCode.loanCode}" th:text="${lo.getLoanName()}"></option>
+														
+													</select>
+												
+												</div>
+												<div class="form-group sm col-md-4">
+											       <label class="form-label">Effective Schedule Date
+											       <span class="text-danger">*</span></label>
+							                 <input  type="text"id="effScheduleDate"name="effScheduleDate" title="Eligibility   Date" th:value=${loanRequestEdit.effScheduleDate} class="form-control required"disabled>
+										     </div>
+												
+												</div>
+												
+												
+												
+												
+												
+						<div class="form-row">
+
+										<!-- <div class="form-group sm col-md-4">
+												<label class="form-label">Max Limit For Such Loan
+												 <span class="text-danger">*</span></label> 
+												 <input type="text" id="amount" name="amount" title="Amount" class="form-control required">
+											</div> -->
+											
+												
+												
+
+										</div>
+										
+										<div class="form-row">
+										<div class="form-group sm col-md-4">
+												<label class="form-label">Amount Required
+												 <span class="text-danger">*</span></label> 
+												 <input type="text" id="amountRequired" name="amountRequired" title="Amount" th:value=${loanRequestEdit.amountRequired} class="form-control required"disabled>
+											</div>
+											
+										<div class="form-group sm col-md-4">
+												<label class="form-label">Loan To be Return In 
+												 <span class="text-danger">*</span></label> 
+												 <input type="text" id="amountSanctioned" name="amountSanctioned" title="Amount"  th:value=${loanRequestEdit.amountSanctioned} class="form-control required"disabled>
+											</div>
+											
+											<div class="form-group sm col-md-4">
+											       <label class="form-label">Status
+											       <span class="text-danger">*</span></label>
+												<select class="form-control required"
+																		name="loanStatus" id="loanStatus"disabled>
+																			<option value="">Select Type</option>
+																			<option th:Value="Y" th:selected="${loanRequestEdit.loanStatus}==Y">Approved </option>
+																			<option th:Value="N"th:selected="${loanRequestEdit.loanStatus}==N">Un Approved </option>
+																			
+																	</select>
+												
+												</div>
+										
+										</div>
+										
+										<hr>
+
+								   <button type="submit"class="btn btn-pill btn-secondary" value="cancel">Back</button>
+						     
+						      </form>
+						      </div>
+						  
+	                      </div>
+	                        
+	                </div>   
+	                
+					</div>
+
+				</div>
+		</main>
+		<footer class="footer">
+		<div th:replace="/fragments/footer :: div"></div>
+		</footer>
+		</div>
+		</div>
+	<script>
+		$(function() {
+
+			$("input[name='appDate']").daterangepicker({
+				singleDatePicker: true,
+			    autoApply: true,
+				locale: {
+		            format: 'YYYY/MM/DD'
+		        },
+				showDropdowns: true
+			});
+			
+		$("input[name='effScheduleDate']").daterangepicker({
+				singleDatePicker: true,
+			    autoApply: true,
+				locale: {
+		            format: 'YYYY/MM/DD'
+		        },
+				showDropdowns: true
+			});
+	
+
+
+			
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive: true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons').DataTable({
+				  deferRender:true,
+		            scrollCollapse: true,
+		            scroller: false,
+				   responsive: true,
+				   lengthMenu :[[10,20,30,-1 ],['10 rows', '20 rows', '30 rows', 'Show all' ] ],
+					buttons :[]
+			});
+			datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+		
+	</script>
+	
+		
+
+
+
+<script>
+ function myFunctionCity(){
+   $('#cityCode').click(function() {
+      	 var name= $('#cityCode option:selected').text();
+      	$('#district').val(name);
+      	}); 
+      }
+      
+</script>
+
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+
+</body>
+</html>

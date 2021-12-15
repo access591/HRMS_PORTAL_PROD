@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">HRMS</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+
+							<div class="card" style="border-radius: 2.2rem">
+								<div class="card-header">
+									<h5 class="card-title"style="text-decoration: underline;">Arms License Report
+										</h5>
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}"
+											style="color: red"></div>
+									</div>
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/createarmsreport}" method="get">
+										<div class="row">
+
+
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label">Employee</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" id="select_department"
+														onchange="changeDepartment()" name="empCode" required>
+														<option value=''>--Select--</option>
+														<option value="ALL">ALL</option>
+														<option th:each="emp : ${armsLicenseList}"
+															th:text="${emp.name}"
+															th:value="${emp.armsCode}"></option>
+
+
+
+													</select>
+
+
+
+												</div>
+											</div>
+											
+											
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label">Type Of Report</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2"
+														name="reportType"
+														required>
+														<option value=''>--Select Here--</option>
+														<option value="P">PDF</option>
+														<option value="E">Excel</option>
+														
+
+													</select>
+
+												</div>
+											</div>
+
+
+									
+
+											
+
+
+										</div>
+
+									
+										<Button type="submit" class="btn btn-primary">Generate Sheet</Button>
+
+									
+									</form>
+
+
+
+
+
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+</body>
+</html>
+
+
+
+

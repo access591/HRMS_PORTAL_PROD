@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Employee Details</h1>
+
+
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<form id="smartwizard-validation" enctype="multipart/form-data"
+								class="wizard wizard-primary" th:action="@{/saveEmployee}"
+								th:object="${employees}" method="post">
+								<ul>
+									<li><a href="#validation-step-1"><br />
+										<small>Employee details</small></a></li>
+									<li><a href="#validation-step-2"><br />
+										<small>Department Details </small></a></li>
+									<li><a href="#validation-step-3"><br />
+										<small>Other Details1</small></a></li>
+									<li><a href="#validation-step-4"><br />
+										<small>Other Details2</small></a></li>
+								</ul>
+								<div>
+
+									<div id="validation-step-1">
+
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+
+													<label class="form-label">Emp Code <span
+														class="text-danger">*</span>
+													</label> <input name="empCode" type="text" id="empCode"
+														class="form-control" readonly>
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Name <span
+														class="text-danger">*</span>
+													</label> <input name="empName" id="empName" type="text"
+														class="form-control noHTMLtags" title="Name">
+												</div>
+												<div class="form-group">
+													<label class="form-label">Emp Active</label> <span
+														class="text-danger">*</span> <select class="form-control "
+														name="eActive" id="eActive">
+														<option value="">Select Type</option>
+														<option value="Y">Yes</option>
+														<option value="N">No</option>
+													</select>
+												</div>
+												<div class="form-group ">
+													<label class="form-label">Department Code <span
+														class="text-danger">*</span>
+													</label> <input type="text" id="deptCode"
+														class="form-control noHTMLtags" title="Department Code"
+														name="deptCode">
+												</div>
+
+												<div class="form-group ">
+													<label class="form-label">Wef Date</label> <span
+														class="text-danger">*</span> <input
+														class="form-control noHTMLtags" type="text" id="wefdate"
+														name="wefDate" />
+
+												</div>
+												<div class="form-group">
+													<label class="form-label">Designation Code <span
+														class="text-danger">*</span>
+													</label> <input name="desigCode" type="text" id="desigCode"
+														class="form-control noHTMLtags">
+												</div>
+												<div class="form-group">
+													<label class="form-label">Employee Insurance no <span
+														class="text-danger">*</span>
+													</label> <input type="text" id="empInsuranceNo"
+														name="empInsuranceNo" pattern="^[a-zA-Z\s]*$"
+														maxlength="20" class="form-control noHTMLtags">
+												</div>
+											</div>
+
+
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label">Upload Image <span
+														class="text-danger">*</span>
+													</label> <input type="file" id="file" name="file"
+														accept="image/png, image/jpeg"
+														onchange="preview_image(event)" /> <img alt="th"
+														id="output_image" width="100px" height="100px"
+														style="border-radius: 50%" />
+												</div>
+
+
+												<div class="form-group">
+													<label class="form-label">Pf Number <span
+														class="text-danger">*</span>
+													</label> <input name="pfNo" type="text" id="pfNo"
+														class="form-control noHTMLtags">
+												</div>
+												<div class="form-group">
+													<label class="form-label">Pf Effective Date</label> <span
+														class="text-danger">*</span> <select class="form-control "
+														name="empType" id="empType">
+														<option value="">Select Type</option>
+														<option value="P">Permanent</option>
+														<option value="C">Casual</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label class="form-label">Group Insurance Number</label> <span
+														class="text-danger">*</span> <select class="form-control"
+														name="locationType" id="locationType">
+														<option value="">Select Type</option>
+														<option value="C">Company</option>
+														<option value="G">Govt Office</option>
+													</select>
+												</div>
+
+												<div class="form-group ">
+													<label class="form-label">Employee Esi Number <span
+														class="text-danger">*</span>
+													</label> <input name="empEsiNo" type="text" id="empEsiNo"
+														maxlength="2" pattern="\d{1,10}" title="Only digits"
+														class="form-control noHTMLtags">
+												</div>
+
+
+
+												<div class="form-group">
+													<label class="form-label">Arrear Due <span
+														class="text-danger">*</span>
+													</label> <input name="arrearDue" type="text" id="arrearDue"
+														pattern="^[a-zA-Z\s]*$" maxlength="20"
+														class="form-control noHTMLtags">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Arrear Paid <span
+														class="text-danger">*</span>
+													</label> <input name="arrearDue" type="text" id="arrearDue"
+														pattern="^[a-zA-Z\s]*$" maxlength="20"
+														class="form-control noHTMLtags">
+												</div>
+
+											</div>
+										</div>
+									</div>
+
+									<div id="validation-step-2">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label">ReimburseAcode <span
+														class="text-danger">*</span>
+													</label> <input type="text">
+												</div>
+
+
+												<div class="form-group">
+													<label class="form-label">Aname <span
+														class="text-danger">*</span>
+													</label> <input type="text">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Gross1. <span
+														class="text-danger">*</span>
+													</label> <input type="text">
+												</div>
+
+
+
+												<div class="form-group ">
+													<label class="form-label">DGross. <span
+														class="text-danger">*</span>
+													</label> <input type="text">
+												</div>
+
+
+												<div class="form-group ">
+													<label class="form-label">Gross(yearly)</label> <span
+														class="text-danger">*</span> <input type="text">
+
+												</div>
+
+												<div class="form-group ">
+													<label class="form-label"> Basic pay</label> <span
+														class="text-danger">*</span> <input type="text">
+												</div>
+
+												<div class="form-group">
+													<div class="card">
+														<div class="card-header">
+															<h5 class="card-title mb-0">Hra Rate</h5>
+														</div>
+														<div class="card-body">
+															<input type="text">
+														</div>
+													</div>
+												</div>
+											</div>
+
+
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label">Hra Value <span
+														class="text-danger">*</span>
+													</label> <input type="text">
+												</div>
+
+
+												<div class="form-group">
+													<label class="form-label">Company Leased Acc <span
+														class="text-danger">*</span>
+													</label> <input type="text">
+												</div>
+
+
+												<div class="form-group">
+													<label class="form-label">Da <span
+														class="text-danger">*</span>
+													</label> <input type="text">
+												</div>
+
+
+												<div class="form-group">
+													<label class="form-label">Medical Allowance. <span
+														class="text-danger">*</span>
+													</label> <input type="text">
+												</div>
+
+
+
+												<div class="form-group ">
+													<label class="form-label">Conveyance Allowance</label> <span
+														class="text-danger">*</span> <input type="text">
+
+												</div>
+
+												<div class="form-group ">
+													<label class="form-label"> Bonus </label> <span
+														class="text-danger">*</span> <input type="text">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div id="validation-step-3">
+
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label for="inputSex">EPF <span class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+											<div class="form-group sm col-md-4">
+												<label for="inputHieght">ESI <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="identiMark">FPF <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+										</div>
+										<div class="form-row">
+											<div class="form-group col-md-4">
+												<label for="bloodGroup">Basic Pay (Yearly) <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="maritalStatus:">HRA Rate (Yearly) <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="preDisease">HRA Value (Yearly) <span
+													class="text-danger">*</span>
+												</label><input type="text">
+											</div>
+										</div>
+
+										<div class="form-row">
+											<div class="form-group col-md-4">
+												<label for="weddingDate">DA (Yearly) <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+
+											</div>
+											<div class="form-group col-md-4">
+												<label for="noChild">Medical Allowance(Yearly) <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="caste">CCA(Yearly) <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+										</div>
+
+										<div class="form-row">
+											<div class="form-group col-md-4">
+												<label for="religion">Conveyance Allowance (Yearly)
+													<span class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="nationality">Bonus(Yearly) <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="companyCode">Overtime (Yearly) <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+										</div>
+
+
+										<div class="form-row">
+											<div class="form-group col-md-4">
+												<label for="mediclaim">Overtime Rate <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="gpa">PF Type <span class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="Emp_Address1">FPF Percentage<span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+										</div>
+
+										<div class="form-row">
+											<div class="form-group col-md-4">
+												<label for="Emp_Address2">PF Percentage<span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="Emp_City">total Allowance<span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="Emp_State">Total Deduction<span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+										</div>
+
+
+										<div class="form-row">
+											<div class="form-group col-md-4">
+												<label for="Pin_Code">Total Allowance<span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="Emp_Mobile">Total Allowance (Yearly)<span
+													class="text-danger">*</span></label> <input type="text"
+													class="form-control ">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="Emp_Local_Add1">Total Deduction(Yearly)
+													<span class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+
+										</div>
+
+										<div class="form-row">
+											<div class="form-group col-md-4">
+												<label for="Emp_Local_Add2">Ammount Payable (Yearly)
+													<span class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="Emp_Local_City">FPF1(Yearly) <span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="Emp_Local_State">EPF1(Yearly) <span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+										</div>
+
+
+
+										<div class="form-row">
+											<div class="form-group col-md-4">
+												<label for="Emp_Local_PinCode">ESI1(Yearly) <span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+											<div class="form-group col-md-4">
+												<label for="Emp_Local_Mobile_No">Pension Fun1
+													(Yearly)<span class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+										</div>
+
+									</div>
+
+									<div id="validation-step-4">
+
+										<div class="form-row">
+											<div class="form-group col-md-4">
+												<label for="Comp_Mobile_No">Administrative Charges <span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+
+											<div class="form-group col-md-4">
+												<label for="Company_Email">C Code <span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+
+											<div class="form-group col-md-4">
+												<label for="Prof_Inst">Administrative Charges(Y) <span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+										</div>
+										<div class="form-row">
+
+											<div class="form-group col-md-4">
+												<label for="Local_Travel_Pr_km">Calculate Epf <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+
+											<div class="form-group col-md-4">
+												<label for="hobbies">Calculate Esi2 <span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+
+											<div class="form-group col-md-4">
+												<label for="clubs">TDs<span class="text-danger">*</span></label>
+
+												<input type="text">
+											</div>
+
+										</div>
+										<div class="form-row">
+											<div class="form-group col-md-6">
+												<label for="Reg_Code">Surcharge <span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+
+
+
+											<div class="form-group col-md-6">
+												<label for="Estf_Work ">Edchess <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+
+										</div>
+										<div class="form-row">
+											<div class="form-group col-md-6">
+												<label for="E_Emp_Cat">Ed Code <span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+
+
+											<div class="form-group col-md-6">
+												<label for="E_Category ">Section Code <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+										</div>
+
+										<div class="form-row">
+											<div class="form-group col-md-6">
+												<label for="E_Emp_Cat">CTC1 <span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+
+
+											<div class="form-group col-md-6">
+												<label for="E_Category ">CTC <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+										</div>
+
+										<div class="form-row">
+											<div class="form-group col-md-6">
+												<label for="E_Emp_Cat">Gross <span
+													class="text-danger">*</span></label> <input type="text">
+											</div>
+
+
+											<div class="form-group col-md-6">
+												<label for="E_Category ">Gross(yearly) <span
+													class="text-danger">*</span>
+												</label> <input type="text">
+											</div>
+										</div>
+
+
+
+
+										<button type="submit" class="btn btn-primary">Save</button>
+
+
+									</div>
+
+
+
+
+								</div>
+							</form>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="datatables-buttons"
+										class="table table-striped display" style="width: 100%"
+										aria-describedby="table">
+										<thead>
+											<tr>
+												<th scope="col">Emp id</th>
+												<th scope="col">Emp Name</th>
+												<th scope="col">Date Of Joining</th>
+												<th scope="col">employee images</th>
+												<th scope="col">Action</th>
+
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="listemployee : ${listEmployee}">
+												<td th:text="${listemployee.empCode}"></td>
+												<td th:text="${listemployee.empName}"></td>
+												<td th:text="${listemployee.dateOfJoining}"></td>
+												<td><img th:src="@{'/img/'+${listemployee.empImg}}"
+													alt="Avatar" width="48" height="48"
+													class="rounded-circle mr-2" /></td>
+												<td><a
+													th:href="@{/editEmployee/{id}(id=${listemployee.empCode})}"><i
+														class="fa fa-edit"></i></a> <a
+													th:href="@{/deleteEmployee/{id}/{empImg}(id=${listemployee.empCode},empImg=${listemployee.empImg})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="bi bi-trash"></em></a></td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function() {
+
+			$("input[name='dateOfBirth']").daterangepicker({
+				singleDatePicker : true,
+				autoApply : true,
+				locale : {
+					format : 'YYYY/MM/DD'
+				},
+				showDropdowns : true
+			});
+
+			$("input[name=\"loiDate\"]").daterangepicker({
+				singleDatePicker : true,
+				autoApply : true,
+				locale : {
+					format : 'YYYY/MM/DD'
+				},
+				showDropdowns : true
+			});
+
+			$("input[name=\"dateOfJoining\"]").daterangepicker({
+				singleDatePicker : true,
+				autoApply : true,
+				locale : {
+					format : 'YYYY/MM/DD'
+				},
+				showDropdowns : true
+			});
+
+			$("input[name=\"statusDate\"]").daterangepicker({
+				singleDatePicker : true,
+				autoApply : true,
+				locale : {
+					format : 'YYYY/MM/DD'
+				},
+				showDropdowns : true
+			});
+
+			$("input[name=\"leavingDate\"]").daterangepicker({
+				singleDatePicker : true,
+				autoApply : true,
+				locale : {
+					format : 'YYYY/MM/DD'
+				},
+				showDropdowns : true
+			});
+
+			$("input[name=\"weddingDate\"]").daterangepicker({
+				singleDatePicker : true,
+				autoApply : true,
+				locale : {
+					format : 'YYYY/MM/DD'
+				},
+				showDropdowns : true
+			});
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+	<script>
+		$(function() {
+			$("#smartwizard-default-primary").smartWizard({
+				theme : "default",
+				showStepURLhash : false
+			});
+
+			// Validation
+			var $validationForm = $("#smartwizard-validation");
+			$validationForm.validate({
+				errorPlacement : function errorPlacement(error, element) {
+					$(element).parents(".form-group").append(
+							error.addClass("invalid-feedback small d-block"))
+				},
+				highlight : function(element) {
+					$(element).addClass("is-invalid");
+				},
+				unhighlight : function(element) {
+					$(element).removeClass("is-invalid");
+				},
+				rules : {
+					"wizard-confirm" : {
+						equalTo : "input[name=\"wizard-password\"]"
+					}
+				}
+			});
+			$validationForm.smartWizard({
+				autoAdjustHeight : false,
+				backButtonSupport : false,
+				useURLhash : false,
+				showStepURLhash : false,
+
+			}).on("leaveStep",
+					function(e, anchorObject, stepNumber, stepDirection) {
+						if (stepDirection === "forward") {
+							return $validationForm.valid();
+						}
+						return true;
+					});
+			/* $validationForm.find(".btn-submit").on("click", function() {
+				if (!$validationForm.valid()) {
+					return;
+				}
+				
+				return false;
+			}); */
+		});
+	</script>
+	<script type='text/javascript'>
+		function preview_image(event) {
+			var reader = new FileReader();
+			reader.onload = function() {
+				var output = document.getElementById('output_image');
+				output.src = reader.result;
+			}
+			reader.readAsDataURL(event.target.files[0]);
+		}
+	</script>
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+</body>
+</html>

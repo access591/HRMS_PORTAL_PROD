@@ -1,0 +1,617 @@
+ <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Other</h1>
+
+
+					</div>
+
+					<div class="row">
+
+						<div class="col-12">
+							<div class="card">
+									<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">
+									Track all Enquiries</h5>
+									<input type="hidden" id="mess" name="mess"th:value="${message}">
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/saveTrackallEnquiries}"
+										th:object="${trackallEnquiries}" method="post">
+										<div class="form-row">
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Emp Enquiry ID. </label> <input
+													type="text" id="id" name="id" class="form-control"
+													disabled="disabled">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Employee Name</label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" name="empCode.empCode"
+													title="Employee Name" id="empCode.empCode"
+													onchange="myFunctionEmpCode()" required
+													aria-required="true">
+													<option value="">Select Employee</option>
+													<option th:each="e :${listEmployee}"
+														th:value="${e.getEmpCode()}" th:text="${e.getEmpName()}"></option>
+												</select>
+
+											</div>
+												<div class="form-group sm col-md-4">
+												<label class="form-label">Category Code </label> <label
+													style="color: red">*</label> <select
+													class="form-control select2"
+													name="categoryCode.categoryCode"
+													id="categoryCode.categoryCode" required
+													aria-required="true">
+													<option value="">Select Category</option>
+													<option th:each="c :${listCategory}"
+														th:value="${c.getCategoryCode()}"
+														th:text="${c.getCategoryName()}"></option>
+												</select>
+
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Designation Name </label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" name="desgCode.desgCode"
+													title="Designation  Name " id="desgCode.desgCode" required
+													aria-required="true">
+													<option value="">Select Designation</option>
+													<option th:each="d :${listDesignation}"
+														th:value="${d.getDesgCode()}" th:text="${d.getDesgName()}"></option>
+												</select>
+
+											</div>
+
+									
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Date Of Joining</label> <input
+													type="date" id="dateOfJoining" name="dateOfJoining"
+													title="Date Of Joining" class="form-control" disabled>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Present posting</label> <input
+													type="text" id="prsentPosting" name="prsentPosting"
+													title="Present Posting " class="form-control noHTML"
+													readonly>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Date Of Birth</label> <input
+													type="date" id="dob" name="dob" title="Date Of Birth"
+													class="form-control" readonly>
+											</div>
+
+									
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Deputation File No</label> <input
+													type="text" id="depuFileNo" name="depuFileNo"
+													title="Deputaion  File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Deputation Period</label> <input
+													type="text" id="deputationPeriod" name="deputationPeriod"
+													title="Deputation Period" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Deputation Date </label> <input
+													type="date" id="deputationDate" name="deputationDate"
+													title="Deputaion Date" class="form-control">
+											</div>
+
+										
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Under Rule 7 File NO</label> <input
+													type="text" id="underRule7FileNo" name="underRule7FileNo"
+													title="Under Rule 7 File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Under Rule 8 File No</label> <input
+													type="text" id="underRule8FileNo" name="underRule8FileNo"
+													title="Under Rule 8 File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Under Rule 8 Period </label> <input
+													type="date" id="underRule8Period" name="underRule8Period"
+													title="Under Rule 8 Period" class="form-control">
+											</div>
+
+									
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Under Rule 8 Date</label> <input
+													type="date" id="underRule8Date" name="underRule8Date"
+													title="under Rule 8 Date" class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Vigilance INQ File No</label> <input
+													type="text" id="vigilanceFileNo" name="vigilanceFileNo"
+													title="vigilance File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Vigilance INQ Period </label> <input
+													type="date" id="vigilanceInqPeriod"
+													name="vigilanceInqPeriod" title="vigilance Inq Period"
+													class="form-control">
+											</div>
+
+										
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Vigilance INQ Date</label> <input
+													type="date" id="vigilanceInqDate" name="vigilanceInqDate"
+													title="vigilance Inq Date" class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Suspention File No</label> <input
+													type="text" id="suspentionFileNo" name="suspentionFileNo"
+													title="suspention File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Suspention File Period </label> <input
+													type="date" id="suspentionFilePeriod"
+													name="suspentionFilePeriod" title="suspention File Period"
+													class="form-control">
+											</div>
+
+									
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Suspention File Date</label> <input
+													type="date" id="suspentionFileDate"
+													name="suspentionFileDate" title="suspention File Date"
+													class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Promotion File No</label> <input
+													type="text" id="promtionFileNo" name="promtionFileNo"
+													title="promtion File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Promotion File Date </label> <input
+													type="date" id="promtionFileDate" name="promtionFileDate"
+													title="Promtion File Date" class="form-control">
+											</div>
+
+									
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">ACP File No</label> <input
+													type="text" id="acpFileNo" name="acpFileNo"
+													title="Acp File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">ACP File Date</label> <input
+													type="date" id="acpFileDate" name="acpFileDate"
+													title="Acp File Date" class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">ARP File No </label> <input
+													type="text" id="arpFileNo" name="arpFileNo"
+													title="Arp File No" class="form-control noHTML">
+											</div>
+
+								
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">ARP File Date</label> <input
+													type="date" id="arpFileDate" name="arpFileDate"
+													title="arp File Date" class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">ACR File No</label> <input
+													type="text" id="acrFileNo" name="acrFileNo"
+													title="acr File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">ACR File Date </label> <input
+													type="date" id="acrFileDate" name="acrFileDate"
+													title="acr File Date" class="form-control">
+											</div>
+
+									
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Training File No</label> <input
+													type="text" id="trainingFileNo" name="trainingFileNo"
+													title="training File No" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Training File Date</label> <input
+													type="date" id="trainingFileDate" name="trainingFileDate"
+													title="training File Date" class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Ltc File No </label> <input
+													type="text" id="ltcFileNo" name="ltcFileNo"
+													title="ltc File No" class="form-control noHTML">
+											</div>
+									
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Ltc File Date</label> <input
+													type="date" id="ltcFileDate" name="ltcFileDate"
+													title="ltc File Date" class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Leave Acc File No</label> <input
+													type="text" id="leaveAccFileNo" name="leaveAccFileNo"
+													title="leave Acc FileNo" class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Leave Acc File Date </label> <input
+													type="date" id="leaveAccFileDate" name="leaveAccFileDate"
+													title="leave Acc File Date" class="form-control">
+											</div>
+								
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Award</label> <input type="text"
+													id="award" name="award" title="award"
+													class="form-control noHTML">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Award Date</label> <input
+													type="date" id="awardDate" name="awardDate"
+													title="Award Date" class="form-control">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Date Of Retirement </label> <input
+													type="date" id="dateOfRetirement" name="dateOfRetirement"
+													title="Date Of Retirement" class="form-control" disabled>
+											</div>
+
+
+				
+										</div>
+
+										<!-- <div class="form-row">
+										<div class="form-group sm col-md-4">
+												<label class="form-label">Amount Required
+												 <span class="text-danger">*</span></label> 
+								 <input type="text" id="amountRequired" name="amountRequired" maxlength="15" class="form-control"oninvalid="this.setCustomValidity('Please Enter Amount Required')"
+ oninput="setCustomValidity('')" required aria-required="true">
+											</div>
+											
+										<div class="form-group sm col-md-4">
+												<label class="form-label">Loan(To be Return In) 
+												 <span class="text-danger">*</span></label> 
+												 <input type="text" id="amountSanctioned" maxlength="12" name="amountSanctioned" class="form-control" title="loan to be return"oninvalid="this.setCustomValidity('Please Enter Loan(To be Return In)')"
+ oninput="setCustomValidity('')"  required aria-required="true">
+											</div>
+											
+											<div class="form-group sm col-md-4">
+											       <label class="form-label">Status
+											      </label>
+												<select class="form-control required"
+																		name="loanStatus" id="loanStatus">
+																			<option value="">Select Type</option>
+																			<option th:Value="Y">Approved </option>
+																			<option selected="selected" th:Value="N ">Un Approved </option>
+																			
+																	</select>
+												
+												</div>
+										
+										</div> -->
+
+
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> Save
+										</button>
+										&nbsp; &nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em>&nbsp; Cancel
+										</button>
+
+									</form>
+								</div>
+
+							</div>
+
+						</div>
+
+
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="col-sm-12" style="text-align: right;">
+										<span class=" btn btn-primary pull-left" id="selectedTREN"
+											style="background-color: rgb(150, 148, 255)"> <a
+											target="_blank" id="selectedHref"
+											href="/reportTrackallEnquiries" style="color: black;"> <em
+												class="align-middle mr-2 fas fa-fw fa-arrow-circle-down"
+												style="color: rgb(0, 39, 95);"></em> Generate Report
+										</a></span> <span> <select id="reportgenrate" name="reportgenrate"
+											class="custom-select flex-grow-1" style="width: 65px;">
+												<option value="P">PDF</option>
+												<option value="E">EXCEL</option>
+										</select>
+										</span>
+									</div>
+								</div>
+								<div class="card-body">
+									<table id="example" class="table table-striped display"
+										style="width: 100%" aria-describedby="example">
+										<thead>
+											<tr>
+
+												<th scope="col">Id</th>
+												<th scope="col">Name</th>
+												<th scope="col">Date Of Birth</th>
+												<th scope="col">Designation</th>
+												<th scope="col">Category</th>
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="listTrackEnq : ${listTrackallEnquiries}">
+												<td th:text="${listTrackEnq.id}"></td>
+
+												<td th:text="${listTrackEnq?.empCode?.empName}"></td>
+												<td
+													th:text="${#dates.format(listTrackEnq.dob,'dd-MM-yyyy')}"></td>
+												<td th:text="${listTrackEnq?.desgCode?.desgName}"></td>
+												<td th:text="${listTrackEnq.categoryCode?.categoryName}"></td>
+
+												<td><a
+													th:href="@{/editTrackallEnquiries/{id}(id=${listTrackEnq.id})}"><em
+														class="fa fa-edit"></em></a> <a
+													th:href="@{/deleteTrackallEnquiries/{id}(id=${listTrackEnq.id})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times"></em></a></td>
+
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+
+
+
+
+					</div>
+
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(
+				function() {
+					$("#selectedTREN").click(
+							function() {
+								var docFormat = $('#reportgenrate').val();
+								var url = "./";
+								$("#selectedHref").attr(
+										"href",
+										url + "reportTrackallEnquiries?_ex="
+												+ docFormat);
+							});
+
+				});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+
+			$('#example').DataTable({
+
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+
+		});
+	</script>
+
+
+	<script>
+		$(function() {
+
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+
+	<script>
+		function myFunctionEmpCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var empCode = document.getElementById('empCode.empCode').value
+			console.log("ajax request : " + empCode);
+			const xhr = new XMLHttpRequest();
+			xhr
+					.open('GET', './viewEmployeeDetailsTrackAllEnq/' + empCode,
+							true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+					var date = obj.dateOfJoining;
+					var dateOfJoin = (new Date(date)).toISOString().split('T')[0];
+
+					var employeeDateOfBirth = obj.empDob;
+					var employeeBirth = (new Date(employeeDateOfBirth))
+							.toISOString().split('T')[0];
+
+					var dateOfRetire = obj.dateOfRetirement;
+					var dateOfReti = (new Date(dateOfRetire)).toISOString()
+							.split('T')[0];
+
+					$('#prsentPosting').val(obj.presentPosting);
+					$('#dateOfJoining').val(dateOfJoin);
+					$('#dob').val(employeeBirth);
+					$('#dateOfRetirement').val(dateOfReti);
+
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+
+</body>
+</html>

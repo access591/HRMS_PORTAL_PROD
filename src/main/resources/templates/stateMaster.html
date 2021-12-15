@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">State
+										Master</h5>
+										<input type="hidden" id="mess" name="mess"th:value="${message}">
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#" th:action="@{/saveState}"
+										th:object="${state}" method="post">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+
+													<label> State Code </label> <input type="text"
+														class="form-control" id="stateCode" name="stateCode"
+														readonly="readonly">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label"> State Name</label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" pattern="^[a-zA-Z\s]*$"
+														maxlength="50" id="stateName" name="stateName"
+														style="text-transform: capitalize;" required
+														aria-required="true">
+												</div>
+
+												<div class="form-group">
+
+													<label class="form-label">Status</label>
+													<div class="custom-controls-stacked">
+
+														<label class="radio-inline"> <input type="radio"
+															value="Y" name="active" checked> Active
+														</label> <label class="radio-inline"> <input type="radio"
+															value="N" name="active"> Inactive
+														</label>
+
+													</div>
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+
+												<div class="form-group">
+													<label class="form-label">Country <span
+														class="text-danger">*</span></label> <select
+														class="form-control required"
+														name="countryCode.countryCode"
+														id="countryCode.countryCode" title="Country" required
+														aria-required="true">
+														<option value="">Select Country</option>
+														<option th:each="lco :${listCountry}"
+															th:value="${lco.getCountryCode()}"
+															th:text="${lco.getCountryName()}">Select Country
+															Type</option>
+
+													</select>
+												</div>
+											</div>
+
+
+
+
+
+
+										</div>
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="example" aria-describedby="example"
+										class="table table-striped display" style="width: 100%">
+										<thead>
+											<tr>
+												<th scope="col">State code</th>
+												<th scope="col">State Name</th>
+												<th scope="col">Country Name</th>
+												<th scope="col">Status</th>
+												<th scope="col">Action</th>
+
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="listOfState : ${listState}">
+												<td th:text="${listOfState.stateCode}"></td>
+												<td th:text="${listOfState.stateName}"></td>
+												<td th:text="${listOfState?.countryCode?.countryName}"></td>
+												<td th:text="${listOfState.active}"></td>
+												<td><a
+													th:href="@{/editState/{id}(id=${listOfState.stateCode})}"><em
+														class="fa fa-edit"> Edit</em></a> &nbsp; <a
+													th:href="@{/deleteState/{id}(id=${listOfState.stateCode})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times" style="color: red"> Remove</em></a></td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function() {
+			$('#example').DataTable({
+				"scrollY" : 200,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+			
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+			
+			
+			
+		});
+	</script>
+
+
+</body>
+</html>

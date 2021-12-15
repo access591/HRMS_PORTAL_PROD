@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script type="text/javascript" th:src="@{/js/ajax_leaveRequest.js}"></script>
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">HRMS</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<form id="validation-form" action="#"
+						th:action="@{/updateAdvertisement}"
+						th:object="${reqAdvertisement}" method="post">
+
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header">
+										<h5 class="card-title">Employee Requisition Advertisement</h5>
+										<div class="alert-outline">
+											<div th:if="${message}" th:text="${message}"
+												style="color: red"></div>
+										</div>
+									</div>
+
+									<div class="card-body">
+
+
+
+										<div class="container">
+
+											<div class="row">
+												<div class="col-12 col-lg-6">
+													<div class="form-group">
+														<label> Advertisement Code </label> <input type="text"
+															class="form-control" th:field="*{advtCode}" readonly>
+													</div>
+												</div>
+												<div class="col-12 col-lg-6">
+													<label class="form-label">Advertisement Date</label> <input
+														type="date" th:field="*{advtDate}" class="form-control">
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12 col-lg-6">
+													<label class="form-label">Remarks</label> <input
+														type="text" class="form-control noHTML" name="remarks"
+														th:field="*{remarks}">
+												</div>
+
+											</div>
+
+
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header"></div>
+									<div class="card-body">
+										<div id="validation-step-3">
+
+											<div class="col-sm-12" style="text-align: right;">
+
+
+
+
+												<a id="add_row" class="fa fa-plus" aria-hidden="true"
+													style="font-size: 24px; color: #001080"></a>&nbsp;&nbsp;&nbsp;
+												<a id='delete_row' class="fa fa-trash"
+													style="font-size: 24px; color: #399490fc"
+													aria-hidden="true"></a>
+											</div>
+
+
+											<table id="example" aria-describedby="example"
+												class="table table-striped display" style="width: 100%">
+												<thead>
+													<tr>
+														<th scope="col" class="text-center">Requisition Code</th>
+														<th scope="col" class="text-center">Requisition Date</th>
+														<th scope="col" class="text-center">Media Type</th>
+														<th scope="col" class="text-center">Media Name</th>
+														<th scope="col" class="text-center">Amount</th>
+														<th scope="col" class="text-center">Details</th>
+
+
+													</tr>
+												</thead>
+												<tbody>
+													<tr
+														th:each="row, stat :${reqAdvertisement.listReqAdvertisementDetail}">
+
+
+														<td><input
+															th:field="*{listReqAdvertisementDetail[__${stat.index}__].employeeRequisition.reqCode}"
+															class="form-control text-center" readonly></td>
+
+														<td><input type="date"
+															class="form-control text-center"
+															th:field="*{listReqAdvertisementDetail[__${stat.index}__].reqDate}">
+														</td>
+
+
+
+
+
+
+														<td><select id="media"
+															th:field="*{listReqAdvertisementDetail[__${stat.index}__].mediaType}"
+															class="form-control text-center" style="width: 150px;">
+																<option value=" ">Media Type</option>
+																<option value="News Paper">News Paper</option>
+																<option value="Cable TV">Cable TV</option>
+																<option value="Magzine">Magzine</option>
+																<option value="TV Channel">TV Channel</option>
+																<option value="Others">Others</option>
+														</select></td>
+
+														<td><input type="text"
+															class="form-control text-center noHTML" id="mediaName" name="mediaName"
+															th:field="*{listReqAdvertisementDetail[__${stat.index}__].mediaName}">
+														</td>
+
+														<td><input type="text"
+															class="form-control text-center noHTML" id="amount" name="mediaName"
+															th:field="*{listReqAdvertisementDetail[__${stat.index}__].advtAmount}">
+														</td>
+
+														<td><input type="text"
+															class="form-control text-center noHTML" id="details" name="mediaName"
+															th:field="*{listReqAdvertisementDetail[__${stat.index}__].remarks}">
+														</td>
+
+
+
+
+													</tr>
+
+
+
+
+												</tbody>
+
+											</table>
+										</div>
+
+									</div>
+
+								</div>
+							</div>
+							&nbsp&nbsp&nbsp
+							<button type="submit" class="btn btn-primary">Update</button>
+							&nbsp&nbsp&nbsp<input
+								onclick="window.history.go(-1); return false;" type="submit"
+								value="Back" class="btn btn-primary" />
+
+
+						</div>
+					</form>
+				</div>
+
+
+
+
+
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+
+
+
+	<script>
+		$(document).ready(function() {
+			$('#example').DataTable({
+				"scrollY" : 200,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+		});
+
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+
+
+</body>
+
+</html>

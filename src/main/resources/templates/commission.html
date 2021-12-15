@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<script src="js/settings.js"></script>
+<script src="js/app.js"></script>
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"
+	rel="stylesheet" />
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">HRMS</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h6 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Commission</h6>
+									<input type="hidden" id="mess" name="mess"
+										th:value="${message}">
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/saveCommission}" enctype="multipart/form-data"
+										th:object="${Commission}" method="post">
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label>ID</label> <label style="color: red">*</label> <input
+													type="text" class="form-control" id="id" title="ID"
+													name="id" disabled>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label>Title </label> <label style="color: red">*</label> <input
+													type="text" class="form-control noHTMLtags" title="Title"
+													id="comTitle" maxlength="499" name="comTitle" required
+													aria-required="true" />
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label> Description </label>
+												<textarea class="form-control noHTMLtags"
+													title="Description" id="comDesc" name="comDesc"
+													maxlength="1999" style="resize: none;" rows="1"></textarea>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">File</label>
+												<div>
+													<input id="fileUpload" class="validation-file" title="File"
+														maxlength="199" name="fileUpload" multiple="multiple"
+														type="file" accept="application/pdf" />
+												</div>
+											</div>
+
+										</div>
+										<button type="submit" title="Save"
+											class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" title="Reset" class="btn mb-1 btn-danger"
+											value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</form>
+								</div>
+
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="datatables-buttons"
+										class="table table-striped display" style="width: 100%"
+										aria-describedby="example">
+										<thead>
+											<tr>
+												<th scope="col">ID</th>
+												<th scope="col">Title</th>
+												<th scope="col" class="text-left">File Location</th>
+												<th scope="col" class="text-center">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="Commission : ${listCommission}">
+												<td th:text="${Commission.id}"></td>
+
+												<td th:text="${Commission.comTitle}"></td>
+												<td th:text="${Commission?.file}"></td>
+
+												<td class="text-center"><a
+													th:href="@{/editCommission/{id}(id=${Commission.id})}"><em
+														class="fa fa-edit"> Edit</em></a> &nbsp; <a
+													th:href="@{/deleteCommission/{id}(id=${Commission.id})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times" style="color: red"> Remove</em></a></td>
+
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</main>
+			<footer class="footer">
+				<div th:replace="fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			// Datatables basic
+
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+
+		});
+	</script>
+
+</body>
+</html>

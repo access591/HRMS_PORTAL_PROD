@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Sub
+										Module Master</h5>
+									<input type="hidden" id="mess" name="mess"th:value="${message}">
+									
+
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/saveSubModule}" th:object="${SubModule1}"
+										method="post">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+
+
+
+												<div class="form-group">
+													<label> Sub Module Code </label> <label style="color: red">*</label>
+													<input type="text" class="form-control" id="subModuleCode"
+														name="subModuleCode" readonly>
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Module</label> <label
+														style="color: red">*</label> <select class="form-control"
+														title="Module" name="moduleCode.moduleCode"
+														id="moduleCode.moduleCode" required aria-required="true">
+														<option value="">Select Module</option>
+														<option th:each="module: ${modulesList}"
+															th:value="${module.getModuleCode()}"
+															th:text="${module.getModuleName()}"></option>
+
+
+													</select>
+												</div>
+
+
+												<div class="form-group">
+													<label class="form-label">Status</label>
+													<div class="custom-controls-stacked">
+
+														<label class="radio-inline"> <input type="radio"
+															value="Y" name="acitveSubModule" checked> Active
+															&nbsp;&nbsp;
+														</label> <label class="radio-inline"> <input type="radio"
+															value="N" name="acitveSubModule"> Inactive
+														</label>
+
+													</div>
+												</div>
+
+
+
+											</div>
+
+
+
+											<div class="col-12 col-lg-6">
+
+												<div class="form-group">
+													<label class="form-label"> Sub Module Name</label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML"
+														style="text-transform: capitalize;"
+														pattern="^[a-zA-Z\s]*$" title="Sub Module Name"
+														maxlength="50" id="subModuleName" name="subModuleName"
+														required aria-required="true">
+												</div>
+
+												<div class="form-group">
+													<label>Sequence No</label> <label style="color: red">*</label>
+													<input type="text" class="form-control required noHTML"
+														id="seqNoSubModule" title="Sequence No" maxlength="2"pattern="\d{1,3}"
+														name="seqNoSubModule" required aria-required="true">
+												</div>
+											</div>
+										</div>
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="datatables-buttons"
+										class="table table-striped display"
+										aria-describedby="datatables-buttons" style="width: 100%">
+										<thead>
+											<tr>
+												<th scope="col">Sub Module</th>
+												<th scope="col">Sub Module Name</th>
+												<th scope="col">Module</th>
+												<th scope="col">Seq No</th>
+												<th scope="col">Is Active</th>
+												<th scope="col">Action</th>
+
+
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="listsubModule : ${listSubModule}">
+												<td th:text="${listsubModule.subModuleCode}"></td>
+												<td th:text="${listsubModule.subModuleName}"></td>
+												<td th:text="${listsubModule.moduleCode.moduleName}"></td>
+												<td th:text="${listsubModule.seqNoSubModule}"></td>
+												<td th:text="${listsubModule.acitveSubModule}"></td>
+												<td><a
+													th:href="@{/editSubModule/{id}(id=${listsubModule.subModuleCode})}"><em
+														class="fa fa-edit"></em></a> <a
+													th:href="@{/deleteSubModule/{id}(id=${listsubModule.subModuleCode})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times" style="color: red"></em></a></td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+<script>
+		$(document).ready(function() {
+
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+
+		});
+	</script>
+</body>
+</html>

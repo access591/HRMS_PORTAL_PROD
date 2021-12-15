@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+
+
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+
+<script>
+	jQuery(document).ready(function($) {
+
+		$('#validation-form').validate({
+			errorClass : "my-error-class",
+			submitHandler : function(form) { // for demo
+				//alert('valid form');
+				return true
+			}
+		});
+
+		jQuery.validator.addMethod("noHTML", function(value, element) {
+			return this.optional(element) || /^([a-zA-Z0-9]+)$/.test(value);
+		}, "No HTML tags are allowed!");
+
+	});
+
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+
+
+					</div>
+					<form id="validation-form" action="#" enctype="multipart/form-data"
+						th:action="@{/saveEmployeePromotion}"
+						th:object="${EmployeePromotion}" method="post">
+						<div class="row">
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Employee
+											Promotion</h5>
+										<input type="hidden" id="mess" name="mess"th:value="${message}">
+									</div>
+									<div class="card-body">
+										<div class="form-row">
+											<div class="form-group sm col-md-6">
+												<label class="form-label">Department Name </label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" name="departmentCode"
+													id="departmentCode" onchange="myFunctionDeptCode()"
+													required aria-required="true" title="Department Name">
+													<option value="">Select Department</option>
+													<option th:each="e :${listDepartment}"
+														th:value="${e.getDepartmentCode()}"
+														th:text="${e.getDeptName()}"></option>
+												</select>
+											</div>
+
+											<div class="form-group sm col-md-6">
+												<label class="form-label">Employee Name</label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" name="empCode.empCode"
+													id="empCode" onchange="myFunctionEmpCode()" required
+													aria-required="true" title="Employee Name">
+													<option value="">Select Employee</option>
+
+												</select>
+
+											</div>
+										</div>
+										
+										<div class="form-row">
+										
+										</div>	
+										
+										
+										
+									</div>
+
+
+
+								</div>
+							</div>
+							
+							
+							
+							
+							
+						</div>
+						
+						
+						<div class="row">
+								<div class="col-12">
+								<div class="card">
+									<div class="card-header"></div>
+									<div class="card-body">
+										<input id="_cr" name="_cr" type="hidden" value="1"
+											class="noHTML">
+
+										<div class="col-sm-12" style="text-align: right;">
+
+											<a id='delete_row' class="fa fa-trash"
+												style="font-size: 28px; color: #399490fc" aria-hidden="true"></a>
+											<div class="table-responsive">
+												<table id="example" aria-describedby="example" class="table"
+													style="width: 100%">
+													<thead>
+														<tr>
+															<th scope="col"></th>
+															<!-- 	<th scope="col">Employee Name.</th>  -->
+															<th scope="col">Promotion Date</th>
+															<th scope="col">New Post</th>
+															<th scope="col">Old Post</th>
+															<th scope="col">Remark</th>
+															<th scope="col" style="text-align: center">Documents</th>
+
+														</tr>
+													</thead>
+													<tbody>
+														<tr id='addr0'>
+
+															<td><input type="hidden" id='empCode2'
+																name='empCode20' placeholder='Employee Code' size='8'
+																class="noHTML" /></td>
+															<!-- <td><input type="text"id='empName' name='empName0'placeholder='Employee Name' /></td>  -->
+															<td><input type="date" id='promotionDate0'title='date'
+																name='promotionDate0' placeholder='Promotion Date'
+																size='6' value="" required aria-required="true"/></td>
+															<td><input type="text" id="newPost0" name='newPost0'
+																placeholder='New Post' size='8' class="noHTML" /></td>
+															<td><input type="text" id='oldPost0' name='oldPost0'
+																placeholder='Old Post ' size='8' class="noHTML" /></td>
+
+															<td><input type="text" id='remarks0' name='remarks0'
+																placeholder='Remarks' size='10' class="noHTML" /></td>
+															<td><input type="file" id='empUploadDoc0'
+																name='empUploadDoc0' placeholder='Upload Document'
+																accept="application/pdf"/></td>
+
+
+														</tr>
+														<tr id='addr1'></tr>
+
+													</tbody>
+
+
+
+
+												</table>
+											</div>
+
+										</div>
+										<hr>
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> Success
+										</button>
+										&nbsp; &nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em>&nbsp; Reset
+										</button>
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+						
+
+
+					</form>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+					<div class="form-row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+										<table id="datatables-buttons"
+										class="table table-striped display" style="width: 100%"
+										aria-describedby="example">
+										<thead>
+											<tr>
+												<th scope="col">Memo Number</th>
+												<th scope="col">Employee Name</th>
+												<th scope="col">Old post</th>
+												<th scope="col">New Post</th>
+												<th scope="col">Remarks</th>
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="empPromo : ${listEmpPromo}">
+												<td th:text="${empPromo.id}"></td>
+												<td th:text="${empPromo.empCode.empName}"></td>
+												<td th:text="${empPromo.oldPost}"></td>
+												<td th:text="${empPromo.newPost}"></td>
+												<td th:text="${empPromo.remarks}"></td>
+												<td><a
+													th:href="@{/deleteEmployeePromotion/{id}(id=${empPromo.id})}"
+													onclick="return confirm('Are you sure?')">
+													<em class="fa fa-times"></em>
+														
+														
+														</a> &nbsp; &nbsp; <a
+													th:href="@{/editEmployeePromotion/{id}(id=${empPromo.id})}"><em
+														class="fa fa-edit"></em></a> &nbsp; <a
+													th:href="@{/viewEmployeePromotion/{id}(id=${empPromo.id})}"><em
+														class="fa fa-eye" aria-hidden="true"></em></a></td>
+
+											</tr>
+
+
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+	<script>
+		$(function() {
+
+			$("input[name='overTimeDate']").daterangepicker({
+				singleDatePicker : true,
+				autoApply : true,
+				locale : {
+					format : 'YYYY/MM/DD'
+				},
+				showDropdowns : true
+			});
+
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scrollX : true,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+			
+			$('#example').DataTable({
+				"scrollY" : 200,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+		});
+	</script>
+
+
+
+	<script>
+		function myFunctionDeptCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var departmentCode = document.getElementById('departmentCode').value
+			console.log("ajax request : " + departmentCode);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewOverTimeRegisterBydepartment/'
+					+ departmentCode, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+					$('#empCode').empty();
+					$('#empCode').append(
+							$('<option>').val("").text("Select Employee"));
+
+					$('#empName').val(obj.empName);
+					$('#empCode').val(obj.empCode);
+
+					$.each(obj, function(i, item) {
+						/* console.log(" i " + i + " item : "
+								+ item.empCode);
+						console.log(" i " + i + " item : "
+								+ item.empName); */
+
+						$('#empCode').append(
+								$('<option>').val(this.empCode).text(
+										this.empName));
+					});
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+
+
+
+	<script>
+		var countI = 0;
+		function myFunctionEmpCode() {
+
+			var empCode = document.getElementById('empCode').value
+			console.log("ajax request : " + empCode);
+
+			const xhr = new XMLHttpRequest();
+			xhr
+					.open('GET', './viewOverTimeRegisterByEmployee/' + empCode,
+							true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+					// $('#example tr').slice(1).remove()
+
+					if (countI == 0) {
+						$('#empCode2').val(obj.empCode);
+						/*   $('#empName').val(obj.empName);
+						  $('#desgName').val(obj.desgName);	 */
+					}
+
+					if (countI > 0) {
+
+						$('#addr' + countI)
+								.html(
+										"<td><input id='empCode2" + countI + "' name='empCode2" + countI + "' size='8' type='hidden'placeholder='Emp Code' class='noHTML'/> "
+												+
+												/* 		    		"</td><td><input   id='empName"+countI+"'name='empName"+countI+"' type='text' placeholder='Employee Name'/>"+ */
+												"</td><td><input  id='promotionDate" + countI + "'name='promotionDate" + countI + "'size='6' type='date'  placeholder='Date'/>"
+												+
+
+												"</td><td><input  name='newPost" + countI + "'size='8' type='text' placeholder='New Post' class='noHTML'/></td>"
+												+ "</td><td><input  name='oldPost" + countI + "' type='text' placeholder='Old Post'size='8' class='noHTML'/></td>"
+												+ "<td><input  name='remarks" + countI + "' type='text' placeholder='Remark'size='10' class='noHTML'/></td>"
+												+ "<td><input  name='empUploadDoc" + countI + "' type='file' placeholder='Document' title='Choose File'size='8'/></td>"
+												+
+
+												"");
+
+						$('#empCode2' + countI).val(obj.empCode);
+						$('#empName' + countI).val(obj.empName);
+
+						$('#example').append(
+								'<tr id="addr' + (countI + 1) + '"></tr>');
+						$('#_cr').val(countI + 1);
+
+					}
+					countI++;
+
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+
+	<script>
+		$("#delete_row").click(function() {
+
+			if (countI > 1) {
+				$("#addr" + (countI - 1)).html('');
+				$('#_cr').val(countI - 1);
+				countI--;
+
+			}
+		});
+	</script>
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				//debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+
+</body>
+
+</html>

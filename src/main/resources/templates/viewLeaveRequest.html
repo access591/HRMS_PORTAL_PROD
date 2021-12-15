@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+input[type="text"] {
+	pointer-events: none;
+}
+
+input[type="date"] {
+	pointer-events: none;
+}
+
+.myclass {
+	pointer-events: none;
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title" th:text="${header}">Leave Request
+										Form</h5>
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}"
+											style="color: red"></div>
+									</div>
+								</div>
+
+
+
+								<div class="card-body">
+									<form id="validation-form" th:object="${leaveRequest}"
+										method="post">
+
+										<div class="row">
+											<div class="col-12 col-lg-4">
+												<div class="form-group">
+
+													<label> Employee Code </label> <input type="text"
+														class="form-control" id="id" name="empCode"
+														th:field="*{employee.empCode}">
+												</div>
+
+											</div>
+
+
+
+
+											<div class="col-12 col-lg-4">
+												<div class="form-group">
+													<label class="form-label"> Employee Name</label> <input
+														type="text" class="form-control"
+														th:field="*{employee.empName}">
+												</div>
+											</div>
+
+											<div class="col-12 col-lg-4">
+												<div class="form-group">
+													<label class="form-label"> Department Name</label> <input
+														type="text" class="form-control "
+														th:field="*{department.deptName}">
+												</div>
+											</div>
+
+
+										</div>
+
+										<div class="row">
+
+											<div class="col-12 col-lg-4">
+												<div class="form-group">
+
+													<label> Applied Date </label> <input type="date"
+														class="form-control" id="id" name="applyDate"
+														th:field="*{applyDate}">
+												</div>
+
+
+											</div>
+
+											<div class="col-12 col-lg-4">
+												<div class="form-group">
+
+													<label> From Date </label> <input type="date"
+														class="form-control" name="fromDate"
+														th:field="*{fromDate}">
+												</div>
+
+
+											</div>
+
+											<div class="col-12 col-lg-4">
+												<div class="form-group">
+													<label class="form-label"> To Date</label> <input
+														type="date" class="form-control " name="toDate"
+														th:field="*{toDate}">
+												</div>
+											</div>
+
+
+
+
+										</div>
+
+
+										<div class="row">
+
+											<div class="col-12 col-lg-4">
+												<label class="form-label">Order Number</label> <input
+													type="text" name="" value="" id="" class="form-control"
+													th:field="*{orderNo}">
+											</div>
+
+											<div class="col-12 col-lg-4">
+												<div class="form-group">
+													<label> Order Date </label> <input type="date" id=""
+														class="form-control" title="Total Leave"
+														th:field="*{orderDate}">
+												</div>
+											</div>
+
+
+											<div class="col-12 col-lg-4">
+												<div class="form-group">
+													<label> Contact </label> <input type="text" id=""
+														class="form-control" title="Total Leave"
+														th:field="*{contact}">
+												</div>
+											</div>
+
+										</div>
+
+
+										<div class="row">
+
+											<div class="col-12 col-lg-4">
+												<div class="form-group">
+
+													<label> Days </label> <input type="text"
+														class="form-control" id="id" name="leaveFor"
+														th:field="*{leaveFor}">
+												</div>
+
+
+											</div>
+
+
+											<div class="col-12 col-lg-4">
+												<div class="form-group">
+													<label class="form-label"> Reason</label> <input
+														type="text" class="form-control " name="reason"
+														th:field="*{reason}">
+												</div>
+											</div>
+
+											<div class="col-12 col-lg-4">
+												<div class="form-group">
+
+													<label class="form-label">From Type </label> <select
+														class="form-control myclass" th:field="*{fromDateType}"
+														id="from_date_type"
+														onchange="fromDayTypeValue(this.value)">
+														<option value=" f">Full</option>
+														<option value="fh">first Half</option>
+														<option value="sh">Second Half</option>
+														<option value="s">Short</option>
+													</select>
+												</div>
+
+
+											</div>
+
+										</div>
+
+
+										<div class="row">
+											<div th:if="${leaveRequest.status=='Y'}"
+												class="col-12 col-lg-4">
+												<div class="form-group">
+
+													<label> Approved Date </label> <input type="text"
+														class="form-control" id="id" name="approvedDate"
+														th:field="*{approvedDate}">
+												</div>
+
+
+											</div>
+											<div th:if="${leaveRequest.status=='C'}"
+												class="col-12 col-lg-4">
+												<div class="form-group">
+
+													<label> Cancel Date </label> <input type="text"
+														class="form-control" id="id" name="approvedDate"
+														th:field="*{approvedDate}">
+												</div>
+
+
+											</div>
+
+											<div th:if="${leaveRequest.status=='Y'}"
+												class="col-12 col-lg-4">
+												<div class="form-group">
+													<label class="form-label">Approved By</label> <input
+														type="text" class="form-control " name="approevedBy"
+														th:field="*{approevedBy}">
+												</div>
+											</div>
+
+											<div th:if="${leaveRequest.status=='C'}"
+												class="col-12 col-lg-4">
+												<div class="form-group">
+													<label class="form-label">Canceled By</label> <input
+														type="text" class="form-control " name="approevedBy"
+														th:field="*{cancelBy}">
+												</div>
+											</div>
+
+
+											<div th:if="${leaveRequest.requestType=='multiple'}"
+												class="col-12 col-lg-4">
+												<div class="form-group">
+
+													<label class="form-label">To Type </label> <select
+														class="form-control" th:field="*{toDateType}"
+														id="to_date_type" onchange="toDayTypeValue(this.value)">
+														<option value="f">Full</option>
+														<option value="fh">first Half</option>
+														<option value="sh">Second Half</option>
+														<option value="s">Short</option>
+													</select>
+												</div>
+
+
+											</div>
+
+										</div>
+
+
+
+
+
+										<input onclick="window.history.go(-1); return false;"
+											type="submit" value="Back" class="btn btn-primary" />
+
+									</form>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<!-- Mirrored from spark.bootlab.io/dashboard-default.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 27 Nov 2020 05:26:47 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<!-- /Added by HTTrack -->
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description"
+	content="Responsive Bootstrap 4 Admin &amp; Dashboard Template">
+<meta name="author" content="Bootlab">
+
+<title>HRMS</title>
+<link rel="stylesheet"
+	href="https://code.highcharts.com/css/highcharts.css" />
+<style>
+body {
+	opacity: 0;
+}
+
+#treeview, #treeview ul {
+	list-style-type: none;
+}
+
+#treeview .open>ul {
+	display: none;
+}
+
+#treeview .open, #treeview .closessss {
+	cursor: pointer;
+}
+.chart_hum {
+    margin: 0 auto;
+    display: inline-block;
+    padding-left:25px;
+    width:fit-content;
+}
+</style>
+<script src="js/settings.js"></script>
+<!-- END SETTINGS -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script type="text/javascript"
+	src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+
+<body>
+
+	<div class="wrapper">
+
+		<!-- Start  SIDEBAR    -->
+		<!-- Start  SIDEBAR    -->
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="fragments/sidebar :: div"></div>
+		</nav>
+		<!--   SIDEBAR    -->
+		<div class="main">
+			<div th:replace="fragments/header ::div"></div>
+
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Welcome HRMS</h1>
+
+
+					</div>
+
+
+
+					<div class="container">
+
+						<div class="row">
+							<div class="col-sm-6 py-2">
+
+								<div class="card card-body h-100">
+									<div class="card flex-fill w-100">
+										<div class="card-header">
+
+
+											<div class="card-actions float-right">
+												<a href="#" class="mr-1"> <em class="align-middle"
+													data-feather="refresh-cw"></em>
+												</a>
+												<div class="d-inline-block dropdown show">
+													<a href="#" data-toggle="dropdown" data-display="static">
+														<em class="align-middle" data-feather="more-vertical"></em>
+													</a>
+
+													<div class="dropdown-menu dropdown-menu-right">
+														<a class="dropdown-item" href="#">Action</a> <a
+															class="dropdown-item" href="#">Another action</a> <a
+															class="dropdown-item" href="#">Something else here</a>
+													</div>
+												</div>
+											</div>
+											<h5 class="card-title mb-0">Gradation List</h5>
+										</div>
+										<div class="card-body py-3">
+											<div class="chart chart-sm">
+
+												<figure class="highcharts-figure">
+													<div id="container-bar"></div>
+												</figure>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+
+							<div class="col-sm-6 py-2">
+
+								<div class="card card-body h-100">
+									<div class="card flex-fill w-100">
+										<div class="card-header" style="height: parent">
+
+											<div class="w-100">
+												<div class="row">
+													<div class="col-sm-6">
+														<div class="card">
+															<div class="card-body">
+																<div class="row">
+																	<div class="col mt-0">
+																		<h5 class="card-title">Total Employee</h5>
+																	</div>
+
+																	<div class="col-auto">
+																		<div class="avatar">
+																			<div
+																				class="avatar-title rounded-circle bg-primary-dark">
+																				<img
+																					src="https://img.icons8.com/color/48/000000/user-group-skin-type-7.png"
+																					alt="image" />
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<h1 class="display-5 mt-1 mb-3"
+																	th:text="${employeeList}">17.212</h1>
+
+															</div>
+														</div>
+														<div class="card">
+															<div class="card-body">
+																<div class="row">
+																	<div class="col mt-0">
+																		<h5 class="card-title">Recruiter</h5>
+																	</div>
+
+																	<div class="col-auto">
+																		<div class="avatar">
+																			<div
+																				class="avatar-title rounded-circle bg-primary-dark">
+																				<em class="align-middle" data-feather="users"></em>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<h1 class="display-5 mt-1 mb-3"
+																	th:text="${finalSelection}">17.212</h1>
+
+															</div>
+														</div>
+														
+														<div class="card">
+															<div class="card-body">
+																<div class="row">
+																	<div class="col mt-0">
+																		<h5 class="card-title">Total Order Tracking Records</h5>
+																	</div>
+
+																	<div class="col-auto">
+																		<div class="avatar">
+																			<div
+																				class="avatar-title rounded-circle bg-primary-dark">
+																				<img
+								x													src="https://img.icons8.com/cotton/64/000000/change-employee-female.png"
+																					alt="image" />
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<h1 class="display-5 mt-1 mb-3"
+																	th:text="${orderTracking}">43</h1>
+
+															</div>
+														</div>
+														
+													</div>
+													<div class="col-sm-6">
+														<div class="card">
+															<div class="card-body">
+																<div class="row">
+																	<div class="col mt-0">
+																		<h5 class="card-title">Total Attendance</h5>
+																	</div>
+
+																	<div class="col-auto">
+																		<div class="avatar">
+																			<div
+																				class="avatar-title rounded-circle bg-primary-dark">
+																				<img
+																					src="https://img.icons8.com/fluent-systems-filled/48/000000/attendance-mark.png"
+																					alt="image" />
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<h1 class="display-5 mt-1 mb-3"
+																	th:text="${listAttendenceRegister}">$24.300</h1>
+
+															</div>
+														</div>
+														<div class="card">
+															<div class="card-body">
+																<div class="row">
+																	<div class="col mt-0">
+																		<h5 class="card-title">Daily Leave</h5>
+																	</div>
+
+																	<div class="col-auto">
+																		<div class="avatar">
+																			<div
+																				class="avatar-title rounded-circle bg-primary-dark">
+																				<img
+																					src="https://img.icons8.com/cotton/64/000000/change-employee-female.png"
+																					alt="image" />
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<h1 class="display-5 mt-1 mb-3"
+																	th:text="${findTodayLeave}">43</h1>
+
+															</div>
+														</div>
+														
+														
+														<div class="card">
+															<div class="card-body">
+																<div class="row">
+																	<div class="col mt-0">
+																		<h5 class="card-title">Total Employee Enquire </h5>
+																	</div>
+
+																	<div class="col-auto">
+																		<div class="avatar">
+																			<div
+																				class="avatar-title rounded-circle bg-primary-dark">
+																				<img
+																					src="https://img.icons8.com/cotton/64/000000/change-employee-female.png"
+																					alt="image" />
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<h1 class="display-5 mt-1 mb-3"
+																	th:text="${trackList}">43</h1>
+
+															</div>
+														</div>
+														
+													</div>
+
+
+													<!-- space filling  -->
+
+												</div>
+
+											</div>
+
+
+
+
+
+										</div>
+									</div>
+								</div>
+
+
+							</div>
+
+
+						</div>
+
+					</div>
+
+
+
+
+
+
+					<!--  -->
+
+					<div class="container">
+
+						<div class="row">
+							<div class="col-sm-12 py-2">
+
+								<div>
+								
+								<div class="card flex-fill w-100">
+								<div class="card-header">
+									<div class="card-actions float-right">
+										<a href="#" class="mr-1"> <em class="align-middle"
+											data-feather="refresh-cw"></em>
+										</a>
+										
+									</div>
+									<h5 class="card-title mb-0">Yearly Budget</h5>
+								</div>
+								
+								<div class="card flex-fill w-100">
+									<div  id="chart_div" class="chart_hum"></div>
+								</div>
+								
+
+							</div>
+							</div>
+							
+							</div>
+							
+							
+							
+							
+						</div>
+					</div>
+
+
+					
+
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="fragments/footer :: div"></div>
+			</footer>
+		</div>
+
+	</div>
+	<script src="js/app.js"></script>
+
+
+	<script src='https://www.gstatic.com/charts/loader.js'></script>
+
+
+
+
+
+
+	<script>
+		$(function() {
+			$('#datatables-dashboard-projects').DataTable({
+				pageLength : 6,
+				lengthChange : false,
+				bFilter : false,
+				autoWidth : false
+			});
+		});
+	</script>
+	<script>
+		$(function() {
+			$('#datetimepicker-dashboard').datetimepicker({
+				inline : true,
+				sideBySide : false,
+				format : 'L'
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			$("#treeview .open").click(function(e) {
+				e.stopPropagation();
+				$(this).toggleClass("closessss open");
+
+			});
+		});
+	</script>
+
+	<!-- category wise record  -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			$.ajax({
+				type : "GET",
+				url : "getCategoryData",
+
+				success : function(result) {
+					var yearDtls = [];
+					var countDtls = [];
+					console.log("graph====>" + result);
+					Object.keys(result).forEach(function(key) {
+						yearDtls.push(key);
+						countDtls.push(result[key]);
+					});
+					drawChart1(yearDtls, countDtls);
+				}
+			});
+		});
+		function drawChart1(year, viewCounts) {
+			Highcharts.chart('container-bar', {
+				chart : {
+					type : 'column',
+					styledMode : true
+				},
+				title : {
+					text : 'Category wise Employee'
+				},
+				xAxis : [ {
+					title : {
+						text : ''
+					},
+					categories : year
+				} ],
+				yAxis : [ {
+					className : 'highcharts-color-0',
+					title : {
+						text : ''
+					}
+				} ],
+				series : [ {
+					data : viewCounts
+				} ]
+			});
+		}
+	</script>
+
+
+
+
+
+
+
+	<!-- demo pai chart -->
+	<script>
+		var data;
+		var chart;
+
+		google.charts.load('current', {
+			callback : drawChart,
+			packages : [ 'corechart' ]
+		});
+
+		function drawChart() {
+			
+
+			
+			var results = new Array;
+
+			$.ajax({
+				type : "GET",
+				url : "demoChart",
+
+				success : function(result) {
+					var yearDtls = [];
+					var countDtls = [];
+
+					console.log("result ====>" + result);
+					results.push(result);
+					console.log("results ====>" + results);
+				},
+				complete : function() {
+					afterAhjaxFinix();
+				}
+
+			});
+
+			function afterAhjaxFinix() {
+
+				console.log("global results ====>" + results);
+				data = new google.visualization.DataTable();
+				data.addColumn('string', 'VoteName');
+				data.addColumn('number', 'VoteCount');
+
+				entry = results;
+				count = 0;
+				
+				/* for (name in entry) {
+					console.log("json name : "+name);
+				    display("display name ====>"+name);
+				    ++count;
+				  } */
+				
+				// iterate "vt" keys
+				Object.keys(results[0]).forEach(function(key) {
+					 if (key.indexOf("vt") > -1) {
+						data.addRow([ key.substring(2,), parseFloat(results[0][key]) ]);
+					} 
+					
+				});
+
+				var options = {
+					title : '',
+					width : 700,
+					height : 450
+				};
+
+				chart = new google.visualization.PieChart(document
+						.getElementById('chart_div'));
+				google.visualization.events.addListener(chart, 'select',
+						selectHandler);
+				chart.draw(data, options);
+			}
+
+			function selectHandler() {
+				// be sure something is selected
+				if (chart.getSelection().length) {
+					var selectedItem = chart.getSelection()[0];
+					var value = data.getValue(selectedItem.row, 0);
+					alert('The user selected ' + value);
+				}
+			}
+		}
+	</script>
+
+</body>
+
+</html>
+

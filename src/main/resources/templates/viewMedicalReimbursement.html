@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"lang="en">
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script  src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+<style>
+body {
+	opacity: 0;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	 gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+<div class="wrapper">
+<nav id="sidebar" class="sidebar"aria-label="Site sidebar">
+ <div th:replace="/fragments/sidebar :: div"></div>
+ </nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+						<nav aria-label="breadcrumb">
+						</nav>
+					</div>
+					<form id="validation-form" action="#" th:action="@{/mediclaimApproval}" th:object="${medicalReimbursementEdit}" >
+					<div class="row">
+					
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title">	View Medical Reimbursement </h5>
+								<div class="alert-outline">
+									<div th:if="${message}" th:text="${message}" style="color: red">
+									</div> 
+									</div>	
+								</div>
+							<div class="card-body">
+									
+										<div class="row">
+											<div class="col-12 col-lg-6">
+											
+											
+											<div class="form-group">
+											  <label>Slip No </label>
+											  	<label style="color: red">*</label>
+											   <input type="text" class="form-control" id="slipNo" name="slipNo" th:field="*{slipNo}" readonly >
+												</div>
+												
+											
+									
+											
+											<div class="form-group">
+													<label class="form-label">Relation</label> 
+													 <select
+														class="form-control required" name="empRelation" th:field="*{empRelation}" id="empRelation" >
+														<option value="">Select Relation</option>
+														<option value="S">Self</option>
+														<option value="F">family</option>
+														
+														
+													</select>
+												</div>
+												
+												
+												
+												<div class="form-group">
+													<label class="form-label">Treatment Type</label> 
+													 <select 
+														class="form-control required" name="treatmentType" id="treatmentType" th:field="*{treatmentType}" >
+														<option value="">Select Type</option>
+														<option value="O">Operations</option>
+														<option value="H">Hospital</option>
+														<option value="D">Dental </option>
+														
+														
+													</select>
+												</div>
+						
+											<div class="form-group ">
+													<label class="form-label">Claiming Date</label> <span
+														class="text-danger">*</span> 
+														<input class="form-control required" type="text" id="claimingDate"name="claimingDate" th:field="*{claimingDate}" required aria-required="true"readonly/>
+
+												</div>
+
+												
+												
+						
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+											  <label> Slip  Date </label>
+											  	<label style="color: red">*</label>
+											   <input type="text" class="form-control" id="dateOfSlip" name="dateOfSlip" th:field="*{dateOfSlip}"  required aria-required="true"readonly/>
+												</div>
+											
+											<div class="form-group">
+													<label class="form-label">Name Of Person</label> <label style="color: red">*</label>
+														
+														 <input Type="text" class="form-control"  th:field="*{nameOfPerson}"name="nameOfPerson" id="nameOfPerson"required aria-required="true"readonly>
+
+												</div>
+												
+												
+													
+											<div class="form-group">
+													<label class="form-label">Indoor/Outdoor</label> 
+													 <select
+														class="form-control required" name="medIndOut" id="medIndOut" th:field="*{medIndOut}">
+														<option value="">Select Type</option>
+														<option value="I">Indoor</option>
+														<option value="O">Outdoor</option>
+														
+														
+													</select>
+												</div>
+												
+												<div class="form-group">
+										
+													<label class="form-label">Description</label> <label style="color: red">*</label>
+														
+														 <input Type="text" class="form-control"name="treatDescription" th:field="*{treatDescription}" id="treatDescription"required aria-required="true"readonly>
+
+												</div>
+												
+											</div>
+										</div>
+										
+									
+								</div>
+							</div>
+						</div>
+	      <div class="col-12">
+							<div class="card">
+								<div class="card-header">
+								</div>
+								<div class="card-body">
+							
+								<table id="datatables-buttons" class="table table-striped display" style="width:100%"aria-describedby="datatables-buttons">
+												<thead>
+					<tr><th scope="col">
+							Sr No
+						</th>
+						<th scope="col">
+						 Medical Store Doctor
+						</th>
+						<th scope="col">
+						   Cash Memo NO. 
+						</th>
+						<th scope="col">
+						  Cash Memo Date. 
+						</th>
+						<th scope="col">
+						 Claiming Amount
+						</th>
+						
+						<th scope="col">
+						 Passing Amount
+						</th>
+					
+					<th scope="col">
+						Govt Exemption  Amount
+						</th>
+						
+					<th scope="col">
+						Remark
+						</th>
+					</tr>
+				</thead>
+								 	<tbody>
+					<tr id='addr0'th:each="row, stat :${medicalReimbursementEdit.medicalReimbursementDetail}">
+						
+						<td>
+						<input type="text" name='srNo'  placeholder='srNo' class="form-control" value="" th:field="*{medicalReimbursementDetail[__${stat.index}__].srNo}"readonly/>
+						</td>
+						
+						
+						<td>
+						<input type="text" name='medStDr'  placeholder='Name' class="form-control" value="" th:field="*{medicalReimbursementDetail[__${stat.index}__].medStDr}"readonly/>
+						</td>
+						<td>
+					
+						<input type="text" name='caseMemoNo' placeholder='CASHMEMO NO' class="form-control"th:field="*{medicalReimbursementDetail[__${stat.index}__].caseMemoNo}"readonly/>
+						</td>
+						<td>
+						<input type="Date" name='caseMemoDate'id='caseMemoDate' placeholder='Case Memo Date' th:value="*{medicalReimbursementDetail[__${stat.index}__].caseMemoDate}" class="form-control"  th:field="*{medicalReimbursementDetail[__${stat.index}__].caseMemoDate}"readonly/>
+						</td>
+						<td>
+						<input type="text" name='calmlAmount' placeholder='Claiming Amount' class="form-control txt"th:field="*{medicalReimbursementDetail[__${stat.index}__].calmlAmount}"readonly/>
+						</td>
+						
+						<td>
+						<input type="text" name='passedAmount' placeholder='Passed Amount' class="form-control pas"th:field="*{medicalReimbursementDetail[__${stat.index}__].passedAmount}"readonly/>
+						</td>
+						<td>
+						<input type="text" name='govtexemptionAmount' placeholder='Govt exemption Amount' class="form-control govt" th:field="*{medicalReimbursementDetail[__${stat.index}__].govtexemptionAmount}"readonly/>
+						</td>
+						
+						
+						<td>
+						<input type="text" name='remark' placeholder='Remark' class="form-control"th:field="*{medicalReimbursementDetail[__${stat.index}__].remark}"readonly/>
+						</td>
+					</tr>
+                    
+                    
+				</tbody>
+				<tr>
+				<td colspan="4"></td>
+				
+					</tr>
+				 
+			           </table>
+							 <button type="submit"class="btn btn-secondary" value="cancel">Back</button>	
+								</div>
+							
+							</div>
+							
+						</div>
+						
+					
+					</div>
+						</form>
+				
+				</div>
+
+			</main>
+
+		<footer class="footer">
+		<div th:replace="/fragments/footer :: div"></div>
+		</footer>
+		
+		</div>
+		</div>
+		<script>
+	$(document).ready(function() {
+	    $('#datatables-buttons').DataTable( {
+	        "scrollY": 200,
+	        "scrollX": true,
+	        deferRender:true,
+            scrollCollapse: true,
+            
+	    } );
+	} );
+	
+	/* $("input").on("change", function() {
+	    this.setAttribute(
+	        "data-date",
+	        moment(this.value, "YYYY-MM-DD")
+	        .format( this.getAttribute("data-date-format") )
+	    )
+	}).trigger("change") */
+	
+	$("input[name='dateOfSlip']").daterangepicker({
+		singleDatePicker: true,
+	    autoApply: true,
+		locale: {
+			 format: 'YYYY/MM/DD'
+        },
+		showDropdowns: true
+	});
+	
+	
+	$("input[name='claimingDate']").daterangepicker({
+		singleDatePicker: true,
+	    autoApply: true,
+		locale: {
+			 format: 'YYYY/MM/DD'
+        },
+		showDropdowns: true
+	});
+	
+
+	</script>
+	
+<script>
+$(document).ready(function(){
+	
+	
+	$('#empRelation').attr("disabled", true); 
+	
+	$('#medIndOut').attr("disabled", true);
+	
+	$('#treatmentType').attr("disabled", true); 
+   function calculateRow(row) {
+	    var price = +row.find('input[name^="passedAmount"]').val();
+	    alert(price);
+
+	}
+   function calculateGrandTotal() {
+	    var grandTotal = 0;
+	    $("datatables-buttons").find('input[name^="passedAmount"]').each(function () {
+	        grandTotal += +$(this).val();
+	    });
+	    $("#grandtotal").text(grandTotal.toFixed(2));
+	    
+	    alert(grandTotal);
+
+	}
+
+
+function calculateSum() {
+
+    var sum = 0;
+    //iterate through each textboxes and add the values
+    $(".txt").each(function () {
+
+        //add only if the value is number
+        if (!isNaN(this.value) && this.value.length != 0) {
+            sum += parseFloat(this.value);
+        }
+
+    });
+    //.toFixed() method will roundoff the final sum to 2 decimal places
+   var fds=sum;
+   //$("#").html(sum.toFixed(2));
+   $("#sum").val(sum);
+    
+}
+
+$("table").on("keyup", ".txt", function () {
+    calculateSum();
+});
+
+
+function calculateSumtotalPassing() {
+
+    var sum = 0;
+    //iterate through each textboxes and add the values
+    $(".pas").each(function () {
+
+        //add only if the value is number
+        if (!isNaN(this.value) && this.value.length != 0) {
+            sum += parseFloat(this.value);
+        }
+
+    });
+    //.toFixed() method will roundoff the final sum to 2 decimal places
+   var fds=sum;
+   //$("#").html(sum.toFixed(2));
+   $("#totalPassing").val(sum);
+    
+}
+
+$("table").on("keyup", ".pas", function () {
+	calculateSumtotalPassing();
+});
+
+});
+
+
+function calculateSumtotalgovt() {
+
+    var sum = 0;
+    //iterate through each textboxes and add the values
+    $(".govt").each(function () {
+
+        //add only if the value is number
+        if (!isNaN(this.value) && this.value.length != 0) {
+            sum += parseFloat(this.value);
+        }
+
+    });
+    //.toFixed() method will roundoff the final sum to 2 decimal places
+   var fds=sum;
+   //$("#").html(sum.toFixed(2));
+   $("#totalGovtExt").val(sum);
+    
+}
+
+$("table").on("keyup", ".govt", function () {
+	calculateSumtotalgovt();
+});
+
+
+
+
+
+</script>
+<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive: true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttonsr').DataTable({
+				  deferRender:true,
+		            scrollCollapse: true,
+		            scroller: false,
+				   responsive: true,
+				   lengthMenu :[[10,20,30,-1 ],['10 rows', '20 rows', '30 rows', 'Show all' ] ],
+					buttons :[]
+			});
+			datatablesButtons.buttons().container().appendTo("#datatablesr-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+				
+</body>
+</html>

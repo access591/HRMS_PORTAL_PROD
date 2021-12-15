@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<script src="js/settings.js"></script>
+<script src="js/app.js"></script>
+
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	jQuery(document).ready(function($) {
+
+		$('#validation-form').validate({
+			errorClass : "my-error-class",
+			submitHandler : function(form) { // for demo
+				//alert('valid form');
+				return false;
+			}
+		});
+
+		jQuery.validator.addMethod("noHTML", function(value, element) {
+			return this.optional(element) || /^([a-z0-9]+)$/.test(value);
+		}, "No HTML tags are allowed!");
+
+	});
+
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Conveyance
+										Approval</h5>
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}"
+											style="color: red"></div>
+									</div>
+									<hr>
+								</div>
+								<div class="card-body">
+									<table id="datatables-buttons"
+										class="table table-striped display" style="width: 100%"
+										aria-describedby="example">
+										<thead>
+											<tr>
+												<th scope="col">Local Conveyance Id</th>
+												<th scope="col">Employee Name</th>
+
+												<th scope="col">Designation Of The Employee</th>
+												<th scope="col">Department Of Employee</th>
+												<th scope="col">Amount Passed</th>
+
+												<th scope="col">Approval Status</th>
+												<th scope="col">View</th>
+
+											</tr>
+
+										</thead>
+										<tbody>
+											<tr th:each="lc:${listLocalConveyance}">
+												<td th:text="${lc.localConvId}"></td>
+
+
+												<td th:text="${lc.empName}"></td>
+												<td th:text="${lc.deptName}"></td>
+												<td th:text="${lc.desgName}"></td>
+
+
+
+
+												<td th:text="${lc.totalPas}"></td>
+												<td>
+
+													<div class="dropdown">
+														<button class="btn btn-primary dropdown-toggle"
+															type="button" data-toggle="dropdown">Approved
+															Action</button>
+														<ul class="dropdown-menu">
+															<li><a class="dropdown-item"
+																th:href="@{/approvedLocalConv/{id}/(id=${lc.localConvId})}">Approved</a>
+															</li>
+															<li><a class="dropdown-item active" href="#">
+																	Not Approved </a></li>
+														</ul>
+													</div>
+												</td>
+												<td><a
+													th:href="@{/viewLocalConv/{id}/(id=${lc.localConvId})}"
+													class="btn btn-success"><em class="fa fa-eye"></em></a></td>
+											</tr>
+
+
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</main>
+			<footer class="footer">
+				<div th:replace="fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+</body>
+
+</html>

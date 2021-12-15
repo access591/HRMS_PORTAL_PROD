@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"lang="en">
+
+<head>
+  <title></title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+
+<div layout:fragment="sidebar">
+
+	<style>
+	
+	
+.fa-dot-circle:before{content:"\f192";margin-inline-end: inherit;color:#a20c97;}
+
+h5.tittle-w3l {
+    color: #000;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.19);
+}
+
+h5.tittle-w3l span {
+    color: #0879c9;
+    font-size: 20px;
+    letter-spacing: 0;
+}
+	
+	</style>
+	
+	
+	
+		<nav id="sidebar" class="sidebar">
+			<a class="sidebar-brand" th:href="@{/dashboard}" style="background: -webkit-linear-gradient(119.54deg, #1CB5E0, #000046);">
+				<img th:src="@{/img/avatars/logo1.png}" class="img-fluid rounded-circle mb-2" alt="image"></img>
+				HRMS
+			</a>
+			
+		<div class="sidebar-content">
+			<div class="sidebar-user">
+			<img th:src="@{/img/ave.png}" class="img-fluid rounded-circle mb-2"alt="image"></img>
+				<!-- 	<img th:src="@{'data:image/jpeg;base64,'+${session.imgUtil.getImgData(session.User_Profile_Pic)}}" class="img-fluid rounded-circle mb-2"alt="image"></img> -->
+					<div class="font-weight-bold"><span class="hidden-xs" th:text="${session.USER_NAME}"></span></div>
+				
+					
+				</div>
+		<ul class="sidebar-nav">
+				<li class="sidebar-header"style="background: -webkit-linear-gradient(
+119.54deg, #3daac900, #e7e7f7);"><a th:href="@{/dashboard}">Home</a> </li>
+				<li class="sidebar-item" th:each="module,statMod: ${modules}"><a
+					th:id="'call'+${statMod.index}"
+					th:onclick="'toggleMenu('+${statMod.index}+');'" href="#mod0"
+					data-toggle="collapse" class="sidebar-link collapsed"> <em
+						class="align-middle mr-2 fas fa-fw fa-tachometer-alt"aria-hidden="true"></em> <span
+						class="align-middle" th:text="${module.moduleName}"></span>
+				</a>
+					<ul th:id="'mod'+${statMod.index}"
+						class="sidebar-dropdown list-unstyled collapse "
+						data-parent="#sidebar">
+
+						<li class="sidebar-item  xx"
+							th:each="subModule,statSubMod: ${module.getSubModuleProgram()}">
+							
+							<a th:if="${statSubMod.index == 0}" th:id="'subCall'+${statSubMod.index}"
+								th:onclick="'toggleSubMenu('+${statSubMod.index}+');'" href="#subMod0" data-toggle="collapse"
+								class="sidebar-link collapsed"> 
+								<em class="align-middle mr-2 fas  fa-hand-point-right"></em> <span
+									class="align-middle" th:text="${subModule.getSubModuleName()}"></span>
+							</a>
+							<a th:if="${statSubMod.index == 1}" th:id="'subCall'+${statSubMod.index}"
+								th:onclick="'toggleSubMenu('+${statSubMod.index}+');'" href="#subMod1" data-toggle="collapse"
+								class="sidebar-link collapsed"> 
+								<em class="align-middle mr-2 fas  fa-hand-point-right"></em> <span
+									class="align-middle" th:text="${subModule.getSubModuleName()}"></span>
+							</a>
+							<a th:if="${statSubMod.index == 2}" th:id="'subCall'+${statSubMod.index}"
+								th:onclick="'toggleSubMenu('+${statSubMod.index}+');'" href="#subMod2" data-toggle="collapse"
+								class="sidebar-link collapsed"> 
+								<em class="align-middle mr-2 fas  fa-hand-point-right"></em> <span
+									class="align-middle" th:text="${subModule.getSubModuleName()}"></span>
+							</a>
+							
+							
+								<a th:if="${statSubMod.index == 3}" th:id="'subCall'+${statSubMod.index}"
+								th:onclick="'toggleSubMenu('+${statSubMod.index}+');'" href="#subMod3" data-toggle="collapse"
+								class="sidebar-link collapsed"> 
+								<em class="align-middle mr-2 fas  fa-hand-point-right"></em> <span
+									class="align-middle" th:text="${subModule.getSubModuleName()}"></span>
+							</a>
+							
+								<a th:if="${statSubMod.index == 4}" th:id="'subCall'+${statSubMod.index}"
+								th:onclick="'toggleSubMenu('+${statSubMod.index}+');'" href="#subMod4" data-toggle="collapse"
+								class="sidebar-link collapsed"> 
+								<em class="align-middle mr-2 fas  fa-hand-point-right"></em> <span
+									class="align-middle" th:text="${subModule.getSubModuleName()}"></span>
+							</a>
+							
+								<a th:if="${statSubMod.index == 5}" th:id="'subCall'+${statSubMod.index}"
+								th:onclick="'toggleSubMenu('+${statSubMod.index}+');'" href="#subMod5" data-toggle="collapse"
+								class="sidebar-link collapsed"> 
+								<em class="align-middle mr-2 fas  fa-hand-point-right"></em> <span
+									class="align-middle" th:text="${subModule.getSubModuleName()}"></span>
+							</a>
+							<a th:if="${statSubMod.index == 6}" th:id="'subCall'+${statSubMod.index}"
+								th:onclick="'toggleSubMenu('+${statSubMod.index}+');'" href="#subMod6" data-toggle="collapse"
+								class="sidebar-link collapsed"> 
+								<em class="align-middle mr-2 fas  fa-hand-point-right"></em> <span
+									class="align-middle" th:text="${subModule.getSubModuleName()}"></span>
+							</a>
+							
+							<a th:if="${statSubMod.index == 7}" th:id="'subCall'+${statSubMod.index}"
+								th:onclick="'toggleSubMenu('+${statSubMod.index}+');'" href="#subMod7" data-toggle="collapse"
+								class="sidebar-link collapsed"> 
+								<em class="align-middle mr-2 fas  fa-hand-point-right"></em> <span
+									class="align-middle" th:text="${subModule.getSubModuleName()}"></span>
+							</a>
+							
+							
+							<a th:if="${statSubMod.index ==8}" th:id="'subCall'+${statSubMod.index}"
+								th:onclick="'toggleSubMenu('+${statSubMod.index}+');'" href="#subMod8" data-toggle="collapse"
+								class="sidebar-link collapsed"> 
+								<em class="align-middle mr-2 fas  fa-hand-point-right"></em> <span
+									class="align-middle" th:text="${subModule.getSubModuleName()}"></span>
+							</a>
+							
+							<a th:if="${statSubMod.index == 9}" th:id="'subCall'+${statSubMod.index}"
+								th:onclick="'toggleSubMenu('+${statSubMod.index}+');'" href="#subMod9" data-toggle="collapse"
+								class="sidebar-link collapsed"> 
+								<em class="align-middle mr-2 fas  fa-hand-point-right"></em> <span
+									class="align-middle" th:text="${subModule.getSubModuleName()}"></span>
+							</a>
+							
+							<a th:if="${statSubMod.index == 10}" th:id="'subCall'+${statSubMod.index}"
+								th:onclick="'toggleSubMenu('+${statSubMod.index}+');'" href="#subMod10" data-toggle="collapse"
+								class="sidebar-link collapsed"> 
+								<em class="align-middle mr-2 fas  fa-hand-point-right"></em> <span
+									class="align-middle" th:text="${subModule.getSubModuleName()}"></span>
+							</a>
+							
+							<a th:if="${statSubMod.index >10}" th:id="'subCall'+${statSubMod.index}"
+								th:onclick="'toggleSubMenu('+${statSubMod.index}+');'" href="" data-toggle="collapse"
+								class="sidebar-link collapsed"> 
+								<em class="align-middle mr-2 fas  fa-hand-point-right"></em> <span
+									class="align-middle" th:text="${subModule.getSubModuleName()}"></span>
+							</a>
+							<ul th:id="'subMod'+${statSubMod.index}"
+								class="sidebar-dropdown list-unstyled collapse"
+								data-child="#sidebar">
+
+								<li class="sidebar-item yy"
+									th:each="entry: ${subModule.getSubPrograms()}">
+								
+									<a class="sidebar-link fas fa-dot-circle" th:href="${entry.value}"th:text="${entry.key}">
+									</a></li>
+
+							</ul></li>
+
+					</ul></li>
+			</ul>
+			</div>
+			</nav>
+			
+			<script>
+			
+			
+		$(document).ready(function() {
+			var path = location.pathname;
+			$('.sidebar-item .yy').filter(function(){
+				
+				/*  $('.collapse').collapse("show"); */
+			    return $('a', this).attr('href') === '.'+path;
+			}).addClass('active');
+			  
+
+		    });
+			
+		
+			
+
+			
+			</script>
+				<script>
+				
+
+				function toggleMenu(menuId){
+					document.getElementById("call"+menuId).setAttribute("href", "#mod"+menuId);
+				}
+
+
+				function toggleSubMenu(subMenuId){
+					//alert(subMenuId);
+					//document.getElementById("subCall"+subMenuId).href = "#subMod"+subMenuId;
+					
+					var subMenuLink =document.getElementById("subCall"+subMenuId);
+					subMenuLink.setAttribute('href', "#subMod"+subMenuId);
+				}
+				
+				
+				
+
+
+</script>
+
+	<!-- End  SIDEBAR    -->
+</div>
+
+</html>

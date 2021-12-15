@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+						<div class="card-header border" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">
+										Leave Grant Register</h5>
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}"
+											style="color: red"></div>
+									</div>
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/updateLeaveGrant}" th:object="${leaveGrant}"
+										method="POST">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+
+
+
+												<div class="form-group">
+													<label>Leave Grant Code </label> <label style="color: red">*</label>
+													<input type="text" class="form-control" id="leaveGrantCode"
+														name="leaveGrantCode"
+														th:field="${leaveGrantEdit.leaveGrantCode}" readonly>
+												</div>
+
+												<div class="form-group ">
+													<label class="form-label">Year</label> <span
+														class="text-danger">*</span> <input
+														class="form-control required" type="text" id="year"
+														name="year" th:value="${leaveGrantEdit.year}" required
+														aria-required="true">
+
+												</div>
+
+
+
+												<div class="form-group">
+													<label class="form-label">Employee Name</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" name="empCode.empCode"
+														id="empCode.empCode" required aria-required="true">
+														<option value="">Select Employee</option>
+														<option th:each="e :${listEmployee}"
+															th:value="${e.getEmpCode()}" th:text="${e.getEmpName()}"
+															th:field="${leaveGrantEdit.empCode.empCode}"></option>
+													</select>
+
+
+												</div>
+
+												<div class="form-group">
+													<label>leaveAvailed </label> <label style="color: red">*</label>
+													<input type="text" class="form-control noHTML"
+														id="leaveAvailed" name="leaveAvailed"
+														th:value="${leaveGrantEdit.leaveAvailed}"
+														pattern="\d{1,2}" maxlength="2" required
+														aria-required="true">
+												</div>
+
+
+
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> No Of Leave Granted </label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" id="noOfLeavesGranted"
+														name="noOfLeavesGranted"
+														th:value="${leaveGrantEdit.noOfLeavesGranted}"
+														pattern="\d{1,2}" maxlength="2" required
+														aria-required="true">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Type</label> <label
+														style="color: red">*</label> <select class="form-control"
+														name="levCode.levCode" id="levCode.levCode" required
+														aria-required="true">
+														<option value="">Select Leave</option>
+														<option th:each="lea :${listLeave}"
+															th:value="${lea.getLevCode()}"
+															th:text="${lea.getLevType()}"
+															th:field="${leaveGrantEdit.levCode.levCode}"></option>
+
+
+													</select>
+												</div>
+
+
+
+												<div class="form-group">
+													<label> Closing Balance </label> <label style="color: red">*</label>
+													<input type="text" class="form-control noHTML"
+														id="closingBal" name="closingBal"
+														th:value="${leaveGrantEdit.closingBal}" pattern="\d{1,2}"
+														maxlength="2" required aria-required="true">
+												</div>
+												<div class="form-group">
+													<label> previous YR Balance </label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" id="previousYrBalance"
+														th:value="${leaveGrantEdit.previousYrBalance}"
+														name="previousYrBalance" pattern="\d{1,2}" maxlength="2"
+														required aria-required="true">
+												</div>
+
+											</div>
+										</div>
+													   <button type="submit" class="btn btn-primary">
+				  										 <em class="fas fa-check"></em>&nbsp;Update</button>
+															&nbsp;
+										<button type="button" class="btn btn-outline-primary"
+											onclick="window.location.href='../leaveGrant';"><em class="fas fa-times"></em>&nbsp;Cancel</button>
+									</form>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+		$("input[name='year']").datepicker({
+
+			autoApply : true,
+			format : "yyyy",
+			autoclose : true,
+			minViewMode : "years",
+			locale : {
+				format : 'YYYY'
+			},
+			showDropdowns : true
+		});
+	</script>
+
+
+
+</body>
+</html>

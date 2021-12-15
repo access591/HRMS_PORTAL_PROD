@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script  src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+
+<style>
+
+
+body {
+	opacity: 0;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+
+#loading {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  display: block;
+  opacity: 0.7;
+  background-color: #676565;
+  z-index: 99;
+  text-align: center;
+}
+
+#loading-image {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  z-index: 100;
+}
+</style>
+
+
+<script>
+
+
+
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	 gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+ 
+<body>
+
+<div class="wrapper">
+<nav id="sidebar" class="sidebar">
+ <div th:replace="/fragments/sidebar :: div"></div>
+ </nav>
+ 		
+		<div class="main">
+		<div th:replace="/fragments/header ::div"></div>
+		<main class="content">
+		<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">
+							Personal
+						</h1>
+						
+					
+					</div>
+					
+					<div class="row">
+					
+							<div class="col-12">
+							<div class="card">
+							<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;"> View LTA Request  </h5>
+								<div class="alert-outline">
+									<div th:if="${message}" th:text="${message}" style="color: red">
+									</div> 
+									</div>	
+								</div>
+								<div class="card-body">
+								<form id="validation-form" action="#"th:action="@{/ltaApproval}" th:object="${LtaRequest}" method="GET" >
+									<div class="form-row">
+									
+									<div class="form-group sm col-md-4">
+											       <label class="form-label">LTA ID
+											       <span class="text-danger">*</span></label>
+							                 <input  type="text"id="ltaCode"name="ltaCode"  th:value="${ltaRequestEdit.ltaCode}"class="form-control " readonly>
+										     </div>
+												
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Employee Code</label>
+												<label style="color: red">*</label>
+												<select class="form-control select2"  name="empCode" id="empCode"  required aria-required="true"disabled>
+												 <option value="">Select Employee</option>
+												<option th:each="e :${listEmployee}" th:value="${e.getEmpCode()}" th:text="${e.getEmpName()}" th:field="${ltaRequestEdit.empCode.empCode}"></option>
+											     	</select>
+
+												</div>
+										     	 
+										     <div class="form-group sm col-md-4">
+											       <label class="form-label">Employee  Name
+											      </label>
+							                 <input  type="text"id="remarks"name="empName" title="remarks" th:field="${ltaRequestEdit.empCode.empName}" class="form-control required"disabled>
+										     </div>
+										     
+												
+												
+								</div>
+								
+								<div class="form-row">
+								<div class="form-group sm col-md-4">
+											       <label class="form-label">Appointment   Date
+											       <span class="text-danger">*</span></label>
+							                 <input  type="text"id="appDate"name="appDate" th:field="${ltaRequestEdit.appDate}" class="form-control required"disabled>
+										     </div>
+											
+									<div class="form-group sm col-md-4">
+											       <label class="form-label">Eligibility   Date
+											       <span class="text-danger">*</span></label>
+							                 <input  type="text"id="eligibilityDate"name="eligibilityDate" th:field="${ltaRequestEdit.eligibilityDate}" class="form-control required"disabled>
+										     </div>
+										     
+										     
+										     	<div class="form-group sm col-md-4">
+											       <label class="form-label">When Due
+											       <span class="text-danger">*</span></label>
+							                 <input  type="text"id="whenDue"name="whenDue" title="When Due" th:field="${ltaRequestEdit.whenDue}" class="form-control required"disabled>
+										     </div>
+										     
+								
+								</div>
+								
+								
+									<div class="form-row">
+									
+									        <div class="form-group sm col-md-4">
+											       <label class="form-label">When Available
+											       <span class="text-danger">*</span></label>
+							                 <input  type="text"id="whenAvailed"name="whenAvailed" title="When Available" th:field="${ltaRequestEdit.whenAvailed}" class="form-control required"disabled>
+										     </div>
+												
+												
+												<div class="form-group sm col-md-4">
+											       <label class="form-label">Leave From
+											       <span class="text-danger">*</span></label>
+							                 <input  type="text"id="leaveFrom"name="leaveFrom" th:field="${ltaRequestEdit.leaveFrom}" title="leave From" class="form-control required"disabled>
+										     </div>
+												
+												
+												<div class="form-group sm col-md-4">
+											       <label class="form-label">Leave To
+											       <span class="text-danger">*</span></label>
+							                 <input  type="text"id="leaveTo"name="leaveTo" th:field="${ltaRequestEdit.leaveFrom}" title="Leave TO" class="form-control required"disabled>
+										     </div>
+												
+												
+												</div>
+
+												
+												<div class="form-row">
+												
+												
+												
+												<div class="form-group sm col-md-4">
+											       <label class="form-label">Amount
+											       <span class="text-danger">*</span></label>
+							                 <input  type="text"id="adavance"name="adavance" title="Amount" th:field="${ltaRequestEdit.adavance}" class="form-control required" disabled>
+										     </div>
+										     
+										     	<div class="form-group sm col-md-4">
+											       <label class="form-label">Remarks
+											       <span class="text-danger">*</span></label>
+							                 <input  type="text"id="remarks"name="remarks" title="remarks" th:field="${ltaRequestEdit.remarks}" class="form-control required"disabled>
+										     </div>
+										     
+										     
+										     
+							</div>
+							
+							
+							
+						
+
+								<button type="submit"class="btn btn-pill btn-secondary" value="cancel">Back</button>
+								 </form>
+						      </div>
+	                      </div>
+	                     
+	                     
+	  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->                   
+	                     
+	                </div>     
+					
+					
+					
+					</div>
+         
+				</div>
+		</main>
+		<footer class="footer">
+		<div th:replace="/fragments/footer :: div"></div>
+		</footer>
+		</div>
+		</div>
+	<script>
+		$(function() {
+
+			$("input[name='appDate']").daterangepicker({
+				singleDatePicker: true,
+			    autoApply: true,
+				locale: {
+		            format: 'YYYY/MM/DD'
+		        },
+				showDropdowns: true
+			});
+			
+		$("input[name='eligibilityDate']").daterangepicker({
+				singleDatePicker: true,
+			    autoApply: true,
+				locale: {
+					  format: 'YYYY/MM/DD'
+		        },
+				showDropdowns: true
+			});
+		$("input[name=\"whenDue\"]").daterangepicker({
+			singleDatePicker: true,
+			   autoApply: true,
+			locale: {
+				  format: 'YYYY/MM/DD'
+	        },
+			showDropdowns: true
+		});
+		$("input[name='whenAvailed']").daterangepicker({
+			singleDatePicker: true,
+		    autoApply: true,
+			locale: {
+				  format: 'YYYY/MM/DD'
+	        },
+			showDropdowns: true
+		});
+		$("input[name='leaveFrom']").daterangepicker({
+			singleDatePicker: true,
+		    autoApply: true,
+			locale: {
+				  format: 'YYYY/MM/DD'
+	        },
+			showDropdowns: true
+		});
+			
+		
+		$("input[name='leaveTo']").daterangepicker({
+				singleDatePicker: true,
+				   autoApply: true,
+				locale: {
+					  format: 'YYYY/MM/DD'
+		        },
+				showDropdowns: true
+			});
+		
+		$("input[name=\"dov\"]").daterangepicker({
+			singleDatePicker: true,
+			   autoApply: true,
+			locale: {
+				  format: 'YYYY/MM/DD'
+	        },
+			showDropdowns: true
+		});
+		$("input[name=\"doi\"]").daterangepicker({
+			singleDatePicker: true,
+			   autoApply: true,
+			locale: {
+				  format: 'YYYY/MM/DD'
+	        },
+			showDropdowns: true
+		});
+
+
+
+			
+			$('#datatables-basic').DataTable({
+				responsive: true
+			});
+			// Datatables with Buttons
+		
+			
+		});			// Datatables basic
+
+		
+	</script>
+	
+		
+
+
+
+
+<script>
+ function myFunction(){
+   $('#empCode').click(function() {
+      	 var name= $('#empCode option:selected').text();
+      	$('#empName').val(name);
+      	}); 
+      }
+      
+</script>
+
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+</body>
+</html>

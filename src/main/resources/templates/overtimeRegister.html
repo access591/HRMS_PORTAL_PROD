@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	$(document).ready(function() {
+		/* 
+		 var i=1;
+		 $("#add_row").click(function(){
+		 $('#addr'+i).html("<td><input name='empCode"+i+"' size='10' type='text'placeholder='Employee Code'/> "+
+		 "</td><td><input  name='empName"+i+"' type='text' placeholder='Employee Name'/>"+
+		 "</td><td><input  name='vistPlace"+i+"' type='text'  placeholder='Designation'/>"+
+		 "</td><td><input  name='purposeOfVist"+i+"'size='8' type='text' placeholder='Over Time Rate'/></td>"+
+		 "</td><td><input  name='purposeOfVist"+i+"' type='time' placeholder='Time In'size='6'/></td>"+
+		 "<td><input  name='distanceKm"+i+"' type='time' placeholder='time Out'size='6'/></td>"+
+		 "<td><input  name='distanceKm"+i+"' type='text' placeholder='Overtime Hours'size='5'/></td>"+
+		 "<td><input  name='ltaRate"+i+"' type='checkbox' class='form-control input'/></td>"+
+		 "<td><input  name='distanceKm"+i+"' type='text' placeholder='Remark'/></td>"+
+		 "");
+
+		 $('#example').append('<tr id="addr'+(i+1)+'"></tr>');
+		 $('#_cr').val(i+1);
+		
+		 i++; 
+		 });
+		 */
+
+
+	
+	var message = document.getElementById('mess').value
+		if (message != null && message !== "") {
+
+			swal(message, "", "success", {
+				button : "OK",
+				hideClass : {
+					popup : 'animate__animated animate__fadeOutUp'
+				},
+			});
+		} else {
+			console.log("ajax request : " + message);
+		}
+
+		$("#delete_row").click(function() {
+			if (i > 1) {
+				$("#addr" + (i - 1)).html('');
+				$('#_cr2').val(i - 1);
+				i--;
+				calculateSum(), calculateSumtotalPassing()
+			}
+		});
+
+		function calculateSum() {
+
+			var sum = 0;
+			//iterate through each textboxes and add the values
+			$(".txt").each(function() {
+
+				//add only if the value is number
+				if (!isNaN(this.value) && this.value.length != 0) {
+					sum += parseFloat(this.value);
+				}
+
+			});
+			//.toFixed() method will roundoff the final sum to 2 decimal places
+			var fds = sum;
+			//$("#").html(sum.toFixed(2));
+			$("#totalClaim").val(sum);
+
+		}
+
+		$("table").on("keyup", ".txt", function() {
+			calculateSum();
+		});
+
+		function calculateSumtotalPassing() {
+
+			var sum = 0;
+			//iterate through each textboxes and add the values
+			$(".pas").each(function() {
+
+				//add only if the value is number
+				if (!isNaN(this.value) && this.value.length != 0) {
+					sum += parseFloat(this.value);
+				}
+
+			});
+			//.toFixed() method will roundoff the final sum to 2 decimal places
+			var fds = sum;
+			//$("#").html(sum.toFixed(2));
+			$("#totalPas").val(sum);
+
+		}
+
+		$("table").on("keyup", ".pas", function() {
+			calculateSumtotalPassing();
+		});
+
+	});
+</script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+
+
+					</div>
+					<form id="validation-form" action="#"
+						th:action="@{/saveOverTimeRegister}"
+						th:object="${overTimeRegister}" method="post">
+						<div class="row">
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header"style="background: #f4f7fc;">
+										<h5 class="card-title" style="text-decoration: underline;color: #dc2eaf;">Over
+											Time Register</h5>
+								<input type="hidden" id="mess" name="mess"th:value="${message}">
+									</div>
+									<div class="card-body">
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Over Time Date</label> <span
+													class="text-danger">*</span> <input type="date"
+													id="overTimeDate" name="overTimeDate" class="form-control"
+													required aria-required="true">
+											</div>
+
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Department Code </label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" name="departmentCode"
+													id="departmentCode" onchange="myFunctionDeptCode()"
+													required aria-required="true">
+													<option value="">Select Employee</option>
+													<option th:each="e :${listDepartment}"
+														th:value="${e.getDepartmentCode()}"
+														th:text="${e.getDeptName()}"></option>
+												</select>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Employee </label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" name="empCode" id="empCode"
+													onchange="myFunctionEmpCode()" required
+													aria-required="true">
+													<option value="">Select Employee</option>
+
+												</select>
+
+											</div>
+										</div>
+
+										<div class="row">
+										
+									<input id="_cr" name="_cr" type="hidden" value="1"
+											class="noHTML">
+
+										<div class="table-responsive">
+											<table id="example" aria-describedby="example" class="table"
+												style="width: 100%">
+												<thead>
+													<tr>
+														<th scope="col">Employee Code</th>
+														<th scope="col">Employee Name.</th>
+														<th scope="col">Designation</th>
+														<th scope="col">Over Time Rate</th>
+														<th scope="col">Time In</th>
+														<th scope="col">Time Out</th>
+														<th scope="col">Overtime Hours</th>
+														<!-- 	<th scope="col">Esi Apply </th> -->
+														<th scope="col">Remark</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr id='addr0'>
+
+														<td><input type="text" id='empCode2'
+															name='employee.empCode' placeholder='Employee Code'
+															size='10' class="noHTML" /></td>
+														<td><input type="text" id='empName' name='empName0'
+															placeholder='Employee Name' class="noHTML" /></td>
+														<td><input type="text" id='desgName' name='desiName0'
+															placeholder='Designation' value="" class="noHTML" /></td>
+														<td><input type="text" name='overTimeRate'
+															placeholder='Over Time Rate' size='8' class="noHTML" /></td>
+														<td><input type="time" class="Time1" id='timeIN'
+															name='timeIN' placeholder='Time In ' size='6' /></td>
+														<td><input type="time" class="Time2" id='timeOut'
+															name='timeOut' placeholder='time Out' size='6' /></td>
+														<td><input type="text" class="Hours noHTML" name='overTime'
+															placeholder='Overtime Hours' value='0' size='5'
+														/></td>
+														<!-- 
+														<td><select  id="esiYn"name="esiYn">
+																<option value="">Select Esi</option>
+																<option value="Y">Yes</option>
+																<option value="N">No</option>
+														</select></td>
+ -->
+														<td><input type="text" name='remarks0'
+															placeholder='Remarks' /></td>
+
+													</tr>
+													<tr id='addr1'></tr>
+
+												</tbody>
+
+
+
+
+											</table>
+										</div>
+										
+											
+										
+										</div>
+<hr>
+										<hr>
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+										
+
+
+									</div>
+								</div>
+							</div>
+					
+						</div>
+
+					</form>
+					
+					
+				<div class="row">
+					
+					<div class="col-12">
+						<div class="card">
+							<div class="card-header"></div>
+							<div class="card-body">
+								<table id="datatables-buttons"
+									class="table table-striped display" style="width: 100%"
+									aria-describedby="example">
+									<thead>
+										<tr>
+											<th scope="col">ID</th>
+											<th scope="col">Employee Name</th>
+											<th scope="col">Department</th>
+											<th scope="col">Designation</th>
+											<th scope="col">Over Time Date</th>
+
+											<th scope="col">Action</th>
+										</tr>
+
+
+
+									</thead>
+									<tbody>
+										<tr th:each="ovr : ${overReg}">
+											<td th:text="${ovr.id}"></td>
+											<td th:text="${ovr.empName}"></td>
+											<td th:text="${ovr.deptName}"></td>
+											<td th:text="${ovr.desgName}"></td>
+
+											<td th:text="${#dates.format(ovr.overTimeDate,'dd-MM-yyyy')}"></td>
+											<td><a th:href="@{/deleteOverTime/{id}/(id=${ovr.id})}"
+												onclick="return confirm('Are you sure?')"><em
+													class="fa fa-times" style="color: red"> Remove</em></a></td>
+
+										</tr>
+
+
+									</tbody>
+
+								</table>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				</div>
+
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+	<script>
+		$(function() {
+
+			function calculate() {
+				var hours = parseInt($(".Time2").val().split(':')[0], 10)
+						- parseInt($(".Time1").val().split(':')[0], 10);
+
+				var calTime = hours - 8;
+				$(".Hours").val(calTime);
+			}
+			$(".Time1,.Time2").change(calculate);
+			calculate();
+
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scrollX : true,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			$('#example').DataTable({
+				"scrollY" : 200,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+
+		});
+	</script>
+
+
+
+	<script>
+		function myFunctionDeptCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var departmentCode = document.getElementById('departmentCode').value
+			console.log("ajax request : " + departmentCode);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewOverTimeRegisterBydepartment/'+ departmentCode, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+					$('#empCode').empty();
+					$('#empCode').append(
+							$('<option>').val("").text("Select Employee"));
+
+					$('#empName').val(obj.empName);
+					$('#empCode').val(obj.empCode);
+
+					$.each(obj, function(i, item) {
+						/* console.log(" i " + i + " item : "
+								+ item.empCode);
+						console.log(" i " + i + " item : "
+								+ item.empName); */
+
+						$('#empCode').append(
+								$('<option>').val(this.empCode).text(
+										this.empName));
+					});
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+	<script>
+		function mydatTime() {
+			var timeIn = document.getElementById('empCode').value
+			alert(timeIn)
+		}
+	</script>
+
+	<script>
+		function myFunctionEmpCode() {
+
+			var empCode = document.getElementById('empCode').value
+			console.log("ajax request : " + empCode);
+
+			const xhr = new XMLHttpRequest();
+			xhr
+					.open('GET', './viewOverTimeRegisterByEmployee/' + empCode,
+							true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+					// $('#example tr').slice(1).remove()
+					var i = 0;
+
+					$('#empCode2').val(obj.empCode);
+					$('#empName').val(obj.empName);
+					$('#desgName').val(obj.desgName);
+
+					if (i > 0) {
+
+						$('#addr' + i)
+								.html(
+										"<td><input id='empCode2"+i+"' name='empCode"+i+"' size='10' type='text'placeholder='Employee Code' class='noHTML'/> "
+												+ "</td><td><input   id='empName"+i+"'name='empName"+i+"' type='text' placeholder='Employee Name' class='noHTML'/>"
+												+ "</td><td><input  id='desgName"+i+"'name='desgName"+i+"' type='text'  placeholder='Designation' class='noHTML'/>"
+												+ "</td><td><input  name='purposeOfVist"+i+"'size='8' type='text' placeholder='Over Time Rate' class='noHTML'/></td>"
+												+ "</td><td><input  name='purposeOfVist"+i+"' type='time' placeholder='Time In'size='6' /></td>"
+												+ "<td><input  name='distanceKm"+i+"' type='time' placeholder='time Out'size='6'/></td>"
+												+ "<td><input  name='distanceKm"+i+"' type='text' placeholder='Overtime Hours'size='5' class='noHTML'/></td>"
+												+ "<td><input  name='ltaRate"+i+"' type='checkbox' class='form-control input'/></td>"
+												+ "<td><input  name='distanceKm"+i+"' type='text' placeholder='Remark' class='noHTML'/></td>"
+												+ "");
+
+						$('#empCode2"+i+"').val(obj.empCode);
+						$('#empName"+i+"').val(obj.empName);
+						$('#desgName"+i+"').val(obj.desgName);
+
+						$('#example').append(
+								'<tr id="addr' + (i + 1) + '"></tr>');
+						$('#_cr').val(i + 1);
+
+					}
+
+					$("#delete_row").click(function() {
+
+						if (i > 1) {
+							$("#addr" + (i - 1)).html('');
+							$('#_cr').val(i - 1);
+							i--;
+
+						}
+					});
+
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+
+
+
+
+
+
+
+
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				//debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+</body>
+</html>

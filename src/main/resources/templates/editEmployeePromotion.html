@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+
+
+					</div>
+					<form id="validation-form" action="#" enctype="multipart/form-data"
+						th:action="@{/updateEmployeePromotion}"
+						th:object="${employeePromotionEdit}" method="post">
+						<div class="row">
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Employee
+											Promotion</h5>
+										<div class="alert-outline">
+											<div th:if="${message}" th:text="${message}"
+												style="color: red"></div>
+										</div>
+									</div>
+									<div class="card-body">
+										<div class="form-row">
+
+
+
+
+											<div class="form-group sm col-md-6">
+												<label class="form-label">ID </label> <label
+													style="color: red">*</label> <input type="text" id="id"
+													name='id' th:field='*{id}' placeholder='id'
+													class="form-control " readonly />
+											</div>
+
+											<div class="form-group sm col-md-6">
+												<label class="form-label">Employee </label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" name="empCode" id="empCode"
+													onchange="myFunctionEmpCode()"
+													th:field="*{empCode.empCode}" required aria-required="true"
+													disabled>
+													<option value="">Select Employee</option>
+													<option th:each="e :${listEmployee}"
+														th:value="${e.getEmpCode()}" th:text="${e.getEmpName()}"></option>
+												</select>
+
+											</div>
+										</div>
+									</div>
+
+									<div class="form-row"></div>
+
+								</div>
+							</div>
+						</div>
+						
+						
+						
+						
+							<div class="form-row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<input id="_cr" name="_cr" type="hidden" value="1">
+
+									<div class="col-sm-12" style="text-align: right;">
+
+
+										<div class="table-responsive">
+											<table id="example" aria-describedby="example" class="table"
+												style="width: 100%">
+												<thead>
+													<tr>
+														<th scope="col" style="text-align: center">Employee
+															Code</th>
+
+														<th scope="col" style="text-align: center">Promotion
+															Date</th>
+														<th scope="col" style="text-align: center">New Post</th>
+														<th scope="col" style="text-align: center">Old Post</th>
+														<th scope="col" style="text-align: center">Remark</th>
+														<th scope="col" style="text-align: center">Documents</th>
+
+													</tr>
+												</thead>
+												<tbody>
+													<tr id='addr0'>
+
+														<td><input type="text" id='empCode.empCode'
+															th:field='*{empCode.empCode}' name='empCode.empCode'
+															placeholder='Employee Code' size='8' class="noHTML" /></td>
+
+														<td><input type="date" id='promotionDate' 
+															th:field='*{promotionDate}' name='promotionDate'
+															placeholder='Promotion Date' size='6' /></td>
+														<td><input type="text" id="newPost" name='newPost'
+															th:field='*{newPost}' placeholder='New Post' size='6'
+															class="noHTML" /></td>
+														<td><input type="text" id='oldPost' name='oldPost'
+															th:field='*{oldPost}' placeholder='Old Post ' size='6'
+															class="noHTML" /></td>
+														<td><input type="text" id='remarks' name='remarks'
+															th:field='*{remarks}' placeholder='Remarks' size='10'
+															class="noHTML" /></td>
+														<td><input type="file" id="file" name="file"
+															th:src="@{'/employeedoc/'+*{empUploadDoc}}"  th:text="${employeePromotionEdit.empUploadDoc}" accept="application/pdf"/></td>
+													</tr>
+													<tr id='addr1'></tr>
+
+												</tbody>
+
+
+
+
+											</table>
+										</div>
+
+									</div>
+									<hr>
+									<button type="submit" class="btn btn-primary">Update</button>
+									&nbsp; &nbsp;
+									<button type="button" class="btn btn-outline-primary"
+									onclick="window.location.href='../employeePromotion';">Cancel</button>
+								</div>
+							</div>
+							
+						</div>
+						
+						</div>
+						
+						
+					</form>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+				</div>
+
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+	<script>
+		$(function() {
+
+			$("input[name='overTimeDate']").daterangepicker({
+				singleDatePicker : true,
+				autoApply : true,
+				locale : {
+					format : 'YYYY/MM/DD'
+				},
+				showDropdowns : true
+			});
+
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scrollX : true,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			$('#example').DataTable({
+				"scrollY" : 200,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+		});
+	</script>
+
+
+
+
+
+
+
+	<script>
+		$("#delete_row").click(function() {
+
+			if (countI > 1) {
+				$("#addr" + (countI - 1)).html('');
+				$('#_cr').val(countI - 1);
+				countI--;
+
+			}
+		});
+	</script>
+
+
+
+
+
+
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				//debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+</body>
+</html>

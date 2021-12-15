@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+	body {
+		opacity: 0;
+	}
+
+	.uppercase {
+		text-transform: uppercase;
+	}
+
+	#loading {
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		position: fixed;
+		display: block;
+		opacity: 0.7;
+		background-color: #676565;
+		z-index: 99;
+		text-align: center;
+	}
+
+	#loading-image {
+		position: absolute;
+		top: 25%;
+		left: 50%;
+		z-index: 100;
+	}
+
+	.my-error-class {
+		color: #FF0000;
+		font-size: 12px;
+		/* red */
+	}
+</style>
+
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+<head>
+	<meta charset="utf-8" />
+	<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title" style="text-decoration: underline;color: #dc2eaf;">LTA
+										Request</h5>
+						
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#" th:action="@{/updateLtaRequest}"
+										th:object="${LtaRequest}" method="post">
+										<div class="form-row">
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">LTA ID <span
+														class="text-danger">*</span></label> <input type="text"
+													id="ltaCode" name="ltaCode" th:value="${ltaRequestEdit.ltaCode}"
+													class="form-control " readonly>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Employee Code</label> <label
+													style="color: red">*</label> <select
+													class="form-control custom-select" name="empCode.empCode"
+													id="empCode.empCode" required aria-required="true" disabled>
+													<option value="">Select Employee</option>
+													<option th:each="e :${listEmployee}" th:value="${e.getEmpCode()}"
+														th:text="${e.getEmpName()}"
+														th:field="${ltaRequestEdit.empCode.empCode}"></option>
+												</select>
+
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Appointment Date <span
+														class="text-danger">*</span></label> <input type="date"
+													id="appDate" name="appDate" th:field="${ltaRequestEdit.appDate}"
+													class="form-control required">
+											</div>
+
+
+
+										</div>
+
+										<div class="form-row">
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Eligibility Date <span
+														class="text-danger">*</span></label> <input type="date"
+													id="eligibilityDate" name="eligibilityDate"
+													th:field="${ltaRequestEdit.eligibilityDate}"
+													class="form-control required">
+											</div>
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">When Due <span
+														class="text-danger">*</span></label> <input type="date"
+													id="whenDue" name="whenDue" title="When Due"
+													th:field="${ltaRequestEdit.whenDue}" class="form-control required">
+											</div>
+
+
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">When Available <span
+														class="text-danger">*</span></label> <input type="date"
+													id="whenAvailed" name="whenAvailed" title="When Available"
+													th:field="${ltaRequestEdit.whenAvailed}"
+													class="form-control required">
+											</div>
+										</div>
+										<div class="form-row">
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Leave From <span
+														class="text-danger">*</span></label> <input type="date"
+													id="leaveFrom" name="leaveFrom"
+													th:field="${ltaRequestEdit.leaveFrom}" title="leave From"
+													class="form-control required">
+											</div>
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Leave To <span
+														class="text-danger">*</span></label> <input type="date"
+													id="leaveTo" name="leaveTo" th:field="${ltaRequestEdit.leaveFrom}"
+													title="Leave TO" class="form-control required">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Amount <span
+														class="text-danger">*</span></label> <input type="text"
+													id="adavance" name="adavance" title="Amount"
+													th:field="${ltaRequestEdit.adavance}"
+													class="form-control required noHTML">
+											</div>
+										</div>
+
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Remarks <span
+														class="text-danger">*</span></label> 
+										
+										<textarea class="form-control noHTML" rows="1" th:field="${ltaRequestEdit.remarks}" id="remarks"style="resize: none;"
+													name="remarks" title="remarks" placeholder="Textarea"></textarea>	
+											
+											
+											
+											
+											</div>
+										</div>
+										<hr>
+						      			 <button type="submit" class="btn btn-primary"> <em class="fas fa-check"></em> &nbsp; Update</button>
+									      &nbsp;
+									      <button type="button" class="btn btn-outline-primary"
+										   onclick="window.location.href='../ltaRequest';"><em class="fas fa-times"></em> &nbsp;    Cancel</button>
+										</form>
+								</div>
+							</div>
+
+
+							<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+
+						</div>
+
+
+
+					</div>
+
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function () {
+
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive: true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+				.DataTable(
+					{
+						deferRender: true,
+						scrollCollapse: true,
+						scroller: false,
+						responsive: true,
+						lengthMenu: [
+							[10, 20, 30, -1],
+							['10 rows', '20 rows', '30 rows',
+								'Show all']],
+						buttons: []
+					});
+			datatablesButtons.buttons().container().appendTo(
+				"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+
+
+
+
+	<script>
+		function myFunction() {
+			$('#empCode').click(function () {
+				var name = $('#empCode option:selected').text();
+				$('#empName').val(name);
+			});
+		}
+	</script>
+
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success: function () {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+</body>
+
+</html>

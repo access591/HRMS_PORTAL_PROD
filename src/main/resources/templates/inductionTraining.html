@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+
+
+					</div>
+					<form id="validation-form" action="#"
+						th:action="@{/saveInductionTraining}"
+						th:object="${inductionTraining}" method="post">
+						<div class="row">
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header" style="background: #f4f7fc;">
+										<h5 class="card-title" style="text-decoration: underline;color: #dc2eaf;">Induction
+											Training</h5>
+									<input type="hidden" id="mess" name="mess"th:value="${message}">
+									</div>
+									<div class="card-body">
+
+										<div class="form-row">
+											<div class="form-group sm col-md-6">
+												<label class="form-label">Department Name </label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" name="departmentCode"
+													title="Department Name" id="departmentCode"
+													onchange="myFunctionDeptCode()" required
+													aria-required="true">
+													<option value="">Select Employee</option>
+													<option th:each="e :${listDepartment}"
+														th:value="${e.getDepartmentCode()}"
+														th:text="${e.getDeptName()}"></option>
+												</select>
+											</div>
+
+											<div class="form-group sm col-md-6">
+												<label class="form-label">Employee Name</label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" name="empCode"
+													title="Employee Name" id="empCode"
+													onchange="myFunctionEmpCode()" required
+													aria-required="true">
+													<option value="">Select</option>
+													<option th:each="e :${listEmployee}"
+														th:value="${e.getEmpCode()}" th:text="${e.getEmpName()}"></option>
+												</select>
+
+											</div>
+
+
+
+
+										</div>
+										<div class="form-row">
+
+											<input id="_cr" name="_cr" type="hidden" value="1"
+												class="noHTML">
+
+											<div class="table-responsive">
+												<table id="example" aria-describedby="example" class="table"
+													style="width: 100%">
+													<thead>
+														<tr>
+															<th scope="col">Department Code.</th>
+															<th scope="col">Department Name.</th>
+															<th scope="col">Contact Person</th>
+															<th scope="col">Induction Date </th>
+															<th scope="col">Duration</th>
+
+
+														</tr>
+													</thead>
+													<tbody>
+														<tr id='addr0'>
+
+
+
+															<td><input type="text" id="departmentCode2"
+																name='departmentCode20' title='Department Code' placeholder='Department Code' /></td>
+															<td><input type="text" id="deptName"
+																name='deptName0' placeholder='Department  Name' title='Department  Name'
+																class="noHTML" /></td>
+
+															<td><input type="text" name='contPerson0'  title='Contact  Person'
+																placeholder='Contact Person' class="noHTML" /></td>
+															<td>
+															 <label style="color: red">*</label>
+															<input type="date" name='trainingDate0'
+																placeholder='Duration' title='Induction Date' required aria-required="true"/></td>
+															<td><select class="form-control Select" title='Duration'
+																name="duration0" id="duration0">
+																	<option value="">Select Type</option>
+																	<option th:Value="1">1St Half</option>
+																	<option th:Value="2">2nd Half</option>
+																	<option th:Value="3">Full day</option>
+															</select></td>
+														</tr>
+														<tr id='addr1'></tr>
+
+													</tbody>
+
+
+
+
+												</table>
+											</div>
+											<hr>
+											<hr>
+											<button type="submit" class=" btn mb-1 btn-success">
+												<em class="fas fa-check"></em> &nbsp; Save
+											</button>
+											&nbsp;
+											<button type="reset" class="btn mb-1 btn-danger"
+												value="Reset">
+												<em class="fas fa-times"></em> &nbsp;Cancel
+											</button>
+
+										</div>
+
+
+
+
+
+
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+					</form>
+
+
+					<!-- Table Row start  -->
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="datatables-buttons"
+										class="table table-striped display" style="width: 100%"
+										aria-describedby="example">
+										<thead>
+											<tr>
+												<th scope="col">Induction Id</th>
+												<th scope="col">Employee Name</th>
+												<th scope="col">Department Name</th>
+												<th scope="col">Designation</th>
+
+												<th scope="col">Action</th>
+											</tr>
+
+
+
+										</thead>
+										<tbody>
+											<tr th:each="listOfInd : ${listInduct}">
+												<td th:text="${listOfInd.id}"></td>
+												<td th:text="${listOfInd.empName}"></td>
+												<td th:text="${listOfInd.deptName}"></td>
+												<td th:text="${listOfInd.desgName}"></td>
+
+												<td><a
+													th:href="@{/editInductionTraining/{id}(id=${listOfInd.id})}"><em
+														class="fa fa-edit"> Edit</em></a> &nbsp; <a
+													th:href="@{/deleteInductionTraining/{id}(id=${listOfInd.id})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times" style="color: red"> Remove</em></a></td>
+
+											</tr>
+
+
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+					<!-- Table Row End  -->
+
+
+				</div>
+
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+	<script>
+		$(function() {
+
+			$("input[name='localConvDate']").daterangepicker({
+				singleDatePicker : true,
+				autoApply : true,
+				locale : {
+					format : 'DD/MM/YYYY'
+				},
+				showDropdowns : true
+			});
+
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scrollX : true,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+			
+			
+			$('#example').DataTable({
+				"scrollY" : 200,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+		});
+	</script>
+
+
+
+	<script>
+		function myFunctionEmpCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var empCode = document.getElementById('empCode').value
+			console.log("ajax request : " + empCode);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewEmployeeDetails/' + empCode, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+					$('#empName').val(obj.empName);
+					$('#deptName').val(obj.deptName);
+					$('#desgName').val(obj.desgName);
+					$('#empPayCode').val(obj.empPayCode);
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+
+
+	<script>
+		function myFunctionDeptCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var departmentCode = document.getElementById('departmentCode').value
+			console.log("ajax request : " + departmentCode);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewInductionBydepartment/' + departmentCode,
+					true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+					$('#empCode').empty();
+					$('#empCode').append(
+							$('<option>').val("").text("Select Employee"));
+
+					$('#empName').val(obj.empName);
+					$('#empCode').val(obj.empCode);
+
+					$.each(obj, function(i, item) {
+						/* console.log(" i " + i + " item : "
+								+ item.empCode);
+						console.log(" i " + i + " item : "
+								+ item.empName); */
+
+						$('#empCode').append(
+								$('<option>').val(this.empCode).text(
+										this.empName));
+					});
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+	<script>
+		function myFunctionEmpCode() {
+
+			var empCode = document.getElementById('empCode').value
+			console.log("ajax request : " + empCode);
+
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewinductionByEmployee/' + empCode, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+					// $('#example tr').slice(1).remove()
+					var i = 0;
+
+					$('#departmentCode2').val(obj.departmentCode);
+					$('#deptName').val(obj.deptName);
+
+					$("#delete_row").click(function() {
+
+						if (i > 1) {
+							$("#addr" + (i - 1)).html('');
+							$('#_cr').val(i - 1);
+							i--;
+
+						}
+					});
+
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+</body>
+</html>

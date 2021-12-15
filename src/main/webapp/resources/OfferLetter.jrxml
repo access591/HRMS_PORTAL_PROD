@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.17.0.final using JasperReports Library version 6.17.0-6d93193241dd8cc42629e188b94f9e0bc5722efd  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OfferLetter" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fcae59ba-4f42-4ace-a2f8-6490b66c2eeb">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="OfferLetter" class="java.lang.String"/>
+	<parameter name="topDate" class="java.util.Date"/>
+	<parameter name="name" class="java.lang.String"/>
+	<parameter name="To" class="java.lang.String"/>
+	<parameter name="from" class="java.lang.String"/>
+	<parameter name="role" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="165" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="750" height="50" uuid="160a2dc4-e355-4141-8dcd-23a3cf5af247"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Goverment of haryana Ministry of Home and Administration of Justice]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="50" width="750" height="30" uuid="c7564129-a917-44cd-b2d0-24709387a701"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Offer Letter]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="80" width="100" height="20" uuid="4ffdb3a3-b362-4330-8d72-14dddd66dd3e"/>
+				<textFieldExpression><![CDATA[$P{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="100" width="100" height="20" uuid="c9a9beeb-523d-405a-890e-4d8bbf25b6ae"/>
+				<textFieldExpression><![CDATA[$P{topDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="140" width="100" height="20" uuid="685aa94e-11ca-4612-a8ac-7606a956e493"/>
+				<textFieldExpression><![CDATA[$P{To}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="182" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="750" height="182" uuid="45123fbc-e7a9-45b5-8b60-be279029f67d"/>
+				<textFieldExpression><![CDATA[$P{OfferLetter}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="107" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="750" height="20" uuid="261dfc38-ffea-4489-bf0a-24f3fa0679a0"/>
+				<text><![CDATA[Looking forward for a fruitfu lcareer for you in our company.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="30" width="750" height="20" uuid="f0bfdc30-6109-4553-847f-a0c0b716c60a"/>
+				<text><![CDATA[For Govt of Haryana Ministry of Home and Administration of justice]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="50" width="100" height="20" uuid="c2de78ac-80a0-4708-9565-bb0b95317259"/>
+				<textFieldExpression><![CDATA[$P{from}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="80" width="100" height="20" uuid="5f86f01b-7fca-48c4-af66-873824a16da5"/>
+				<textFieldExpression><![CDATA[$P{role}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

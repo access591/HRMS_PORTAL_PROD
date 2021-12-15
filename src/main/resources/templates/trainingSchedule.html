@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Training
+										Schedule</h5>
+							        <input type="hidden" id="mess" name="mess"th:value="${message}">
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/saveTrainerSchedule}"
+										th:object="${trainingSchedule}" method="post">
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Training Schedule Code </label> <input
+													type="text" th:field="*{trScheduleCode}" title="Training Schedule Code"
+													class="form-control noHTMLtags" disabled="disabled">
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Training Schedule Date <span
+													class="text-danger">*</span></label> <input type="date" title="Training Schedule Date"
+													th:field="*{trScheduleDate}" id="trScheduleDate"
+													class="form-control required">
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Training Requisition Code</label>
+												<label style="color: red">*</label> <select
+													class="form-control select2"
+													th:field="*{trainingRequisition.trReqCode}" required
+													aria-required="true" id="trReqCode" title="Training Requisition Code"
+													onchange="selectTrainingRequisitionCode()">
+													<option value="">Select</option>
+													<option th:each="e :${listTrainingRequistion}"
+														th:value="${e.trReqCode}" th:text="${e.trReqCode}"></option>
+												</select>
+											</div>
+										</div>
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Training Requisition Date
+													<span class="text-danger">*</span>
+												</label> <input type="date" th:field="*{trReqDate}" title="Training Requisition Date"
+													class="form-control required">
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Topic Serial No</label> <label
+													style="color: red">*</label> <input type="text" title="Topic Serial No"
+													th:field="*{topicSerialNo}" name="topicSrNum"
+													class="form-control required noHTML">
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Employee Name (If Trainer)</label>
+												<select class="form-control select2"
+													th:field="*{trainerCode}" title="Employee Name (If Trainer)" required aria-required="true"
+													id="trainerCode" onchange="selectTrainer()">
+													<option value="">Select</option>
+													<option th:each="e :${listEmployee}"
+														th:value="${e.empCode}" th:text="${e.empName}"></option>
+												</select>
+
+											</div>
+
+										</div>
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Trainer Code</label> <input
+													Type=text id="trainerName" name="trainerName" title="Trainer Code"
+													class="form-control required noHTML">
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Training Start Date <span
+													class="text-danger">*</span></label> <input type="date" title="Training Start Date"
+													id="trainingStartDate" th:field="*{dateFrom}"
+													class="form-control" required>
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Training End Date </label> <input
+													type="date" th:field="*{dateTo}" class="form-control" title="Training End Date"
+													required>
+											</div>
+
+										</div>
+										<div class="form-row"></div>
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Training Agency Name </label> <input
+													type="text" th:field="*{trainerAgency}" name="trainingAgencyName" title="Training Agency Name"
+													class="form-control required noHTML">
+											</div>
+										</div>
+										<button type="submit" title="Save" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" title="Cancel" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="datatables-buttons"
+										class="table table-striped display" style="width: 100%"
+										aria-describedby="example">
+										<thead>
+											<tr>
+												<th scope="col">Training Schedule Code</th>
+												<th scope="col">Training Schedule Date</th>
+												<th scope="col">Employee Name</th>
+												<th scope="col">Training Start Date</th>
+												<th scope="col">Training End Date</th>
+												<th scope="col">Training Agency Name</th>
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+
+											<tr th:each="trainingSchedule : ${listTrainingSchedule}">
+												<td th:text="${trainingSchedule.trScheduleCode}"></td>
+												<td th:text="${#dates.format(trainingSchedule.trScheduleDate, 'dd-MMM-yyyy')}"></td>
+												<td th:text="${trainingSchedule.trainer}"></td>
+												<td th:text="${#dates.format(trainingSchedule.dateFrom, 'dd-MMM-yyyy')}"></td>
+												<td th:text="${#dates.format(trainingSchedule.dateTo, 'dd-MMM-yyyy')}"></td>
+												<td th:text="${trainingSchedule.trainerAgency}"></td>
+												<td><a
+													th:href="@{/edittrainingSchedule/{id}(id=${trainingSchedule.trScheduleCode})}"><em
+														class="fa fa-eye"></em></a>
+														&nbsp; &nbsp;
+														 <a
+													th:href="@{/deleteTrainingSchedule/{id}(id=${trainingSchedule.trScheduleCode})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times"></em></a></td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+	<script>
+		document.getElementById("trScheduleDate").valueAsDate = new Date();
+		var today = new Date().toISOString().split('T')[0];
+		document.getElementsByName("trainingStartDate")[0].setAttribute('min',
+				today);
+		function selectTrainer() {
+			var trainerCode = document.getElementById("trainerCode").value;
+			console.log("trainer code : " + trainerCode);
+			document.getElementById("trainerName").value = trainerCode;
+		}
+	</script>
+	<script>
+		$(function() {
+
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+	<script>
+		function selectTrainingRequisitionCode() {
+			console.log("hi ");
+			var trReqCode = document.getElementById('trReqCode').value
+			console.log("ajax request : " + trReqCode);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './getTrainingInfoBytrCode/' + trReqCode, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+	<script>
+		$(document).ready(function() {
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+
+		});
+	</script>
+	
+	
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+</body>
+</html>

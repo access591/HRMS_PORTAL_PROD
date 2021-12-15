@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+<script>
+	$(document)
+			.ready(
+					function() {
+						var i = 1;
+						$("#add_row")
+								.click(
+										function() {
+											$('#addr' + i)
+													.html(
+															"<td><input name='jobDutie"+i+"' type='text'  placeholder='Job Dutie' title='job Duties' class='form-control txt input-md noHTML' required/> "
+																	+
+
+																	"</td><td><input  name='fromDate"+i+"' type='Date'  title='From Date' placeholder='y'class='form-control input-md'required>"
+																	+ "</td><td><input  name='toDate"+i+"' type='Date'title='To Date' placeholder='y'  class='pas form-control input-md'required></td>"
+																	+ "<td><select class=' form-control input-md' id='status'name='status"+i+"'><option value=' '>Select</option><option value='Y'>Yes</option><option value='N'>No</option></select></td>"
+																	+
+
+																	"");
+
+											$('#tabTour').append(
+													'<tr id="addr' + (i + 1)
+															+ '"></tr>');
+											$('#_cr').val(i + 1);
+
+											i++;
+										});
+
+						$("#delete_row").click(
+								function() {
+									if (i > 1) {
+										$("#addr" + (i - 1)).html('');
+										$('#_cr2').val(i - 1);
+										i--;
+										calculateSum(),
+												calculateSumtotalPassing(),
+												calculateSumtotalgovt()
+									}
+								});
+
+					});
+</script>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Others</h1>
+
+
+					</div>
+					<form id="validation-form" action="#"
+						th:action="@{/savestaffDuties}" th:object="${saffPostingDuties}"
+						method="post">
+						<div class="row body">
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header" style="background: #f4f7fc;">
+											<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Staff
+											Posting Duties</h5>
+							<input type="hidden" id="mess" name="mess"th:value="${message}">
+									</div>
+									<div class="card-body">
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+
+												<label class="form-label">Job Code </label> <input
+													name="jobCode" type="text" id="jobCode" title="Job Code"
+													class="form-control" readonly>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Employee Code</label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" name="empCode.empCode" id="empCode"
+													onchange="myFunctionEmpCode()" title="Employee Code" required 
+													aria-required="true">
+													<option value="">Select Employee</option>
+													<option th:each="e :${listEmployee}"
+														th:value="${e.getEmpCode()}" th:text="${e.getEmpCode()}"></option>
+												</select>
+
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Employee Name </label> <input
+													type="text" id="empName" name="empName" title="Employee Name"
+													class="form-control" readonly>
+											</div>
+
+
+
+
+										</div>
+
+										<div class="form-row">
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Position Code </label> <input
+													type="text" id="positionCode" name="positionCode"
+													title="Position Code" class="form-control noHTML">
+											</div>
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Department</label> <input
+													Type="text" class="form-control" name="deptName" title="Department"
+													id="deptName" readonly>
+
+											</div>
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Designation</label> <input
+													Type=text class="form-control " name="desgName" title="Designation"
+													id="desgName" readonly>
+
+											</div>
+										</div>
+										<div class="form-row">
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Description</label>
+
+												<textarea id="jobDesc" name="jobDesc" rows="1" style="resize: none;"title="Description"
+													class="form-control"></textarea>
+											</div>
+										</div>
+
+
+										<div class="card-body">
+											<input id="_cr" name="_cr" type="hidden" value="1">
+
+											<div class="col-sm-12" style="text-align: right">
+
+
+
+												<a id="add_row" class="fa fa-plus" aria-hidden="true"
+													style="font-size: 20px; color: #001080"></a>&nbsp;&nbsp;&nbsp;
+												<a id='delete_row' class="fa fa-trash"
+													style="font-size: 20px; color: #399490fc"
+													aria-hidden="true"></a>
+											</div>
+
+											<div class="table-responsive">
+												<table id="tabTour" aria-describedby="example" class="table"
+													style="width: 100%">
+													<thead>
+														<tr>
+															<th scope="col">job Duties.</th>
+															<th scope="col">From Date</th>
+															<th scope="col">To Date</th>
+															<th scope="col">Status</th>
+
+														</tr>
+													</thead>
+													<tbody>
+														<tr id='addr0'>
+
+															<td><input type="text" name='jobDutie0' title='job Duties'
+																placeholder='job Duties.' class="form-control noHTML"
+																value="" required /></td>
+															<td><input type="Date" name='fromDate0'title='From Date'
+																placeholder='from Date' class="form-control" required /></td>
+															<td><input type="Date" name='toDate0'title='To Date'
+																placeholder='To Date' class="form-control" required /></td>
+															<td><select class="form-control "  title='Status'
+																name="status0" id="status0">
+																	<option value="">Select Status</option>
+																	<option th:Value="Y">Yes</option>
+																	<option th:Value="N">No</option>
+
+															</select></td>
+
+
+														</tr>
+														<tr id='addr1'></tr>
+
+													</tbody>
+
+
+												</table>
+											</div>
+										</div>
+
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+
+
+
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</form>
+					
+					<div class="row body">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<div class="col-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="col-sm-12" style="text-align: right;">
+									<span class=" btn btn-primary pull-left" id="selectedTREN"
+										style="background-color: rgb(150, 148, 255)"> <a
+										target="_blank" id="selectedHref"
+										href="/reporStaffPostingDuties" style="color: black;"> <em
+											class="align-middle mr-2 fas fa-fw fa-arrow-circle-down"
+											style="color: rgb(0, 39, 95);"></em> Generate Report
+									</a></span> <span> <select id="reportgenrate" name="reportgenrate"
+										class="custom-select flex-grow-1" style="width: 65px;">
+											<option value="P">PDF</option>
+											<option value="E">EXCEL</option>
+									</select>
+									</span>
+								</div>
+							</div>
+							<div class="card-body">
+								<table id="datatables-buttons"
+									class="table table-striped display" style="width: 100%"
+									aria-describedby="example">
+									<thead>
+										<tr>
+											<th scope="col">Job Code</th>
+											<th scope="col">Employee Name</th>
+											<th scope="col">Department</th>
+											<th scope="col">Designation</th>
+
+											<th scope="col">Action</th>
+										</tr>
+
+
+
+									</thead>
+									<tbody>
+										<tr th:each="listOfStaff : ${listStaffDuties}">
+											<td th:text="${listOfStaff.jobCode}"></td>
+											<td th:text="${listOfStaff.empName}"></td>
+											<td th:text="${listOfStaff.deptName}"></td>
+											<td th:text="${listOfStaff.desgName}"></td>
+
+											<td><a
+												th:href="@{/editStaffPostingDuties/{id}(id=${listOfStaff.jobCode})}"><em
+													class="fa fa-edit"></em></a> <a
+												th:href="@{/deleteStaffPostingDuties/{id}(id=${listOfStaff.jobCode})}"
+												onclick="return confirm('Are you sure?')"><em
+													class="fa fa-times"></em></a></td>
+
+										</tr>
+
+
+									</tbody>
+
+								</table>
+							</div>
+
+						</div>
+					</div>
+				
+					</div>
+					
+					
+					
+				</div>
+
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		// Datatables basic
+		$('#datatables-basic').DataTable({
+			responsive : true
+		});
+		// Datatables with Buttons
+		var datatablesButtons = $('#datatables-buttons').DataTable(
+				{
+					deferRender : true,
+					scrollCollapse : true,
+					scroller : false,
+					responsive : true,
+					lengthMenu : [ [ 10, 20, 30, -1 ],
+							[ '10 rows', '20 rows', '30 rows', 'Show all' ] ],
+					buttons : []
+				});
+		datatablesButtons.buttons().container().appendTo(
+				"#datatables-buttons_wrapper .col-md-6:eq(0)")
+	</script>
+
+
+
+
+	<script>
+		function myFunctionEmpCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var empCode = document.getElementById('empCode').value
+			console.log("ajax request : " + empCode);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewEmployeeDetailsDuties/' + empCode, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+					$('#empName').val(obj.empName);
+					$('#deptName').val(obj.deptName);
+					$('#desgName').val(obj.desgName);
+					$('#empPayCode').val(obj.empPayCode);
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+
+	<script type="text/javascript">
+		$(document).ready(
+				function() {
+
+					$("#selectedTREN").click(
+							function() {
+
+								var docFormat = $('#reportgenrate').val();
+								var url = "./";
+								$("#selectedHref")
+
+								.attr(
+										"href",
+										url + "reporStaffPostingDuties?_ex="
+												+ docFormat);
+
+							});
+					
+					var message = document.getElementById('mess').value
+					if (message != null && message !== "") {
+
+						swal(message, "", "success", {
+							button : "OK",
+							hideClass : {
+								popup : 'animate__animated animate__fadeOutUp'
+							},
+						});
+					} else {
+						console.log("ajax request : " + message);
+					}
+					
+					
+
+				});
+	</script>
+
+
+
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+</body>
+</html>

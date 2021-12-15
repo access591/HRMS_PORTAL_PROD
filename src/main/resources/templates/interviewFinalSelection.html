@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+<style>
+table.dataTable thead .sorting:after, table.dataTable thead .sorting:before,
+	table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_asc:before,
+	table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_asc_disabled:before,
+	table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_desc:before,
+	table.dataTable thead .sorting_desc_disabled:after, table.dataTable thead .sorting_desc_disabled:before
+	{
+	bottom: .5em;
+}
+
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">HRMS</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title" style="text-decoration: underline;">Interview
+										Final Selection</h5>
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}"
+											style="color: red"></div>
+									</div>
+								</div>
+								<div class="card-body">
+
+									<div class="row">
+										<div th:if="${session.message}"
+											class="alert alert-primary alert-dismissible fade show">
+											<p class="text-center" th:text="${session.message.content}"></p>
+											<button type="button" class="close" data-dismiss="alert">&times;</button>
+											<th:block th:text="${#session.removeAttribute('message')}"></th:block>
+
+										</div>
+									</div>
+
+									<form id="validation-form" action="#" method="post">
+
+
+
+
+										<table class="table table-striped table-bordered table-sm"
+											style="width: 100%">
+											<thead>
+												<tr>
+													<th scope="col">Interview Code</th>
+													<th scope="col">Interview Date</th>
+													<th scope="col">Application Code</th>
+													<th scope="col">Applicant Name</th>
+													<th scope="col">Application Date</th>
+													<th scope="col">Current CTC</th>
+													<th scope="col">Expected CTC</th>
+													<th scope="col">Overall Rating</th>
+													<th scope="col">Selection Status</th>
+
+													<th scope="col">View Details</th>
+
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="interFinal : ${interviewFinalSelection}">
+
+
+													<td><label th:text="${interFinal.interviewCode}"></label></td>
+
+													<td><label
+														th:text="${#dates.format(interFinal.interviewDate, 'dd-MM-yyyy')}"></label></td>
+
+													<td><label
+														th:text="${interFinal.applicantCode.applicantCode}"></label></td>
+
+													<td><label
+														th:text="${interFinal.applicantCode.applicantName}"></label></td>
+
+													<td><label
+														th:text="${#dates.format(interFinal.applicantCode.applicantDate,'dd-MM-yyyy')}"></label></td>
+
+													<td><label
+														th:text="${interFinal.applicantCode.currentCtc}"></label></td>
+
+													<td><label
+														th:text="${interFinal.applicantCode.expectedCtc}"></label></td>
+
+													<td><label th:text="${interFinal.overAllRating}"></label></td>
+
+
+
+													<td th:if="${interFinal.selectionStatus == 'Selected'}"><div
+															class="dropdown show">
+															<a class="btn btn-primary dropdown-toggle" href="#"
+																role="button" id="dropdownMenuLink"
+																data-toggle="dropdown" aria-haspopup="true"
+																aria-expanded="false"> Selected </a>
+
+															<div class="dropdown-menu"
+																aria-labelledby="dropdownMenuLink">
+																<a class="dropdown-item"
+																	th:href="@{/interviewFileApproval/{applicantCode}/{interviewCode}/{finalApprovalStatus}/
+															    				(applicantCode=${interFinal.applicantCode.applicantCode},interviewCode=${interFinal.interviewCode},finalApprovalStatus=${'Selected'})}">Selected</a>
+																<a class="dropdown-item"
+																	th:href="@{/interviewFileApproval/{applicantCode}/{interviewCode}/{finalApprovalStatus}/
+															    					(applicantCode=${interFinal.applicantCode.applicantCode},interviewCode=${interFinal.interviewCode},finalApprovalStatus=${'Rejected'})}">Rejected</a>
+
+															</div>
+														</div></td>
+
+													<td th:if="${interFinal.selectionStatus == 'Rejected'}"><div
+															class="dropdown show">
+															<a class="btn btn-primary dropdown-toggle" href="#"
+																role="button" id="dropdownMenuLink"
+																data-toggle="dropdown" aria-haspopup="true"
+																aria-expanded="false"> Rejected </a>
+
+															<div class="dropdown-menu"
+																aria-labelledby="dropdownMenuLink">
+																<a class="dropdown-item"
+																	th:href="@{/interviewFileApproval/{applicantCode}/{interviewCode}/{finalApprovalStatus}/
+															    				(applicantCode=${interFinal.applicantCode.applicantCode},interviewCode=${interFinal.interviewCode},finalApprovalStatus=${'Selected'})}">Selected</a>
+																<a class="dropdown-item"
+																	th:href="@{/interviewFileApproval/{applicantCode}/{interviewCode}/{finalApprovalStatus}/
+															    					(applicantCode=${interFinal.applicantCode.applicantCode},interviewCode=${interFinal.interviewCode},finalApprovalStatus=${'Rejected'})}">Rejected</a>
+
+															</div>
+														</div></td>
+
+
+
+
+
+
+													<td th:if="${interFinal.selectionStatus == 'N'}"><div
+															class="dropdown show">
+															<a class="btn btn-primary dropdown-toggle" href="#"
+																role="button" id="dropdownMenuLink"
+																data-toggle="dropdown" aria-haspopup="true"
+																aria-expanded="false"> &nbsp &nbspAction &nbsp </a>
+
+															<div class="dropdown-menu"
+																aria-labelledby="dropdownMenuLink">
+																<a class="dropdown-item"
+																	th:href="@{/interviewFileApproval/{applicantCode}/{interviewCode}/{finalApprovalStatus}/
+															    				(applicantCode=${interFinal.applicantCode.applicantCode},interviewCode=${interFinal.interviewCode},finalApprovalStatus=${'Selected'})}">Selected</a>
+																<a class="dropdown-item"
+																	th:href="@{/interviewFileApproval/{applicantCode}/{interviewCode}/{finalApprovalStatus}/
+															    					(applicantCode=${interFinal.applicantCode.applicantCode},interviewCode=${interFinal.interviewCode},finalApprovalStatus=${'Rejected'})}">Rejected</a>
+
+															</div>
+														</div></td>
+
+
+													<td><a
+														th:href="@{viewInterviewDetail/{applicantCode}/(applicantCode=${interFinal.interviewCode})}"><i
+															class="fas fa-eye fa-lg"></i></a></td>
+
+
+
+
+
+												</tr>
+
+
+
+
+
+
+
+
+
+
+
+											</tbody>
+
+										</table>
+
+
+
+									</form>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+
+	<script>
+		$(document)
+				.ready(
+						function() {
+							console.log("click function...");
+							var i = 1;
+							counter = i;
+							$("#add_row")
+									.click(
+											function() {
+												$('#addr' + i)
+														.html(
+																"<td><input type='text' class='form-controln noHTML' id='totalVacancy'name='employeRequisitionDetail["+i+"].totalvacancy'></td>"
+																		+ "<td><input type='text' class='form-control noHTML' id='salaryFrom'name='employeRequisitionDetail["+i+"].salaryFrom'></td>"
+																		+ "<td><input type='text' class='form-control noHTML' id='salaryTo'name='employeRequisitionDetail["+i+"].salaryTo'></td>"
+																		+ "<td><input type='text' class='form-control noHTML' id='remarks'name='employeRequisitionDetail["+i+"].remarks'></td>"
+																		+ "<td style='text-align:center;'><input type='checkbox'style='zoom:1.5;'></td>"
+																		+
+
+																		"<td><input type='text' class='form-control noHTML' id='salaryFrom'name='employeRequisitionDetail["+i+"].salaryFrom'></td>"
+																		+ "<td><input type='text' class='form-control noHTML' id='salaryTo'name='employeRequisitionDetail["+i+"].salaryTo'></td>"
+																		+ "<td><input type='text' class='form-control noHTML' id='salaryTo'name='employeRequisitionDetail["+i+"].salaryTo'></td>"
+																		+ "<td><input type='text' class='form-control noHTML' id='salaryTo'name='employeRequisitionDetail["+i+"].salaryTo'></td>"
+																		+ "<td><input type='text' class='form-control noHTML' id='remarks'name='employeRequisitionDetail["+i+"].remarks'></td>");
+
+												$('#example1').append(
+														'<tr id="addr'
+																+ (i + 1)
+																+ '"></tr>');
+												$('#_cr').val(i + 1);
+												i++;
+											});
+
+							$("#delete_row").click(function() {
+								if (i > 1) {
+									$("#addr" + (i - 1)).html('');
+									$('#_cr').val(i - 1);
+									i--;
+								}
+							});
+
+						});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			$('#example1').DataTable({
+				"scrollY" : "200px",
+				"scrollCollapse" : true,
+			});
+			$('.dataTables_length').addClass('bs-select');
+		});
+	</script>
+
+
+	<script
+		src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title">Create Page Master</h5>
+
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}"
+											style="color: red"></div>
+									</div>
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#" th:action="@{/savePages}"
+										th:object="${Pages}" method="post">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Url_Id </label> <label style="color: red">*</label>
+													<input type="text" class="form-control noHTML" id="urlId"
+														title="Url Id" name="urlId" required aria-required="true">
+												</div>
+
+
+												<div class="form-group">
+													<label> Request Mapping </label> <label style="color: red">*</label>
+													<input type="text" class="form-control" id="reqMapping"
+														title="Request Mapping" name="reqMapping" required
+														aria-required="true">
+												</div>
+
+
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label"> Page Name</label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" title="Page Name"
+														onkeypress="return /[a-z]/i.test(event.key)" id="pageName"
+														name="pageName" required aria-required="true">
+												</div>
+											</div>
+										</div>
+										<button type="submit" class="btn btn-primary">Save</button>
+										<button type="reset" class="btn btn-primary" value="Reset">Reset</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="datatables-buttons"
+										aria-describedby="datatables-buttons"
+										class="table table-striped display" style="width: 100%">
+										<thead>
+											<tr>
+												<th scope="col">Url Id</th>
+												<th scope="col">Page Name</th>
+												<th scope="col">Request Mapping</th>
+
+												<th scope="col">Action</th>
+
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="listUrlDetail : ${listUrlDetail}">
+												<td th:text="${listUrlDetail.urlId}"></td>
+												<td th:text="${listUrlDetail.pageName}"></td>
+												<td th:text="${listUrlDetail.reqMapping}"></td>
+
+												<td><a
+													th:href="@{/editPage/{id}(id=${listUrlDetail.urlId})}"><em
+														class="fa fa-edit"></em></a> <a
+													th:href="@{/deletePage/{id}(id=${listUrlDetail.urlId})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times"></em></a></td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">
+										Leave Detail</h5>
+									<input type="hidden" id="mess" name="mess"th:value="${message}">
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/saveLeaveDetail}" th:object="${leaveDetail}"
+										method="post">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Leave Code </label> <label style="color: red">*</label>
+													<input type="text" class="form-control" id="lvCode"
+														name="lvCode" readonly="readonly">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label"> Total Leaves</label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control uppercase noHTML" maxlength="2"
+														id="totalLeave" name="totalLeave" required
+														aria-required="true">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">LWP</label> <label
+														style="color: red">*</label> <select
+														class="form-control required" name="lwp" id="lwp">
+														<option value="N">No</option>
+														<option value="Y">Yes</option>
+
+													</select>
+												</div>
+												<div class="form-group">
+													<label class="form-label"> Maximum Limit</label> <input
+														type="text" class="form-control noHTML" maxlength="2"
+														title="Maximum Limit" id="maxLimit" name="maxLimit">
+												</div>
+												<div class="form-group">
+													<label class="form-label">Status</label>
+													<div class="custom-controls-stacked">
+														<label class="radio-inline"> <input type="radio"
+															value="Y" name="active" checked> Active
+														</label> <label class="radio-inline"> <input type="radio"
+															value="N" name="active"> Inactive
+														</label>
+													</div>
+												</div>
+
+
+											</div>
+											<div class="col-12 col-lg-6">
+
+												<div class="form-group">
+													<label class="form-label">Type</label> <label
+														style="color: red">*</label> <select class="form-control"
+														name="leaveType" onchange="myvistFunction()"
+														id="leaveType" required aria-required="true">
+														<option value="">Select Leave</option>
+														<option th:each="ListLeave :${listLeave}"
+															th:value="${ListLeave.getLevCode()}"
+															th:text="${ListLeave.getLevType()}"></option>
+
+
+													</select> <input type="hidden" class="form-control" id="levTypeName"
+														name="levTypeName" size="50">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Status</label> <label
+														style="color: red">*</label> <select class="form-control"
+														name="leaveStatus" id="leaveStatus">
+														<option value="R">RESET</option>
+														<option value="C">Cumulative</option>
+
+													</select>
+												</div>
+												<div class="form-group">
+													<label class="form-label"> Entitlement Days</label> <input
+														type="text" class="form-control noHTML"
+														title="Entitlement Days" maxlength="2" id="entDay"
+														name="entDay">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label"> Abbreviation </label> <input
+														type="text" class="form-control noHTML"
+														title="Abbreviation" maxlength="2" id="abbrev"
+														name="abbrev">
+												</div>
+
+											</div>
+										</div>
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="col-sm-12" align="right">
+										<span class=" btn btn-primary pull-left" id="selectedTREN"
+											style="background-color: rgb(150, 148, 255)"> <a
+											target="_blank" id="selectedHref" href="/reportLeaveDetail"
+											style="color: black;"> <i
+												class="align-middle mr-2 fas fa-fw fa-arrow-circle-down"
+												style="color: rgb(0, 39, 95);"></i> Generate Report
+										</a></span> <span> <select id="reportgenrate" name="reportgenrate"
+											class="custom-select flex-grow-1" style="width: 65px;">
+												<option value="P">PDF</option>
+												<option value="E">EXCEL</option>
+										</select>
+										</span>
+									</div>
+
+								</div>
+								<div class="card-body">
+									<table id="example" aria-describedby="example"
+										class="table table-striped dataTable dtr-inline collapsed"
+										style="width: 100%; padding: 0; margin: 0;">
+										<thead>
+											<tr>
+												<th scope="col">Code</th>
+												<th scope="col">Leave Name</th>
+												<th scope="col">Total Leaves</th>
+												<th scope="col">Status</th>
+												<th scope="col">Action</th>
+
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="listOfCity : ${listLeaveDetail}">
+												<td id="lvCode" th:text="${listOfCity.lvCode}"></td>
+												<td th:text="${listOfCity.levTypeName}"></td>
+												<td th:text="${listOfCity.totalLeave}"></td>
+												<td th:text="${listOfCity.leaveStatus}"></td>
+
+												<td><a
+													th:href="@{/editLeaveDetail/{id}(id=${listOfCity.lvCode})}">
+														<em class="align-middle fas fa-fw fa-pen"> Edit</em>
+												</a>&nbsp; <a
+													th:href="@{/deleteLeaveDetail/{id}(id=${listOfCity.lvCode})}"
+													onclick="return confirm('Are you sure?')"> <em
+														class="fa fa-times" style="color: red"> Remove</em></a></td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function() {
+			$('#example').DataTable({
+				"scrollY" : 200,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+			$("#selectedTREN").click(function() {
+
+				var docFormat = $('#reportgenrate').val();
+				var url = "./";
+				$("#selectedHref")
+
+				.attr("href", url + "reportLeaveDetail?_ex=" + docFormat);
+
+			});
+			
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+			
+			
+		});
+	</script>
+
+	<script>
+		function myvistFunction() {
+			$('#leaveType').click(function() {
+				var name = $('#leaveType option:selected').text();
+				$('#levTypeName').val(name);
+			});
+		}
+	</script>
+
+
+
+</body>
+</html>

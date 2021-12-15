@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<script src="./js/settings.js"></script>
+<script src="./js/app.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+
+
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">HRMS</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h6 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Policy</h6>
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"th:action="@{/updatePolicy}" th:object="${policy}"enctype="multipart/form-data"
+										method="post">
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label>ID </label> <label style="color: red">*</label> <input
+													type="text" class="form-control" id="id" name="id"
+													th:value="${policyEdit.id}" readonly>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label>DOU</label> <label style="color: red">*</label> <input
+													type="Date" class="form-control" id="dou" name="dou"
+													th:value="${policyEdit.dou}" required aria-required="true" />
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Policy No</label> <label
+													style="color: red">*</label>
+												<div>
+													<input type="text" class="form-control noHTMLtags"
+														id="policyNo" name="policyNo" maxlength="25"
+														th:value="${policyEdit.policyNo}" required
+														aria-required="true" />
+
+												</div>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label>Policy Title </label> <label style="color: red">*</label>
+												<input type="text" class="form-control noHTMLtags"
+													id="policyTitle" name="policyTitle"
+													th:value="${policyEdit.policyTitle}" required
+													aria-required="true" />
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label>Policy Description </label>
+												<textarea class="form-control noHTMLtags" id="policyDesc"
+													name="policyDesc" maxlength="1999"
+													th:field="${policyEdit.policyDesc}" style="resize: none;"
+													rows="1"></textarea>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label>Policy DOI </label> <label style="color: red">*</label>
+												<input type="Date" class="form-control" id="policyDoi"
+													name="policyDoi" th:value="${policyEdit.policyDoi}"
+													required aria-required="true" />
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label>Branch</label> <input type="text"
+													class="form-control noHTMLtags" id="branch" name="branch"
+													th:value="${policyEdit.branch}">
+											</div>
+												<div class="form-group sm col-md-4">
+												<label class="form-label">File</label>
+												<div>
+													<input id="fileUpload" class="validation-file"
+														name="fileUpload" title="File" multiple="multiple"
+														type="file" th:text="${policyEdit.file}"
+														accept="application/pdf" />
+												</div>
+											</div>
+
+										</div>
+										<button type="submit" class="btn btn-primary">Update</button>
+										&nbsp;
+										<button type="button" class="btn btn-outline-primary"
+											onclick="window.location.href='../policy';">Cancel</button>
+									</form>
+								</div>
+
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+
+			</main>
+			<footer class="footer">
+				<div th:replace="fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+
+</body>
+</html>

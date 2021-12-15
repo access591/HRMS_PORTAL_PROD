@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+						<div class="card-header border" style="background: #f4f7fc;">
+									<h5 class="card-title "
+										style="text-decoration: underline; color: #dc2eaf;">
+										Leave Grant Register</h5>
+								<input type="hidden" id="mess" name="mess"th:value="${message}">
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/saveLeaveGrant}" th:object="${leaveGrant}"
+										method="POST">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+
+
+												<div class="form-group" style="display: none;">
+													<label>Leave Grant Code </label> <label style="color: red">*</label>
+													<input type="text" class="form-control" id="leaveGrantCode"
+														name="leaveGrantCode" readonly>
+												</div>
+
+												<div class="form-group ">
+													<label class="form-label">Year</label> <span
+														class="text-danger">*</span> <input class="form-control"
+														type="text" id="year" name="year" title="Year" required
+														aria-required="true" />
+
+												</div>
+												<div class="form-group">
+													<label class="form-label">Employee Name</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" onchange="myFunction()"
+														title="Employee Name" name="empCode.empCode"
+														id="empCode.empCode" required aria-required="true">
+														<option value="">Select Employee</option>
+														<option th:each="e :${listEmployee}"
+															th:value="${e.getEmpCode()}" th:text="${e.getEmpName()}"></option>
+													</select>
+
+
+												</div>
+
+
+
+												<div class="form-group">
+													<label>Leave Availed </label> <input type="text"
+														class="form-control noHTML" id="leaveAvailed"
+														title="Leave Availed" name="leaveAvailed"
+														pattern="\d{1,2}" maxlength="2" value="0" />
+												</div>
+												<div class="form-group">
+													<label> Previous YR Balance </label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" id="previousYrBalance"
+														title="Previous YR Balance" name="previousYrBalance"
+														pattern="\d{1,2}" maxlength="2" value="0">
+												</div>
+
+											</div>
+
+											<div class="col-12 col-lg-6">
+
+												<div class="form-group">
+													<label class="form-label">Type</label> <label
+														style="color: red">*</label> <select class="form-control"
+														name="levCode.levCode" id="levCode.levCode" required
+														aria-required="true" title="type">
+														<option value="">Select Leave</option>
+														<option th:each="lea :${listLeave}"
+															th:value="${lea.getLevCode()}"
+															th:text="${lea.getLevType()}"></option>
+
+
+													</select>
+												</div>
+
+
+												<div class="form-group">
+													<label> No Of Leave Granted </label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" title="No Of Leave Granted"
+														id="noOfLeavesGranted" name="noOfLeavesGranted"
+														pattern="\d{1,2}" maxlength="2" required
+														aria-required="true" />
+												</div>
+
+
+
+												<div class="form-group">
+													<label> Closing Balance </label> <label style="color: red">*</label>
+													<input type="text" class="form-control noHTML"
+														title="Closing Balance " id="closingBal" name="closingBal"
+														size="50" pattern="\d{1,2}" maxlength="2" required
+														aria-required="true">
+												</div>
+
+
+
+											</div>
+										</div>
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+										<table id="example" aria-describedby="example"
+										class="table table-striped dataTable dtr-inline collapsed"
+										style="width: 100%">
+										
+										<thead>
+											<tr>
+												<th scope="col">Leave Grant Code</th>
+												<th scope="col">Employee Name</th>
+												<th scope="col">Leave Type</th>
+												<!-- 	<th scope="Col">Leave Available </th> -->
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="listofCountry : ${listLeaveGrant}">
+												<td th:text="${listofCountry.leaveGrantCode}"></td>
+												<td th:text="${listofCountry?.empCode?.empName}"></td>
+												<td th:text="${listofCountry?.levCode?.levType}"></td>
+												<!-- <td th:text="${listofCountry.leaveAvailed}"></td> -->
+												<td><a
+													th:href="@{/editLeaveGrant/{id}(id=${listofCountry.leaveGrantCode})}"><em
+														class="fa fa-edit"></em> Edit</a> &nbsp; <a
+													th:href="@{/deleteLeaveGrant/{id}(id=${listofCountry.leaveGrantCode})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times" style="color: red"> </em> Remove </a></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+			$("input[name='year']").datepicker({
+				format : "yyyy",
+				autoclose : true,
+				minViewMode : "years",
+
+				locale : {
+					format : 'YYYY'
+				},
+
+			});
+			
+			$('#example').DataTable({
+				"scrollY" : true,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+			});
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+
+		});
+	</script>
+</body>
+</html>

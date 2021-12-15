@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script  src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<style>
+body {
+	opacity: 0;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	 gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+<div class="wrapper">
+<nav id="sidebar" class="sidebar"aria-label="Site sidebar">
+ <div th:replace="/fragments/sidebar :: div"></div>
+ </nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title"> Personal</h1>
+						<nav aria-label="breadcrumb">
+						</nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Employee Transfer </h5>
+								</div>
+								<div class="card-body">
+									<form>
+										<div class="row">
+								  
+								      <div class="col-12 col-lg-6">
+								      
+								        <div class="form-group">
+											       <label class="form-label">Memo No
+											      </label>
+							                <input  type="text"  th:value="${employeeTransferView.id}"class="form-control" readonly>
+										     </div>
+											 
+											 <div class="form-group ">
+											         <label class="form-label">Transfer Date
+											        </label>
+							                         <input  type="text"  th:value="${#dates.format(employeeTransferView.transferDate, 'dd-MM-yyyy')}"class="form-control" readonly>
+										            </div>
+												</div>
+												 <div class="col-12 col-lg-6">
+												 <div class="form-group ">
+											       <label class="form-label">Employee Name
+											       <span class="text-danger">*</span></label>
+							                  <input  type="text"  th:value="${employeeTransferView.empCode.empName}"class="form-control" readonly>
+										     
+										     </div>
+										     </div>
+           
+       										<button type="button" class="btn btn-pill btn-secondary" onclick="window.location.href='../employeeTransfer';">Back</button>
+											
+										</div>
+										
+									</form>
+								</div>
+							</div>
+						</div>
+	      					<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+								</div>
+								<div class="card-body">
+								<div class="embed-responsive embed-responsive-16by9">
+								<iframe  class="embed-responsive-item" th:src="@{'/employeedoc/'+${employeeTransferView.empTransferDoc}}"title="iframe">
+								</iframe>
+								
+								</div>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+
+		<footer class="footer">
+		<div th:replace="/fragments/footer :: div"></div>
+		</footer>
+		</div>
+		</div>
+	
+		
+		
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title" style="text-decoration: underline;">
+										User Rights Master</h5>
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}"
+											style="color: red"></div>
+									</div>
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/updateUserRights}" th:object="${UserRights}"
+										method="post">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+
+												<div class="mb-3">
+													<label class="form-label">Users</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" name="userCode.userCode"
+														id="userCode.userCode" required aria-required="true">
+														<option value="">Select User</option>
+														<option th:each="users: ${listUsers}"
+															th:value="${users.getUserCode()}"
+															th:text="${users.getUserName()}"
+															th:field="${userRightsEdit.userCode.userCode}"></option>
+													</select>
+												</div>
+
+												<div class="mb-3">
+													<label class="form-label">Sub Module</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2"
+														name="subModuleCode.subModuleCode"
+														id="subModuleCode.subModuleCode" required
+														aria-required="true" disabled>
+														<option value="">Select Sub Module</option>
+														<option th:each="submodule: ${subModulesList}"
+															th:value="${submodule.getSubModuleCode()}"
+															th:text="${submodule.getSubModuleName()}"
+															th:field="${userRightsEdit.subModuleCode.subModuleCode}"></option>
+													</select>
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Status</label>
+													<div class="custom-controls-stacked">
+														<label class="radio-inline"> <input type="radio"
+															value="Y" name="active"
+															th:checked="${userRightsEdit.active}==Y " />&nbsp;&nbsp;
+															Active &nbsp;&nbsp;
+														</label> <label class="radio-inline"> <input type="radio"
+															value="N" name="active"
+															th:checked="${userRightsEdit.active}==N " />&nbsp;&nbsp;Inactive
+														</label>
+
+													</div>
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="mb-3">
+													<label class="form-label">Module</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" name="moduleCode.moduleCode"
+														id="moduleCode.moduleCode" required aria-required="true"
+														disabled>
+														<option value="">Select Module</option>
+														<option th:each="module: ${modulesList}"
+															th:value="${module.getModuleCode()}"
+															th:text="${module.getModuleName()}"
+															th:field="${userRightsEdit.moduleCode.moduleCode}"></option>
+													</select>
+												</div>
+
+
+												<div class="mb-3">
+													<label class="form-label">Program</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" name="prgCode.programCode"
+														id="prgCode.programCode" required aria-required="true"
+														disabled>
+														<option value="">Select Program</option>
+														<option th:each="program: ${programsList}"
+															th:value="${program.getProgramCode()}"
+															th:text="${program.getProgramName()}"
+															th:field="${userRightsEdit.prgCode.programCode}"></option>
+													</select>
+												</div>
+												<div class="mb-3">
+													<input type="hidden" class="form-control" id="id" name="id"
+														th:value="${userRightsEdit.id}" readonly="readonly">
+												</div>
+
+											</div>
+
+										</div>
+										<button type="submit" class="btn btn-primary">Update</button>
+										&nbsp;
+										<button type="button" class="btn btn-outline-primary"
+											onclick="window.location.href='../userProgramRights';">Cancel</button>
+									</form>
+								</div>
+							</div>
+						</div>
+
+
+
+
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+
+</body>
+</html>

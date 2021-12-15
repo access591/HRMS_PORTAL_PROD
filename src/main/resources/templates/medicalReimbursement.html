@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+
+
+<script>
+	$(document)
+			.ready(
+					function() {
+
+						var i = 1;
+						$("#add_row")
+								.click(
+										function() {
+											$('#addr' + i)
+													.html(
+															"<td>"
+																	+ (i + 1)
+																	+ "</td><td><input name='medStDr"+i+"' type='text' placeholder='Name' class='form-control txt input-md noHTML'/> </td>"
+																	+ "<td><input  name='caseMemoNo"+i+"' type='text' placeholder='Case Memo No'  class='form-control input-md noHTML'></td>"
+																	+ "<td><input  name='caseMemoDate"+i+"' type='Date' placeholder='Case Memo Date'  class='form-control input-md'></td>"
+																	+ "<td><input  name='calmlAmount"+i+"' type='text'placeholder='Calming Amount'  class='txt form-control input-md noHTML' required></td>"
+																	+ "<td><input  name='passedAmount"+i+"' type='text' placeholder='Passed Amount'  class='pas form-control input-md noHTML'required></td>"
+																	+ "<td><input  name='govtexemptionAmount"+i+"' type='text' placeholder='govt Exemption Amount'  class='govt form-control input-md noHTML'required></td>"
+																	+ "<td><input  name='remark"+i+"' type='text' placeholder='Remark'  class='form-control input-md noHTML'></td>");
+
+											$('#datatables-buttons').append(
+													'<tr id="addr' + (i + 1)
+															+ '"></tr>');
+											$('#_cr').val(i + 1);
+
+											i++;
+										});
+
+						$("#delete_row").click(
+								function() {
+									if (i > 1) {
+										$("#addr" + (i - 1)).html('');
+										$('#_cr').val(i - 1);
+										i--;
+										calculateSum(),
+												calculateSumtotalPassing(),
+												calculateSumtotalgovt()
+									}
+								});
+
+						function calculateRow(row) {
+							var price = +row
+									.find('input[name^="passedAmount"]').val();
+							alert(price);
+
+						}
+						function calculateGrandTotal() {
+							var grandTotal = 0;
+							$("datatables-buttons").find(
+									'input[name^="passedAmount"]').each(
+									function() {
+										grandTotal += +$(this).val();
+									});
+							$("#grandtotal").text(grandTotal.toFixed(2));
+
+							alert(grandTotal);
+
+						}
+
+						function calculateSum() {
+
+							var sum = 0;
+							//iterate through each textboxes and add the values
+							$(".txt").each(
+									function() {
+
+										//add only if the value is number
+										if (!isNaN(this.value)
+												&& this.value.length != 0) {
+											sum += parseFloat(this.value);
+										}
+
+									});
+							//.toFixed() method will roundoff the final sum to 2 decimal places
+							var fds = sum;
+							//$("#").html(sum.toFixed(2));
+							$("#sum").val(sum);
+
+						}
+
+						$("table").on("keyup", ".txt", function() {
+							calculateSum();
+						});
+
+						function calculateSumtotalPassing() {
+
+							var sum = 0;
+							//iterate through each textboxes and add the values
+							$(".pas").each(
+									function() {
+
+										//add only if the value is number
+										if (!isNaN(this.value)
+												&& this.value.length != 0) {
+											sum += parseFloat(this.value);
+										}
+
+									});
+							//.toFixed() method will roundoff the final sum to 2 decimal places
+							var fds = sum;
+							//$("#").html(sum.toFixed(2));
+							$("#totalPassing").val(sum);
+
+						}
+
+						$("table").on("keyup", ".pas", function() {
+							calculateSumtotalPassing();
+						});
+
+						function calculateSumtotalgovt() {
+
+							var sum = 0;
+							//iterate through each textboxes and add the values
+							$(".govt").each(
+									function() {
+
+										//add only if the value is number
+										if (!isNaN(this.value)
+												&& this.value.length != 0) {
+											sum += parseFloat(this.value);
+										}
+
+									});
+							//.toFixed() method will roundoff the final sum to 2 decimal places
+							var fds = sum;
+							//$("#").html(sum.toFixed(2));
+							$("#totalGovtExt").val(sum);
+
+						}
+
+						$("table").on("keyup", ".govt", function() {
+							calculateSumtotalgovt();
+						});
+
+
+					});
+</script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+
+					<form id="validation-form" action="#"
+						th:action="@{/saveMedicalReimbursement}"
+						th:object="${medicalReimbursement}" method="POST">
+						<div class="row">
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header" style="background: #f4f7fc;">
+										<h5 class="card-title" style="text-decoration: underline;color: #dc2eaf;">
+											Medical Reimbursement</h5>
+										<input type="hidden" id="mess" name="mess"th:value="${message}">
+									</div>
+									<div class="card-body">
+
+										<div class="row">
+											<div class="col-12 col-lg-6">
+
+
+												<div class="form-group">
+													<label>Slip Number </label> <input type="text"
+														class="form-control" id="slipNo" name="slipNo" title="Slip Number" readonly>
+												</div>
+
+
+												<div class="form-group">
+													<label class="form-label">Employee Name</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" title="Employee Name" onchange="myFunction()"
+														name="empCode" id="empCode" required aria-required="true">
+														<option value="">Select Employee</option>
+														<option th:each="e :${listEmployee}"
+															th:value="${e.getEmpCode()}" th:text="${e.getEmpName()}"></option>
+													</select>
+
+
+												</div>
+
+
+												<div class="form-group">
+													<label class="form-label">Relation</label> <select
+														class="form-control required"  title="Relation" name="empRelation"
+														id="empRelation">
+														<option value="">Select Relation</option>
+														<option value="S">Self</option>
+														<option value="F">Family</option>
+
+
+													</select>
+												</div>
+
+
+
+												<div class="form-group">
+													<label class="form-label">Treatment Type</label> <select
+														class="form-control required" name="treatmentType" title="Treatment Type"
+														id="treatmentType">
+														<option value="">Select Type</option>
+														<option value="O">Operations</option>
+														<option value="H">Hospital</option>
+														<option value="D">Dental</option>
+
+
+													</select>
+												</div>
+
+												<div class="form-group ">
+													<label class="form-label">Claiming Date</label> <span
+														class="text-danger">*</span> <input
+														class="form-control required" type="date" title="Claiming Date"
+														id="claimingDate" name="claimingDate" required
+														aria-required="true" />
+
+												</div>
+
+
+
+
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Slip Date </label> <label style="color: red">*</label>
+													<input type="date" class="form-control" id="dateOfSlip" title=" Slip Date"
+														name="dateOfSlip" required aria-required="true" />
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Name Of Person</label> <label
+														style="color: red">*</label> 
+														<input Type="text" class="form-control noHTML" name="nameOfPerson" title="Name Of Person"
+														id="nameOfPerson" required aria-required="true">
+
+												</div>
+
+
+
+												<div class="form-group">
+													<label class="form-label">Indoor/Outdoor</label> <select
+														class="form-control required" name="medIndOut" title="Indoor/Outdoor"
+														id="medIndOut">
+														<option value="">Select Type</option>
+														<option value="I">Indoor</option>
+														<option value="O">Outdoor</option>
+
+
+													</select>
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Description</label> <label
+														style="color: red">*</label> <input Type="text" title="Description"
+														class="form-control noHTML" name="treatDescription"
+														id="treatDescription" required aria-required="true">
+												</div>
+
+											</div>
+										</div>
+
+
+
+
+
+										<div class="row">
+
+											<input id="_cr" name="_cr" type="hidden" value="1"
+												class="noHTML">
+											<div class="col-sm-12" style="text-align: right;">
+												<a id="add_row" class="fa fa-plus" aria-hidden="true"
+													style="font-size: 28px; color: #001080"></a>&nbsp;&nbsp;&nbsp;
+												<a id='delete_row' class="fa fa-trash"
+													style="font-size: 28px; color: #399490fc"
+													aria-hidden="true"></a>
+											</div>
+
+											<div class="table-responsive">
+
+												<table id="datatables-buttons" aria-describedby="example"
+													class="table" style="width: 100%">
+													<thead>
+														<tr>
+															<th scope="col">Sr No</th>
+															<th scope="col">Medical Store/ Doctor</th>
+															<th scope="col">Cash Memo NO.</th>
+															<th scope="col">Cash Memo Date.</th>
+															<th scope="col">Claiming Amount</th>
+															<th scope="col">Passing Amount</th>
+															<th scope="col">Govt Exemption Amount</th>
+															<th scope="col">Remark</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr id='addr0'>
+															<td>1</td>
+															<td><input type="text" name='medStDr0'
+																placeholder='Name' value="" class="noHTML" /></td>
+															<td><input type="text" name='caseMemoNo0'
+																placeholder='CASHMEMO NO' class="noHTML" /></td>
+															<td><input type="Date" name='caseMemoDate0'
+																placeholder='Case Memo Date' /></td>
+															<td><input type="text" name='calmlAmount0'
+																placeholder='Claiming Amount' class="txt noHTML" title="Claiming Amount"
+																required /></td>
+
+															<td><input type="text" name='passedAmount0'
+																title='Passed Amount' placeholder='Passed Amount' class="pas noHTML" required />
+															</td>
+															<td><input type="text" name='govtexemptionAmount0'
+																 title='Govt exemption Amount' placeholder='Govt exemption Amount' class="govt noHTML"
+																required /></td>
+
+
+															<td><input type="text" name='remark0'
+																placeholder='Remark' class="noHTML" /></td>
+														</tr>
+														<tr id='addr1'></tr>
+
+													</tbody>
+													<tr>
+														<td colspan="3"></td>
+														<td><label class="form-label">Total Amount</label></td>
+														<td><input type="text" id="sum" name='totalAmount'  title="Total Amount"
+															class="noHTML" /></td>
+														<td><input type="text" id="totalPassing"
+															name='totalPassing' class="noHTML" /></td>
+														<td><input type="text" id="totalGovtExt"
+															name='totalGovtExt' class="noHTML" /></td>
+
+
+													</tr>
+
+												</table>
+
+											</div>
+
+
+										</div>
+										<hr>
+										<hr>
+										<div>
+											&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+											<button type="submit" class=" btn mb-1 btn-success">
+												<em class="fas fa-check"></em> &nbsp; Save
+											</button>
+											&nbsp;
+											<button type="reset" class="btn mb-1 btn-danger"
+												value="Reset">
+												<em class="fas fa-times"></em> &nbsp;Cancel
+											</button>
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+
+
+						</div>
+						
+					</form>
+
+					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+					<div class="row">
+
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<div class="table-responsive">
+
+										<table id="example" aria-describedby="example" class="table"
+											style="width: 100%">
+											<thead>
+												<tr>
+													<th scope="col">SLip Number</th>
+													<th scope="col">Slip Date</th>
+													<th scope="col">Employee Code</th>
+													<th scope="col">Employee Name</th>
+													<th scope="col">Action</th>
+												</tr>
+
+
+
+											</thead>
+											<tbody>
+
+												<tr th:each="med : ${listMedicalReimbursement}">
+
+													<td th:text="${med.slipNo}"></td>
+
+													<td th:text="${#dates.format(med.dateOfSlip,'dd-MM-yyyy')}"></td>
+
+													<td th:text="${med.empCode.empCode}"></td>
+
+													<td th:text="${med.empCode.empName}"></td>
+
+
+
+
+													<td><th:block th:switch="${med.approvalStatus}">
+
+															<div th:case="'N'">
+																<a
+																	th:href="@{/editMedicalReimbursement/{id}(id=${med.slipNo})}"><em
+																	class="fa fa-edit"></em></a> <a
+																	th:href="@{/deleteMedicalReimbursement/{id}(id=${med.slipNo})}"
+																	onclick="return confirm('Are you sure?')"><em
+																	class="fa fa-times"></em></a>
+															</div>
+															<div th:case="'Y'">
+																<a
+																	th:href="@{/deleteMedicalReimbursement/{id}(id=${med.slipNo})}"
+																	onclick="return confirm('Are you sure?')"><em
+																	class="fa fa-times"></em></a>
+															</div>
+														</th:block></td>
+
+												</tr>
+
+
+											</tbody>
+
+										</table>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+			$('#example').DataTable({
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+			});
+			
+			
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}	
+		});
+	
+	</script>
+
+	<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	$(document)
+			.ready(
+					function() {
+
+						var i = 1;
+						$("#add_row")
+								.click(
+										function() {
+											$('#addr' + i)
+													.html(
+															"<td><input value='"
+																	+ (i + 1)
+																	+ "' class='form-control'></td>"
+																	+ "<td><input name='listTransactionRequisitionDetail["+i+"].topicDetail' type='text' placeholder='Topic Details.' title='Topic Details.'  class='form-control  input-md noHTML'/> </td>"
+																	+ "<td><input  name='listTransactionRequisitionDetail["+i+"].trDate' type='Date' placeholder='Topic Date'  title='Topic Date' class='form-control input-md'>"
+																	+ "<td><select class=' form-control input-md' id='modeOfTravel'name='listTransactionRequisitionDetail["+i+"].priority'><option value=' '>Select Type</option><option value='H'>High</option> <option value='M'>Medium</option><option value='L'>Low</option>  </select></td>"
+																	+ "</td><td><input  name='listTransactionRequisitionDetail["+i+"].remarks' type='text' placeholder='Remarks'  title='Remarks'  class='form-control input-md noHTML'></td>"
+																	+ "");
+
+											$('#example').append(
+													'<tr id="addr' + (i + 1)
+															+ '"></tr>');
+											$('#_cr').val(i + 1);
+
+											i++;
+										});
+
+						$("#delete_row").click(function() {
+							if (i > 1) {
+								$("#addr" + (i - 1)).html('');
+								$('#_cr').val(i - 1);
+								i--;
+
+							}
+
+						});
+
+						var J = 1;
+
+						$("#tab2_AddRow")
+								.click(
+										function() {
+
+											$('#addrtabsecond' + J)
+													.html(
+															"<td><select class=' form-control input-md' id='modeOfTravel'"
+																	+ " name='listTransactionReqEmployeeDetail["
+																	+ i
+																	+ "].employee.empCode' onchange='selectEmploye()' "
+																	+ "><option value=' '>Select</option></select></td>"
+																	+
+
+																	"</td><td><input  name='listTransactionReqEmployeeDetail["+i+"].topicSrlNo' type='text' "+
+	    		"placeholder='Pay Code'  class='form-control input-md noHTML'></td>"
+																	+ "<td><input type='text' placeholder='Father Name'  class='nbt form-control input-md noHTML'></td>"
+																	+ "");
+											$('#example2').append(
+													'<tr id="addrtabsecond'
+															+ (J + 1)
+															+ '"></tr>');
+											$('#_cr2').val(J + 1);
+
+											J++;
+										});
+						var J = 1;
+						$("#tab2_delete").click(function() {
+
+							if (J > 1) {
+								$("#addrtabsecond" + (J - 1)).html('');
+								$('#_cr2').val(J - 1);
+								J--;
+
+							}
+						});
+
+					});
+</script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+
+
+					</div>
+					<form id="validation-form" action="#"
+						th:action="@{/saveTrainingRequisition}"
+						th:object="${trainingRequisition}" method="post">
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Training
+											Requisition</h5>
+									<input type="hidden" id="mess" name="mess"th:value="${message}">
+									</div>
+									<div class="card-body">
+
+
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+
+												<label class="form-label">Training Requisition Code
+													<span class="text-danger">*</span>
+												</label> <input name="tourClaimId" type="text" id="tourClaimId"
+													class="form-control" th:field="*{trReqCode}" title="Training Requisition Code" readonly>
+											</div>
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Training Requisition Date
+													<span class="text-danger">*</span>
+												</label> <input type="date" id="tourClaimDate" name="tourClaimDate"
+													th:field="*{trReqDate}" class="form-control required" title="Training Requisition Date">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Department Name</label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" id="departmentDropdown" title="Department Name"
+													onchange="changeDepartment()"
+													th:field="*{department.departmentCode}">
+													<option value="">Select Department</option>
+													<option th:each="e :${listDepartment}"
+														th:value="${e.departmentCode}" th:text="${e.deptName}"></option>
+												</select>
+
+											</div>
+
+
+										</div>
+
+
+
+										<div class="form-row">
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Remarks </label>
+
+												<textarea class="form-control noHTML" th:field="*{remarks}" title="Remarks"
+													style="resize: none;" rows="1" placeholder="Remarks"></textarea>
+											</div>
+
+
+										</div>
+
+
+
+									</div>
+								</div>
+								</div>
+								<div class="col-12">
+									<div id="smartwizard">
+
+										<ul>
+											<li><a href="#validation-step-1"><br /> <small>Topic
+														Details</small></a></li>
+											<li><a href="#validation-step-2"><br /> <small>Topic
+														Wise Employees </small></a></li>
+
+
+										</ul>
+										<div class="form-row">
+
+											<div id="validation-step-1">
+
+												<div class="form-row">
+													<div class="card">
+														<div class="card-header"></div>
+														<div class="card-body">
+
+															<div class="col-sm-12" style="text-align: right">
+
+
+
+
+																<a id="add_row" class="fa fa-plus" aria-hidden="true"
+																	style="font-size: 28px; color: #001080"></a>&nbsp;&nbsp;&nbsp;
+																<a id='delete_row' class="fa fa-trash"
+																	style="font-size: 28px; color: #399490fc"
+																	aria-hidden="true"></a>
+															</div>
+															<div class="table-responsive">
+																<table id="example" aria-describedby="example"
+																	class="table" style="width: 100%">
+																	<thead>
+																		<tr>
+																			<th scope="col">Sr No</th>
+																			<th scope="col">Topic Details.</th>
+																			<th scope="col">Topic Date.</th>
+																			<th scope="col">Topic priority</th>
+																			<th scope="col">Topic Remark</th>
+
+
+
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr id='addr0'>
+																			<td><input value="1" class="form-control noHTML" title="Sr No"></td>
+
+																			<td><input type="text"
+																				placeholder='Topic Details ' title="Topic Details"
+																				name="listTransactionRequisitionDetail[0].topicDetail"
+																				class="form-control noHTML" value="" /></td>
+																			<td><input type="date" placeholder='Topic Date' title="Topic Date"
+																				name="listTransactionRequisitionDetail[0].trDate"
+																				class="form-control" /></td>
+																			<td><select style="width: 130px"
+																				id="modeOfTravel0"
+																				name="listTransactionRequisitionDetail[0].prioity" title="Topic priority">
+																					<option value="">Select Type</option>
+																					<option th:Value="H">High</option>
+																					<option th:Value="M">Medium</option>
+																					<option th:Value="L">Low</option>
+																			</select></td>
+
+
+																			<td><input type="text" placeholder='Remark'
+																				class="form-control noHTML" value="" title="Remark"
+																				name="listTransactionRequisitionDetail[0].remarks" /></td>
+
+																		</tr>
+																		<tr id='addr1'></tr>
+
+																	</tbody>
+
+
+																</table>
+															</div>
+														</div>
+
+													</div>
+												</div>
+
+
+
+											</div>
+											<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+											<div id="validation-step-2">
+
+
+
+												<div class="form-row">
+													<div class="card">
+
+														<div class="card-body">
+															<input id="_cr2" name="_cr2" type="text" value="1">
+															<div class="col-sm-12" align="right">
+
+
+
+
+																<a id="tab2_AddRow" class="fa fa-plus"
+																	aria-hidden="true"
+																	style="font-size: 28px; color: #001080"></a>&nbsp;&nbsp;&nbsp;
+																<a id='tab2_delete' class="fa fa-trash"
+																	style="font-size: 28px; color: #399490fc"
+																	aria-hidden="true"></a>
+															</div>
+															<div class="table-responsive">
+																<table id="example2" aria-describedby="example"
+																	class="table" style="width: 100%">
+																	<thead>
+																		<tr>
+																			<th scope="col">Employee Name</th>
+
+																			<th scope="col">Payee Code.</th>
+																			<th scope="col">Father Name</th>
+
+
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr id='addrtabsecond0'>
+																			<td><select class="form-control"
+																				name="listTransactionReqEmployeeDetail[0].employee.empCode"
+																				id="empName0" onchange="selectEmploye()" title="Employee Name">
+																					<option value="">Select Employee</option>
+
+																			</select></td>
+
+
+																			<td><input type="text"
+																				name="listTransactionReqEmployeeDetail[0].topicSrlNo"
+																				placeholder='Payee Code' title="Payee Code" class="form-control noHTML" /></td>
+
+																			<td><input type="text" placeholder='Father Name' title="Father Name"
+																				class="form-control noHTML" /></td>
+
+																		</tr>
+																		<tr id='addrtabsecond1'></tr>
+
+																	</tbody>
+
+
+																</table>
+															</div>
+													<button type="submit" class=" btn mb-1 btn-success" title="Save">
+										     	<em class="fas fa-check"></em> &nbsp; Save
+										         </button>
+														</div>
+
+
+
+													</div>
+												</div>
+
+											</div>
+
+											<!-- third ta>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. -->
+
+
+										</div>
+
+
+
+
+
+
+
+									</div>
+								</div>
+
+							</div>
+							</form>
+							
+					
+					<div class="row">
+					<div class="col-12">
+						<div class="card">
+							<div class="card-header"></div>
+							<div class="card-body">
+								<table id="datatables-buttons"
+									class="table table-striped display" style="width: 100%"
+									aria-describedby="example">
+									<thead>
+										<tr>
+											<th  scope="col">Training Requisition
+												Code</th>
+											<th  scope="col">Training Requisition
+												Date</th>
+											<th scope="col">Department</th>
+											<th class="text-center" scope="col">Status</th>
+
+											<th class="text-center" scope="col">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="training : ${listTrainingReqisition}">
+										<td th:text="${training.trReqCode}"></td>
+										<td th:text="${#dates.format(training.trReqDate,'dd-MMM-yyyy')}"></td>
+										<td th:text="${training.department.deptName}"></td>
+
+
+											<th:block th:switch="${training.trReqStatus}">
+												<td th:case="'Y'" class="text-center">Approved</td>
+												<td th:case="'C'" class="text-center">Cancel</td>
+												<td th:case="'N'" class="text-center">Pending</td>
+											</th:block>
+
+
+											<td class="text-center"><th:block
+													th:switch="${training.trReqStatus}">
+													<div th:case="'Y'">
+														<a
+															th:href="@{/viewTrainingRequisition/{id}(id=${training.trReqCode})}"><em
+															class="align-middle fas fa-fw fa-pen"></em></a><!--  <a
+															th:href="@{/deleteTrainingRequisition/{id}(id=${training.trReqCode})}"
+															onclick="return confirm('Are you sure?')"><em
+															class="align-middle fas fa-fw fa-trash"></em></a> -->
+
+													</div>
+
+													<div th:case="'N'">
+														<a
+															th:href="@{/editTrainingRequisition/{id}(id=${training.trReqCode})}"><em
+															class="align-middle fas fa-fw fa-pen"></em></a> <a
+															th:href="@{/deleteTrainingRequisition/{id}(id=${training.trReqCode})}"
+															onclick="return confirm('Are you sure?')"><em
+															class="align-middle fas fa-fw fa-trash"></em></a>
+
+													</div>
+
+													<div th:case="'C'">
+														<a
+															th:href="@{/viewTrainingRequisition/{id}(id=${training.trReqCode})}"><em
+															class="align-middle fas fa-fw fa-pen"></em></a> <a
+															th:href="@{/deleteTrainingRequisition/{id}(id=${training.trReqCode})}"
+															onclick="return confirm('Are you sure?')"><em
+															class="align-middle fas fa-fw fa-trash"></em></a>
+
+													</div>
+
+
+												</th:block></td>
+
+
+										</tr>
+									</tbody>
+
+								</table>
+							</div>
+
+						</div>
+					</div>
+					</div>
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+
+
+	<script>
+		$(document).ready(function() {
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+			// SmartWizard initialize
+			$('#smartwizard').smartWizard();
+			$('#smartwizard').smartWizard("loader", "show");
+
+		});
+	</script>
+
+
+	<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 5, 10, 15, -1 ],
+										[ '5 rows', '10 rows', '15 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+	<script>
+		function myFunctionEmpCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var empCode = document.getElementById('empCode').value
+			console.log("ajax request : " + empCode);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewEmployeeTourClaim/' + empCode, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+					$('#deptName').val(obj.deptName);
+					$('#desgName').val(obj.desgName);
+
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+
+	<script>
+		var size = "";
+		var idIndex = 0;
+		function changeDepartment() {
+
+			//set dept code value 
+
+			var selecteDepartmentValue = document
+					.getElementById("departmentDropdown").value;
+			console.log("select category : " + selecteDepartmentValue);
+			//$('#employeeName').append($('<option>', {value:0, text:'Select Employee'}));
+			var x = document.getElementById("empName'+idIndex+'");
+			console.log("x value : " + x);
+
+			//var length = x.options.length;
+			//for (i = length - 1; i >= 1; i--) {
+			//	x.options[i] = null;
+			//}
+
+			if (selecteDepartmentValue !== ""
+					|| document.getElementById("selecteDepartmentValue").selected == false) {
+				const xhr = new XMLHttpRequest();
+				xhr.open('GET', 'getEmployeeByDeptCode/'
+						+ selecteDepartmentValue, true);
+				xhr.getResponseHeader('content-type', 'application/json');
+				xhr.onload = function() {
+					if (this.status === 200) {
+						let obj = JSON.parse(this.responseText);
+						console.log(obj);
+						console.log("console.log size :" + obj.length);
+
+						$('#empName' + idIndex).empty();
+						$('#empName' + idIndex).append(
+								$('<option>').val('').text('Select Employee'));
+
+						$.each(obj, function(i, item) {
+							console.log(" i " + i + " item : " + item.empCode);
+							console.log(" i " + i + " item : " + item.empName);
+
+							console.log("dbIndex value is : " + idIndex);
+							$('#empName' + idIndex).append(
+									$('<option>').val(this.empCode).text(
+											this.empName));
+						});
+
+					} else {
+						console.error("some error occured");
+					}
+
+				}
+				xhr.send();
+			} else {
+				$('select[name="empName"]').prop("disabled", true);
+			}
+
+		}
+	</script>
+
+
+
+
+
+	<script>
+		document.getElementById("tourClaimDate").valueAsDate = new Date();
+	</script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+
+</body>
+</html>

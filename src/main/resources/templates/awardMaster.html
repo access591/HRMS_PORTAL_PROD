@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	
+
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+							<div class="card-header" style="background: #f4f7fc;">
+							<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Award
+										Master</h5>
+								<input type="hidden" id="mess" name="mess"th:value="${message}">
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#" th:action="@{/saveAward}"
+										th:object="${award}" method="post">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+
+													<label> Award Code </label> <input type="text"
+														class="form-control" id="id" name="id"
+														readonly="readonly">
+												</div>
+
+												<div class="form-group">
+
+													<label class="form-label">Status</label>
+													<div class="custom-controls-stacked">
+
+														<label class="radio-inline"> <input type="radio"
+															data-toggle="tooltip" title="Active!" value="Y"
+															name="active" checked> &nbsp;&nbsp; Active &nbsp;
+														</label> <label class="radio-inline"> <input type="radio"
+															data-toggle="tooltip" title="Inactive!" value="N"
+															name="active"> &nbsp;&nbsp; Inactive
+														</label>
+
+													</div>
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label"> Award Name</label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML"
+														style="text-transform: capitalize;"
+														pattern="^[a-zA-Z\s]*$" maxlength="25" title=" Award Name"
+														id="awardName" name="awardName" required
+														aria-required="true">
+												</div>
+											</div>
+										</div>
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="example" class="table table-striped display"
+										style="width: 100%" aria-describedby="example">
+										<thead>
+											<tr>
+												<th scope="col">Award Code</th>
+												<th scope="col">Award Name</th>
+												<th scope="col">Status</th>
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="listOfAward : ${listAward}">
+												<td th:text="${listOfAward.id}"></td>
+												<td th:text="${listOfAward.awardName}"></td>
+												<td th:text="${listOfAward.active}"></td>
+												<td><a
+													th:href="@{/editAward/{id}(id=${listOfAward.id})}"><em
+														class="align-middle fas fa-fw fa-pen"> Edit</em></a>&nbsp; <a
+													th:href="@{/deleteAward/{id}(id=${listOfAward.id})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times" style="color: red"> Remove</em></a></td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(document).ready(
+				function() {
+					
+					
+					var message = document.getElementById('mess').value
+					if (message != null && message !== "") {
+
+						swal(message, "", "success", {
+							button : "OK",
+							hideClass : {
+								popup : 'animate__animated animate__fadeOutUp'
+							},
+						});
+					} else {
+						console.log("ajax request : " + message);
+					}
+					
+	
+					
+					var datatablesButtons = $('#example').DataTable({
+						"scrollY" : 200,
+						"scrollX" : true,
+						deferRender : true,
+						lengthChange : false,
+						buttons : [ 'copy', 'csv', 'excel', 'pdf', 'print' ],
+						scrollCollapse : true,
+
+					});
+
+					datatablesButtons.buttons().container().appendTo(
+							"#example_wrapper .col-md-6:eq(0)");
+					
+					
+				
+
+				});
+	</script>
+
+	<script
+		src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+<script>
+	$(document)
+			.ready(
+					function() {
+						var i = 1;
+						$("#add_row")
+								.click(
+										function() {
+											$('#addr' + i)
+													.html(
+															"<td><input name='startPlace"+i+"' type='text'  placeholder='Start Place'  class='form-control txt input-md noHTML'required/> "
+																	+ "</td><td><input  name='endPlace"+i+"' type='text' placeholder='end Place'  class='form-control input-md noHTML'required>"
+																	+ "</td><td><input  name='fromDate"+i+"' type='Date'  placeholder='From Date'class='form-control input-md'required>"
+																	+ "</td><td><input  name='toDate"+i+"' type='Date' placeholder='Purpose Of Vist'  class='pas form-control input-md'required></td>"
+																	+ "<td><input  name='purpose"+i+"' type='text' placeholder='Purpose/Task to be done'  class='form-control input-md noHTML'></td>"
+																	+ "");
+
+											$('#tabTour').append(
+													'<tr id="addr' + (i + 1)
+															+ '"></tr>');
+											$('#_cr').val(i + 1);
+
+											i++;
+										});
+
+						$("#delete_row").click(
+								function() {
+									if (i > 1) {
+										$("#addr" + (i - 1)).html('');
+										$('#_cr2').val(i - 1);
+										i--;
+										calculateSum(),
+												calculateSumtotalPassing(),
+												calculateSumtotalgovt()
+									}
+								});
+
+					});
+</script>
+
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<form id="validation-form" action="#" th:action="@{/saveTourPlan}"
+						th:object="${tourPlan}" method="post">
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header" style="background: #f4f7fc;">
+										<h5 class="card-title"
+											style="text-decoration: underline; color: #dc2eaf;">Tour
+											Plan</h5>
+										<input type="hidden" id="mess" name="mess"th:value="${message}">
+									</div>
+									<div class="card-body">
+
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label>Tour Plan Id </label> <input type="text"
+														class="form-control" id="tourPlanId" name="tourPlanId"
+														readonly="readonly">
+												</div>
+												<div class="form-group">
+													<label class="form-label"> Employee Name</label> <label
+														style="color: red">*</label> <select
+														class="form-control custom-select required" id="empCode.empCode"
+														name="empCode.empCode" title="Employee Code" required
+														aria-required="true">
+														<option value="">Select Employee</option>
+														<option th:each="r :${listEmployee}"
+															th:value="${r.empCode}" th:text="${r.empName}"></option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label class="form-label"> Designation Name </label> <label
+														style="color: red">*</label> <select
+														class="form-control custom-select required" id="desgCode.desgCode"
+														name="desgCode.desgCode" title="Designation Name" required
+														aria-required="true">
+														<option value="">Select Designation</option>
+														<option th:each="designation : ${listDesignation}"
+															th:text="${designation.desgName}"
+															th:value=" ${designation.desgCode}"></option>
+													</select>
+												</div>
+
+												<div class="form-group">
+													<label> Tour Start Date and Time </label> <label
+														style="color: red">*</label> <input type="datetime-local"
+														class="form-control" id="tourStartDate"
+														title="Tour Start Date and Time" name="tourStartDate"
+														required aria-required="true">
+												</div>
+											</div>
+
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label"> Tour Plan Date</label> <label
+														style="color: red">*</label> <input
+														class="form-control required" type="date"
+														title="Tour Plan Date" id="tourPlanDate"
+														name="tourPlanDate" required aria-required="true" />
+
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Department Name</label> <label
+														style="color: red">*</label> <select
+														class="form-control custom-select" name="departmentCode.departmentCode"
+														id="departmentCode.departmentCode" required aria-required="true"
+														title="Department Name">
+														<option value="">Select Department</option>
+														<option th:each="dep :${listDepartment}"
+															th:value="${dep.getDepartmentCode()}"
+															th:text="${dep.getDeptName()}"></option>
+													</select>
+												</div>
+
+												<div class="form-group">
+													<label> Mobile Number </label> <input type="tel"
+														class="form-control noHTML" id="mobNumber" maxlength="11"
+														title="mobile Number " name="mobNumber">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label"> Tour End Date and Time</label> <label
+														style="color: red">*</label> <input type="datetime-local"
+														class="form-control" maxlength="25"
+														title="Tour End Date and Time " id="tourEndDate"
+														name="tourEndDate" required aria-required="true">
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+					</div>
+					
+				
+						<div class="row">	
+							
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header"></div>
+									<div class="card-body">
+										<input id="_cr" name="_cr" type="hidden" value="1">
+										<div class="col-sm-12" style="text-align: right;">
+											<a id="add_row" class="fa fa-plus" aria-hidden="true"
+												style="font-size: 28px; color: #001080"></a>&nbsp;&nbsp;&nbsp;
+											<a id='delete_row' class="fa fa-trash"
+												style="font-size: 28px; color: #399490fc" aria-hidden="true"></a>
+										</div>
+										<table id="tabTour" class="table table-striped display"
+											style="width: 100%" aria-describedby="datatables-buttons">
+											<thead>
+												<tr>
+													<th scope="col">Start Place.</th>
+													<th scope="col">End Place</th>
+													<th scope="col">From Date</th>
+													<th scope="col">To Date</th>
+													<th scope="col">Purpose/Task to be done</th>
+
+												</tr>
+											</thead>
+											<tbody>
+												<tr id='addr0'>
+
+													<td>
+														<select
+														class="form-control custom-select" name="startPlace0"
+														id="startPlace0" required aria-required="true"
+														title="Start Place">
+														<option value="">Select Place</option>
+														<option th:each="city :${cityList}"
+															th:value="${city.getCityName()}"
+															th:text="${city.getCityName()}"></option>
+													</select>
+														</td>
+													<td>
+													<select
+														class="form-control custom-select" name="endPlace0"
+														id="endPlace0" required aria-required="true"
+														title="End Place">
+														<option value="">Select Place</option>
+														<option th:each="city :${cityList}"
+															th:value="${city.getCityName()}"
+															th:text="${city.getCityName()}"></option>
+													</select>
+														
+														</td>
+														
+													<td><input type="Date" name='fromDate0'title="From Date"
+														placeholder='From Date' class="form-control"  required /></td>
+													<td><input type="Date" name='toDate0'title="To Date"
+														placeholder='To Date' class="form-control" required /></td>
+													<td><input type="text" name='purpose0'
+														placeholder='Purpose/Task to be done'
+														class="form-control noHTML" /></td>
+
+												</tr>
+												<tr id='addr1'></tr>
+
+											</tbody>
+										</table>
+										<hr>
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</div>
+
+								</div>
+
+							</div>
+					</div>
+
+					</form>
+					<div class="row">
+						&nbsp; &nbsp;&nbsp; &nbsp;
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="example" class="table table-striped display"
+										style="width: 100%" aria-describedby="example">
+										<thead>
+											<tr>
+												<th scope="col">Tour Plan Id</th>
+												<th scope="col">Employee Name</th>
+												<th scope="col">Department</th>
+												<th scope="col">Designation</th>
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="tourPlan : ${ListTourPlan}">
+												<td th:text="${tourPlan.tourPlanId}"></td>
+												<td th:text="${tourPlan.empCode.empName}"></td>
+												<td th:text="${tourPlan.departmentCode.deptName}"></td>
+												<td th:text="${tourPlan.desgCode.desgName}"></td>
+
+												<td><th:block th:switch="${tourPlan.approvalStatus}">
+														<div th:case="'N'">
+															<a
+																th:href="@{/editTourPlan/{id}(id=${tourPlan.tourPlanId})}"><em
+																class="fa fa-edit"></em></a>	&nbsp; <a
+																th:href="@{/deleteTourPlan/{id}(id=${tourPlan.tourPlanId})}"
+																onclick="return confirm('Are you sure?')"><em
+																class="fa fa-times" style="color: orangered;"></em></a>
+														</div>
+														<div th:case="'Y'">
+														 <a th:href="@{/viewTourPlan/{id}/(id=${tourPlan.tourPlanId})}"><em class="fa fa-eye"></em></a>
+															&nbsp;
+															
+															<!-- <a
+																th:href="@{/deleteTourPlan/{id}(id=${tourPlan.tourPlanId})}"
+																onclick="return confirm('Are you sure?')"><em
+																class="fa fa-times" style="color: orangered;"></em></a> -->
+														</div>
+													</th:block></td>
+
+											</tr>
+
+
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(document).ready(
+				function() {
+					var datatablesButtons = $('#example').DataTable({
+						"scrollY" : 200,
+						"scrollX" : true,
+						deferRender : true,
+						lengthChange : false,
+						buttons : [],
+						scrollCollapse : true,
+
+					});
+
+					datatablesButtons.buttons().container().appendTo(
+							"#example_wrapper .col-md-6:eq(0)")
+
+				});
+	</script>
+	<script>
+		$(document).ready(function() {
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+		});
+	</script>
+
+
+
+
+
+
+
+</body>
+</html>

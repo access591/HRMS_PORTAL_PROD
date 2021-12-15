@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+h5.tittle-w3l {
+	color: #000;
+	font-size: 17px;
+	letter-spacing: 1px;
+	text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.19);
+}
+
+h5.tittle-w3l span {
+	color: #0879c9;
+	font-size: 20px;
+	letter-spacing: 0;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+									<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Skill
+										Category Master</h5>
+								
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/updateSkillCategory}"
+										th:object="${skillCategory}" method="post">
+										<div class="row">
+											<div class="border col-12 col-lg-6">
+												<br>
+												<h5 class="tittle-w3l">
+													<span>Skill </span>Detail <span> Description</span>
+												</h5>
+												<div class="form-group">
+													<label> Skill Level Code </label> <label style="color: red">*</label>
+													<input type="text" class="form-control" id="skillLevelCode"
+														name="skillLevelCode"
+														th:value="${skillCategoryEdit.skillLevelCode}"
+														readonly="readonly">
+												</div>
+												<div class="form-group">
+													<label class="form-label"> Skill Category
+														Description </label> <label style="color: red">*</label> <input
+														type="text" class="form-control noHTML"
+														pattern="^[a-zA-Z\s]*$" maxlength="50" id="skillCatDesc"
+														name="skillCatDesc"
+														th:value="${skillCategoryEdit.skillCatDesc}" required
+														aria-required="true">
+												</div>
+												<div class="form-group">
+													<label class="form-label"> Level</label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" maxlength="10"
+														pattern="^[a-zA-Z\s]*$" id="skillLevel" name="skillLevel"
+														title="Level" th:value="${skillCategoryEdit.skillLevel}"
+														required aria-required="true">
+												</div>
+
+
+											</div>
+											<div class="border col-12 col-lg-6">
+												<br>
+												<h5 class="tittle-w3l">
+													<span>Skill </span>Set <span> Description </span>
+												</h5>
+
+												<div class="form-group">
+													<label class="form-label"> Skill Parameter Code </label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" maxlength="10"
+														id=" skillParaCode" name="skillParaCode"
+														th:value="${skillCategoryEdit.skillParaCode}" required
+														aria-required="true">
+												</div>
+												<div class="form-group">
+													<label class="form-label"> Skill Parameter
+														Description</label> <label style="color: red">*</label> <input
+														type="text" class="form-control noHTML" maxlength="50"
+														title="Skill Parameter Description" id="skillParaDes"
+														name="skillParaDes"
+														th:value="${skillCategoryEdit.skillParaDes}" required
+														aria-required="true">
+												</div>
+												<div class="form-group">
+													<label class="form-label"> Skill Parameter Max Mark</label>
+													<label style="color: red">*</label> <input type="text"
+														class="form-control noHTML" maxlength="12"
+														id="skillParaMaxMark" name="skillParaMaxMark"
+														th:value="${skillCategoryEdit.skillParaMaxMark}" required
+														aria-required="true">
+												</div>
+
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label">Status</label>
+													<div class="custom-controls-stacked">
+														<label class="radio-inline"> <input type="radio"
+															value="Y" name="active"
+															th:checked="${skillCategoryEdit.active}==Y " />&nbsp;Active
+														</label> &nbsp;&nbsp; <label class="radio-inline"> <input
+															type="radio" value="N" name="active"
+															th:checked="${skillCategoryEdit.active}==N" />
+															&nbsp;Inactive
+														</label>
+													</div>
+												</div>
+											</div>
+										</div>
+										<button type="submit" class="btn btn-primary"><em class="fas fa-check"></em> &nbsp;Update</button>&nbsp;&nbsp;
+										<button type="button" class="btn btn-outline-primary"
+											onclick="window.location.href='../skillCategoryMaster';"><em class="fas fa-times"></em> &nbsp;Cancel</button>
+									</form>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+</body>
+</html>

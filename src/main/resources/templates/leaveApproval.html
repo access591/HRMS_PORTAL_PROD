@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script  src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+<style>
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+bottom: .5em;
+}
+
+body {
+	opacity: 0;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+
+</style>
+
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+<div class="wrapper">
+<nav id="sidebar" class="sidebar"aria-label="Site sidebar">
+ <div th:replace="/fragments/sidebar :: div"></div>
+ </nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title"> Personal</h1>
+						<nav aria-label="breadcrumb">
+						</nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header border" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Leave Approval </h5>
+								
+								
+								<div class="alert-outline">
+									<div th:if="${message}" th:text="${message}" style="color: red">
+									</div> 
+									</div>	
+									
+									<div class="row">
+								<div th:if="${session.message}" class="alert alert-primary alert-dismissible fade show">
+									<p class="text-center" th:text="${session.message.content}"></p>
+									<button type="button" class="close" data-dismiss="alert">&times;</button>
+									<th:block th:text="${#session.removeAttribute('message')}"></th:block>
+									 
+								</div>
+								</div>
+								
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"  method="post">
+										
+											<table 
+												class="table table-striped table-bordered table-sm" style="width: 100%">
+												<thead>
+													<tr>
+														<th scope="col" class="text-center">Employee Code</th>
+														<th scope="col" class="text-center">Employee Name</th>
+														<th scope="col" class="text-center">Department</th>
+														
+														<th scope="col" class="text-center">From Date</th>
+														<th scope="col" class="text-center">To Date</th>
+														<th scope="col" class="text-center">Total Leave</th>
+														<th scope="col" class="text-center">Approval Status</th>
+														<th scope="col" class="text-center">View</th>
+														
+													</tr>
+												</thead>
+												<tbody>
+												
+												<tr th:each="leaveRequestapproval : ${listLeaveApproval}">
+														<td><label class="form-control text-center" th:text="${leaveRequestapproval.employee.empCode}"></label></td>
+
+														<td><label class="form-control text-center" th:text="${leaveRequestapproval.employee.empName}"></label></td>
+
+														<td><label class="form-control text-center" th:text="${leaveRequestapproval.department.deptName}"></label></td>
+
+														<td><label class="form-control text-center" th:text="${#dates.format(leaveRequestapproval.fromDate, 'dd-MM-yyyy')}"></label></td>
+
+														<td><label class="form-control text-center" th:text="${#dates.format(leaveRequestapproval.toDate, 'dd-MM-yyyy')}"></label></td>
+														<td><label class="form-control text-right" th:text="${leaveRequestapproval.leaveFor}"></label></td>
+														
+														<td>
+													<div class="btn-group">
+														  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="white-space: nowrap;font-weight: btn-font-weight;">
+														    Pending
+														  </button>
+														  <div class="dropdown-menu" onclick="myfunction()">
+														    <a  class="dropdown-item" th:href="@{/approveLeaveRequest/{leaveRequestId}/{status}/{leaveType}/(leaveRequestId=${leaveRequestapproval.leaveRequestId},status=${'Y'},leaveType=${leaveRequestapproval.leave.levCode})}">Approved</a>
+														    <a  class="dropdown-item" th:href="@{/approveLeaveRequest/{leaveRequestId}/{status}/{leaveType}/(leaveRequestId=${leaveRequestapproval.leaveRequestId},status=${'C'},leaveType=${leaveRequestapproval.leave.levCode})}">Cancel</a>
+														   
+														    
+														    
+														  </div>
+													</div> 
+  															
+  														</td>
+
+														<td class="text-center"><a class="btn btn-primary" th:href="@{/viewLeaveApproval/{id}(id=${leaveRequestapproval.leaveRequestId})}"><em class="fas fa-eye fa-sm"></em></a></td>
+													</tr>
+												
+													
+													
+													
+												</tbody>
+
+											</table>
+											
+										
+										
+									</form>
+								</div>
+							</div>
+						</div>
+	      
+					</div>
+				</div>
+
+			</main>
+
+		<footer class="footer">
+		<div th:replace="/fragments/footer :: div"></div>
+		</footer>
+		</div>
+		</div>
+	
+	
+	
+	<script>
+	
+	function myFunction(){
+		console.log("hello");
+	}
+	
+	$(document).ready(function () {
+		$('#example1').DataTable({
+		"scrollY": "200px",
+		"scrollCollapse": true, 
+		});
+		$('.dataTables_length').addClass('bs-select');
+		});
+	</script>
+	
+		
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+   
+
+		
+</body>
+</html>

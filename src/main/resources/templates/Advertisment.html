@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+
+
+
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
+
+
+<script type="text/javascript" th:src="@{/js/ajax_leaveRequest.js}"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+
+
+
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.dropdown-menu {
+	min-width: 250px;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	jQuery(document).ready(function($) {
+
+		$('#validation-form').validate({
+			errorClass : "my-error-class",
+			submitHandler : function(form) { // for demo
+				//alert('valid form');
+				return false;
+			}
+		});
+
+		jQuery.validator.addMethod("noHTML", function(value, element) {
+			return this.optional(element) || /^([a-z0-9]+)$/.test(value);
+		}, "No HTML tags are allowed!");
+
+	});
+
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<form id="validation-form" action="#"
+						th:action="@{/saveAdvertisement}" class="wizard wizard-primary"
+						th:object="${reqAdvertisement}" method="post">
+
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+							<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Employee
+											Requisition Advertisement</h5>
+										<input type="hidden" id="mess" name="mess"th:value="${message}">
+									</div>
+
+									<div class="card-body">
+
+										<div class="row">
+											<div th:if="${session.message}"
+												class="alert alert-primary alert-dismissible fade show">
+												<p class="text-center" th:text="${session.message.content}"></p>
+												<th:block th:text="${#session.removeAttribute('message')}"></th:block>
+												<button type="button" class="close" data-dismiss="alert">&times;</button>
+
+
+											</div>
+										</div>
+
+										<div class="container">
+
+											<div class="form-row">
+												<div class="col-12 col-lg-6">
+													<div class="form-group">
+														<label> Advertisement Code </label> <input type="text"
+															class="form-control" th:field="*{advtCode}"
+															title="advertisement code" readonly>
+													</div>
+												</div>
+												<div class="col-12 col-lg-6">
+													<label class="form-label">Advertisement Date</label> <label
+														style="color: red">*</label> <input type="date"
+														th:field="*{advtDate}" id="theDate"
+														title="advertisement date" class="form-control">
+												</div>
+											</div>
+											<div class="form-row">
+												<div class="from-group col-12 col-lg-6">
+													<label class="form-label">Remarks</label> <input
+														type="text" class="form-control noHTML"name="remarks"
+														th:field="*{remarks}" title="remarks">
+												</div>
+
+											</div>
+
+
+
+
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header"></div>
+									<div class="card-body">
+										<div id="validation-step-3">
+
+											<div class="col-sm-12" style="text-align: right">
+
+
+
+
+												<a id="add_row" class="fa fa-plus" aria-hidden="true"
+													style="font-size: 24px; color: #001080"></a>&nbsp;&nbsp;&nbsp;
+												<a id='delete_row' class="fa fa-trash"
+													style="font-size: 24px; color: #399490fc"
+													aria-hidden="true"></a>
+											</div>
+
+
+											<table id="example" aria-describedby="example"
+												class="table table-striped display" style="width: 100%">
+												<thead>
+													<tr>
+														<th scope="col" class="text-center">Requisition Code</th>
+														<th scope="col" class="text-center">Requisition Date</th>
+														<th scope="col" class="text-center">Media Type</th>
+														<th scope="col" class="text-center">Media Name<label
+															style="color: red">*</label></th>
+														<th scope="col" class="text-center">Amount</th>
+														<th scope="col" class="text-center">Details</th>
+
+
+													</tr>
+												</thead>
+												<tbody>
+													<tr id="addr0">
+
+
+														<td><select class="form-control" style="width: auto;"
+															id="reqCode0"
+															name="listReqAdvertisementDetail[0].employeeRequisition.reqCode"
+															onchange="selectDateByReqCode()" title="requisition code">
+																<option value=" ">Select ReqCode</option>
+																<option
+																	th:each="employeeReq : ${listEmployeeRequisition}"
+																	th:text="${employeeReq.reqCode}"
+																	th:value="${employeeReq.reqCode}"></option>
+
+														</select></td>
+
+														<td><input type="date" id="reqDate0"
+															style="width: 150px;" title="requisition date"
+															name="listReqAdvertisementDetail[0].reqDate"
+															class="noHTML"></td>
+
+
+
+
+
+
+														<td><select class="form-control" style="width: auto;"
+															id="media" name="listReqAdvertisementDetail[0].mediaType"
+															title="media type">
+																<option value=" ">Media Type</option>
+																<option value="News Paper">News Paper</option>
+																<option value="Cable TV">Cable TV</option>
+																<option value="Magzine">Magzine</option>
+																<option value="TV Channel">TV Channel</option>
+																<option value="Others">Others</option>
+														</select></td>
+
+														<td><input type="text" class="form-control noHTML"
+															id="mediaName"
+															name="listReqAdvertisementDetail[0].mediaName"
+															title="media name "></td>
+
+														<td><input type="text" class="form-control noHTML "
+															id="amount"
+															name="listReqAdvertisementDetail[0].advtAmount"
+															title="advertisement amount"></td>
+
+														<td><input type="text" class="form-control noHTML"
+															id="details" name="listReqAdvertisementDetail[0].remarks"
+															title="remarks"></td>
+
+
+
+
+													</tr>
+													<tr id="addr1"></tr>
+
+
+
+												</tbody>
+
+											</table>
+										</div>
+
+									</div>
+
+								</div>
+								<hr>
+								<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+							</div>
+							
+
+						</div>
+					</form>
+				</div>
+				<p></p>
+
+				<div class="col-12">
+					<div class="card">
+						<div class="card-header"></div>
+						<div class="card-body">
+							<table id="datatables-buttons"
+								class="table table-striped display" style="width: 100%"
+								aria-describedby="example">
+								<thead>
+									<tr>
+										<th scope="col">Advertisement Code</th>
+										<th scope="col">Advertisement Date</th>
+										<th scope="col">Remarks</th>
+										<th scope="col">Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="list : ${listReqAdvertisement}">
+										<td th:text="${list.advtCode}"></td>
+										<td th:text="${#dates.format(list.advtDate, 'dd-MM-yyyy')}"></td>
+										<td th:text="${#strings.capitalize(list.remarks)}"></td>
+										<td><a
+											th:href="@{editAdvertisement/{id}(id=${list.advtCode})}"><em
+												class="align-middle fas fa-fw fa-pen"></em></a> <a
+											th:href="@{/deleteAdvertisement/{id}(id=${list.advtCode})}"
+											onclick="return confirm('Are you sure?')"><em
+												class="align-middle fas fa-fw fa-trash"></em></a></td>
+									</tr>
+								</tbody>
+
+							</table>
+						</div>
+
+					</div>
+				</div>
+
+
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+	<script>
+		var idIndex = 0;
+	</script>
+
+
+	<script th:inline="javascript">
+		$(document).ready(function() {
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+			$('#example').DataTable({
+				"scrollY" : 200,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+		});
+
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 5, 10, 15, -1 ],
+										[ '5 rows', '10 rows', '15 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+
+		$(document)
+				.ready(
+						function() {
+							console.log("click function...");
+							var i = 1;
+							counter = i;//<option value=" ">Select Requisition Code</option>
+
+							$("#add_row")
+									.click(
+											function() {
+												idIndex++;
+												$('#addr' + i)
+														.html(
+
+																"<td><select id='reqCode"
+																		+ idIndex
+																		+ "' name='listReqAdvertisementDetail["
+																		+ idIndex
+																		+ "].reqCode' class='form-control' style='width:auto;'onchange='selectDateByReqCode()'><option value=''>Select Req Code</option><option th:each='employeeReq : ${listEmployeeRequisition}'th:text='${employeeReq.reqCode}'></option></select></td>"
+																		+ "<td><input type='Date' id='reqDate" + idIndex + "'name='listReqAdvertisementDetail[" + idIndex + "].reqDate'style='width: 150px;'></td>"
+																		+ "<td><select id='mediaType'name='listReqAdvertisementDetail[" + i + "].mediaType' class='form-control' style='width: auto;'>"
+																		+
+
+																		"<option value=''>Media Type</option><option value='News Paper'>News Paper</option><option value='Cable TV'>Cable TV</option><option value='Magzine'>Magzine</option><option value='TV Channel'>TV Channel</option><option value='Others'>Others</option></select></td>"
+																		+
+
+																		"<td><input type='text' id='mediaName'name='listReqAdvertisementDetail[" + i + "].mediaName' class='form-control noHTML'></td>"
+																		+
+
+																		"<td><input type='text' 'id='advtAmount'name='listReqAdvertisementDetail[" + i + "].advtAmount' class='form-control noHTML'></td>"
+																		+ " </td><td><input type='text' id='remarks'name='listReqAdvertisementDetail[" + i + "].remarks' class='form-control noHTML'></td>"
+
+														);
+
+												$('#example').append(
+														'<tr id="addr'
+																+ (i + 1)
+																+ '"></tr>');
+												$('#_cr').val(i + 1);
+												i++;
+												ajaxQueryForRequisitionCode();
+											});
+
+							$("#delete_row").click(function() {
+								if (i > 1) {
+									$("#addr" + (i - 1)).html('');
+									$('#_cr').val(i - 1);
+									i--;
+								}
+							});
+
+						});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			var date = new Date();
+
+			var day = ("0" + date.getDate()).slice(-2);
+			var month = ("0" + (date.getMonth() + 1)).slice(-2);
+
+			var today = date.getFullYear() + "-" + (month) + "-" + (day);
+
+			$('#theDate').val(today);
+
+		});
+
+		$(document).ready(function() {
+			var date = new Date();
+
+			var day = ("0" + date.getDate()).slice(-2);
+			var month = ("0" + (date.getMonth() + 1)).slice(-2);
+
+			var today = date.getFullYear() + "-" + (month) + "-" + (day);
+
+			$('#theDate2').val(today);
+
+		});
+	</script>
+
+	<script>
+		function selectDateByReqCode() {
+			var selectReqCode = document.getElementById("reqCode" + idIndex).value;
+			console.log("selectReqCode value : " + selectReqCode);
+
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', 'getRequisitionByReqCode/' + selectReqCode, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+					document.getElementById("reqDate" + idIndex).value = obj.reqDate;
+
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+
+		}
+	</script>
+
+	<script>
+		function ajaxQueryForRequisitionCode() {
+
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', 'getemployeerequisitionstatus', true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+					//document.getElementById("reqDate0").value = obj.reqDate;
+
+					var x = document.getElementById("reqCode" + idIndex);
+					console.log("x value : " + x);
+
+					var length = x.options.length;
+					for (i = length - 1; i >= 1; i--) {
+						x.options[i] = null;
+					}
+					$.each(obj, function(i, item) {
+						console.log(" i " + i + " item : " + item.desigCode);
+						console.log(" i " + i + " item : " + item.desgName);
+
+						$('#reqCode' + idIndex).append(
+								$('<option>').val(this.reqCode).text(
+										this.reqCode));
+					});
+
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+
+		}
+	</script>
+
+
+
+
+</body>
+
+</html>

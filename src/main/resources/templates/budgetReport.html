@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+<style>
+	body {
+		opacity: 0;
+	}
+
+	.uppercase {
+		text-transform: uppercase;
+	}
+
+	.my-error-class {
+		color: #FF0000;
+		font-size: 12px;
+		/* red */
+	}
+</style>
+<script>
+
+	jQuery(document).ready(function ($) {
+
+		$('#validation-form').validate({
+			errorClass: "my-error-class",
+			submitHandler: function (form) { // for demo
+				//alert('valid form');
+				return false;
+			}
+		});
+
+		jQuery.validator.addMethod("noHTML", function (value, element) {
+			return this.optional(element) || /^([a-z0-9]+)$/.test(value);
+		}, "No HTML tags are allowed!");
+
+
+	});
+	
+	
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+<head>
+	<meta charset="utf-8" />
+	<title>HRMS</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">HRMS</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+
+							<div class="card" style="border-radius: 2.2rem">
+								<div class="card-header">
+									<h5 class="card-title" style="text-decoration: underline;">Budget
+										Report</h5>
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}" style="color: red"></div>
+									</div>
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#" th:action="@{/createbudgetreport}"
+										method="post">
+										<div class="row">
+
+
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label">Select Department</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" id="select_department"
+														onchange="changeDepartment()" name="deptCode">
+														<option value=''>--Select--</option>
+														<option value='ALL'>All</option>
+														<option th:each="department : ${departmentList}"
+															th:text="${department.deptName}"
+															th:value="${department.departmentCode}"></option>
+
+
+
+													</select>
+
+
+
+												</div>
+											</div>
+
+
+
+
+											<div class="col-12 col-lg-6">
+												<label class="form-label">Financial Year</label> <label
+													style="color: red">*</label> <input type="text" name="financial"
+													id="financial" class="form-control noHTML">
+
+											</div>
+
+
+										</div>
+
+										<p></p>
+
+										<Button type="submit" class="btn btn-primary">Generate Sheet</Button>
+
+
+									</form>
+
+
+
+
+
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+	<script>
+		$(function () {
+			$("input[name='financial']").datepicker({
+
+				autoApply: true,
+				format: "yyyy",
+				autoclose: true,
+				minViewMode: "years",
+				locale: {
+					format: 'YYYY'
+				},
+				showDropdowns: true
+			});
+		}
+	</script>
+
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+
+
+
+
+</body>
+
+</html>

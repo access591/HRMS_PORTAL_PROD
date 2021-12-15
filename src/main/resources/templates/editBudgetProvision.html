@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">HRMS</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+
+						<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Budget
+										Tracking</h5>
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}"
+											style="color: red"></div>
+									</div>
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/updateBudgetProvision}"
+										th:object="${budgetProvision}" method="post">
+										<div class="row">
+											<input type="hidden" th:field="*{budgetProvisionId}">
+											<div class="col-12 col-lg-4">
+												<label class="form-label">Budget Head</label> <label
+													style="color: red">*</label> <input type="text" name="budgetHead"
+													th:field="*{budgetHead}" class="form-control noHTML">
+
+											</div>
+
+											<div class="col-12 col-lg-4">
+												<label class="form-label">Department</label> <label
+													style="color: red">*</label> <select class="form-control"
+													onchange="changeCategory()"
+													th:field="*{department.departmentCode}">
+													<option value="">Select Department</option>
+													<option th:each="department : ${departmentList}"
+														th:text="${department.deptName}"
+														th:value="${department.departmentCode}"></option>
+
+												</select>
+											</div>
+
+
+											<div class="col-12 col-lg-4">
+												<label class="form-label">Expenditure Purpose</label> <label
+													style="color: red">*</label> <input type="text"
+													th:field="*{expenditurePurpose}" name="expenditurePurpose"
+													class="form-control noHTML">
+
+											</div>
+
+
+											<div class="col-12 col-lg-4">
+												<label class="form-label">File No</label> <label
+													style="color: red">*</label> <input type="text"
+													name="fileNo"
+													th:field="*{fileNo}" class="form-control noHTML">
+
+											</div>
+
+											<div class="col-12 col-lg-4">
+												<label class="form-label">Date of
+													Sanction/Permission</label> <label style="color: red">*</label> <input
+													type="date" th:field="*{dateOfSanction}"
+													class="form-control">
+
+											</div>
+
+											<div class="col-12 col-lg-4">
+												<label class="form-label">Expenditure Amount</label> <label
+													style="color: red">*</label> <input type="text" name="expenditueAmount"
+													th:field="*{expenditureAmount}" class="form-control noHTML">
+
+											</div>
+
+
+
+
+
+											<div class="col-12 col-lg-4">
+												<label class="form-label">Balance Amount</label> <label
+													style="color: red">*</label> <input type="text" name="balanceAmount"
+													th:field="*{balanceAmount}" class="form-control noHTML">
+
+											</div>
+
+											<div class="col-12 col-lg-4">
+												<label class="form-label">Yearly Fix Amount</label> <label
+													style="color: red">*</label> <input type="text" name="yearFixAmount"
+													th:field="*{yearlyFixAmount}" class="form-control noHTML">
+
+											</div>
+
+
+										</div>
+
+										<p></p>
+
+
+				   <button type="submit" class="btn btn-primary">
+				   <em class="fas fa-check"></em> &nbsp; Update</button>&nbsp;
+					<button type="button" class="btn btn-outline-primary" onclick="window.history.go(-1); return false;"> 
+					<em class="fas fa-times"></em> &nbsp;Cancel</button>
+				   
+
+
+
+
+
+
+
+
+
+									</form>
+
+
+
+
+
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+
+
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+</body>
+</html>
+
+
+
+

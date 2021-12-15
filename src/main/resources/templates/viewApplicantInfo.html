@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.border {
+	border: double;
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+
+
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title">Applicants Information</h5>
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}"
+											style="color: red"></div>
+									</div>
+								</div>
+								<div class="card-body"></div>
+
+								<div class="col-12">
+									<form id="smartwizard-validation"
+										class="wizard wizard-primary" 
+										th:object="${applicantInfo}" method="get">
+
+										<ul>
+											<li><a href="#validation-step-1"><br /> <small>Applicant
+														Information</small></a></li>
+											<li><a href="#validation-step-2"><br /> <small>
+														Experience Detail </small></a></li>
+											
+
+										</ul>
+
+										<div>
+
+											<div id="validation-step-1">
+											<!-- first block -->
+												<div>
+													<div style="padding: 10px" class="border">
+														<div class="form-row">
+															<div class="form-group sm col-md-4">
+
+																<label class="form-label">Application Code 
+																</label> <input type="text" th:field="*{applicantCode}" readonly
+																class="form-control ">
+															</div>
+															<div class="form-group sm col-md-4">
+																<label class="form-label">Application Date </label> 
+																<input type="date"
+																	class="form-control" th:field="*{applicantDate}">
+															</div>
+
+															<div class="form-group sm col-md-4">
+																<label class="form-label">Advertisement Code 
+																</label> <select class="form-control " id="advtCode" onchange="reqCodeByDate()" th:field="*{reqAdvertisement.advtCode}">
+																	<option value="">Select Advertisement Code</option>
+																	<option th:each="reqAdvertisement, stat : ${listReqAdvertisement}"
+																		th:text="${reqAdvertisement.advtCode}" th:value="${reqAdvertisement.advtCode}" >code 1</option>
+																	
+
+
+																</select>
+															</div>
+														</div>
+
+
+
+														<div class="form-row">
+															<div class="form-group sm col-md-4">
+
+																<label class="form-label">Advertisement Date 
+																</label> <input  class="form-control " id="advtDate" th:field="*{advtDate}">
+															</div>
+															<div class="form-group sm col-md-4">
+																<label class="form-label">Applicant Name 
+																</label> <input type="text"
+																	class="form-control " th:field="*{applicantName}">
+															</div>
+
+
+															<div class="form-group sm col-md-4">
+																<label class="form-label">Designation</label>  <select
+																	class="form-control " name="designationCode"
+																	id="designationCode" th:field="*{desigCode.desgCode}">
+																	<option value="">Select Designation</option>
+																	<option th:each="applicant : ${listEmployeeRequisition}"
+																		th:text="${applicant.designation.desgName}" th:value="${applicant.designation.desgCode}"></option>
+																	
+
+
+																</select>
+															</div>
+															
+														</div>
+
+
+
+														<div class="form-row">
+
+															<div class="form-group sm col-md-4">
+																<label class="form-label">Father Name 
+																</label> <input name="employeePayeeCode" type="text"
+																	class="form-control " th:field="*{fatherName}">
+															</div>
+
+															<div class="form-group sm col-md-4">
+																<label class="form-label">Sex 
+																</label> <select
+																	class="form-control " name="designationCode"
+																	id="designationCode"th:field="*{sex}">
+																	<option value="">Select</option>
+																	<option th:Value="Male">Male</option>
+																	<option th:Value="Female">Female</option>
+																	
+
+
+																</select>
+															</div>
+
+
+															<div class="form-group sm col-md-4">
+																<label class="form-label">Marital Status 
+																</label> <select
+																	class="form-control " name="designationCode"
+																	id="designationCode" th:field="*{maritalStatus}">
+																	<option value="">Select</option>
+																	<option th:Value="Married">Married</option>
+																	<option th:Value="Unmarried">Unmarried</option>
+																	
+
+
+																</select>
+															</div>
+
+
+														</div>
+
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<p></p>
+															<h5>Correspondence Address</h5>
+														</div>
+														<div class="col-md-6">
+															<p></p>
+															<h5>Permanent Address</h5>
+														</div>
+													</div>
+													
+													<!--second block   -->
+													<div class="row border">
+													<div class="col-md-6" >
+													<div  class="border" style="padding: 10px">
+														<div class="form-row">
+															<div class="form-group sm col-md-12">
+
+																<label class="form-label">Address 
+																</label> <input name="frmDate" type="text"
+																 class="form-control " th:field="*{corrAdd}">
+															</div>
+															
+														</div>
+
+
+
+														<div class="form-row">
+															<div class="form-group sm col-md-12">
+
+																<label class="form-label">Address2 
+																</label> <input name="toDate" type="text" 
+																	th:field="*{corrAdd2}" class="form-control ">
+															</div>
+															
+														</div>
+
+
+
+														<div class="form-row">
+
+															<div class="form-group sm col-md-12">
+																<label class="form-label">City 
+																</label> <select
+																	class="form-control " name="designationCode"
+																	id="designationCode" th:field="*{corrCity}">
+																	<option value="">Select City</option>
+																	<option th:each="city : ${cityList}" th:text="${city.cityName}"
+																	th:value="${city.cityCode}"></option>
+
+
+																</select>
+															</div>
+														</div>
+														
+														<div class="form-row">
+
+															<div class="form-group sm col-md-12">
+																<label class="form-label">State 
+																</label> <input name="employeePayeeCode" type="text"
+																	class="form-control " th:field="*{corrState}">
+															</div>
+
+															
+
+
+														</div>
+														
+														<div class="form-row">
+
+															<div class="form-group sm col-md-12">
+																<label class="form-label">Contact No 
+																</label> <input name="employeePayeeCode" type="text"
+																	class="form-control " th:field="*{corrStdPhone}">
+															</div>
+
+															
+
+
+														</div>
+
+														</div>
+														</div>
+														
+														<!-- 2nd row 2nd collumn -->
+														<div class="col-md-6" >
+													<div  class="border" style="padding: 10px">
+														<div class="form-row">
+															<div class="form-group sm col-md-12">
+
+																<label class="form-label">Address 
+																</label> <input name="frmDate" type="text"
+																	 class="form-control "th:field="*{permAdd}">
+															</div>
+															
+														</div>
+
+
+
+														<div class="form-row">
+															<div class="form-group sm col-md-12">
+
+																<label class="form-label">Address2 
+																</label> <input name="toDate" type="text"
+																	th:field="*{permAdd2}" class="form-control ">
+															</div>
+															
+														</div>
+
+
+
+														<div class="form-row">
+
+															<div class="form-group sm col-md-12">
+																<label class="form-label">City 
+																</label> <select
+																	class="form-control "th:field="*{permCity}">
+																	<option value="">Select City</option>
+																	<option th:each="city : ${cityList}" th:text="${city.cityName}"
+																	th:value="${city.cityCode}"></option>
+																	
+
+
+																</select>
+															</div>
+
+														</div>
+														
+														<div class="form-row">
+
+															<div class="form-group sm col-md-12">
+																<label class="form-label">State 
+																</label> <input name="employeePayeeCode" type="text"
+																	class="form-control " th:field="*{permState}">
+															</div>
+
+															
+
+
+														</div>
+														
+														<div class="form-row">
+
+															<div class="form-group sm col-md-12">
+																<label class="form-label">Contact No 
+																</label> <input name="employeePayeeCode" type="text"
+																	th:field="*{permStdPhone}"
+																	class="form-control ">
+															</div>
+
+															
+
+
+														</div>
+
+														</div>
+														</div>
+													
+													</div>
+													<!--second block end  -->
+													
+													<div class="row">
+														<div class="col-md-6">
+															<p></p>
+															<h5>Language</h5>
+														</div>
+														<div class="col-md-6">
+															<p></p>
+															<h5>Qualification</h5>
+														</div>
+													</div>
+													
+													<!--second block   -->
+													<div class="row">
+													<div class="col-md-6" >
+													<div  class="border" style="padding: 10px">
+													<div class="row">
+													<div class="col-md-6">
+														<div class="form-row">
+															<div class="form-group sm col-md-6">
+
+																<label class="form-label">Hindi 
+																</label> <select
+																	class="form-control " th:field="*{langHindi}">
+																	<option value="">Select</option>
+																	<option th:Value="Read">Read</option>
+																	<option th:Value="Write">Write</option>
+																	<option th:Value="Both">Both</option>
+																	
+
+
+																</select>
+															</div>
+															
+														</div>
+
+
+														<div class="form-row">
+															<div class="form-group sm col-md-6">
+
+																<label class="form-label">English 
+																</label> <select
+																	class="form-control "th:field="*{langEnglish}">
+																	<option value="">Select</option>
+																	<option th:Value="Read">Read</option>
+																	<option th:Value="Write">Write</option>
+																	<option th:Value="Both">Both</option>
+																	
+
+
+																</select>
+															</div>
+															
+														</div>
+														</div>
+														
+														<div class="col-md-6">
+														<p>Other Language</p>
+														<div class="form-row">
+															<div class="form-group sm col-md-6">
+
+																<label class="form-label">Name 
+																</label> <input name="frmDate" type="text" 
+																	th:field="*{langOtherName}" class="form-control ">
+															</div>
+															
+														</div>
+														
+
+
+														<div class="form-row">
+															<div class="form-group sm col-md-6">
+
+																<label class="form-label">Fluency 
+																</label> <select
+																	class="form-control "th:field="*{langOthersRw}">
+																	
+																	<option th:Value="taxi">Fluency</option>
+																	
+
+
+																</select>
+															</div>
+															
+														</div>
+														</div>
+
+													</div>
+
+														
+														
+														</div>
+														</div>
+														
+														<!-- 2nd row 2nd collumn -->
+														<div class="col-md-6" >
+													<div  class="border" style="padding: 10px">
+														<div class="form-row">
+															<div class="form-group sm col-md-12">
+
+																<label class="form-label">Academic 
+																</label> <select
+																	class="form-control " th:field="*{acadQuali}">
+																	<option value="">Choose</option>
+																	<option th:Value="Bachelor">Bachelor</option>
+																	<option th:Value="Master">Master</option>
+																	
+
+
+																</select>
+															</div>
+															
+														</div> 	
+
+
+
+														<div class="form-row">
+															<div class="form-group sm col-md-12">
+
+																<label class="form-label">Technical 
+																</label> <input name="toDate" type="text"
+																		th:field="*{techQuali}" class="form-control ">
+															</div>
+															
+														</div>
+
+
+
+														
+
+														</div>
+														</div>
+													
+													</div>
+													<!--third block end  -->
+													
+													<div class="row">
+														<div class="col-md-6">
+															<p></p>
+															<h5>Other Information</h5>
+														</div>
+														
+													</div>
+													
+													<!-- 4th block -->
+													
+													<div style="padding: 10px" class="border">
+														<div class="form-row">
+															<div class="form-group sm col-md-4">
+
+																<label class="form-label">Reference Mode 
+																</label> <select
+																	class="form-control " th:field="*{modeOfRef}">
+																	<option value=" ">Media Type</option>
+																<option value="News Paper">News Paper</option>
+																<option value="Cable TV">Cable TV</option>
+																<option value="Magzine">Magzine</option>
+																<option value="TV Channel">TV Channel</option>
+																<option value="Others">Others</option>
+																	
+
+
+																</select>
+															</div>
+															<div class="form-group sm col-md-4">
+																<label class="form-label">Employee Code 
+																</label> 
+																	<select th:field="*{empCode}" class="form-control">
+																		<option value="">Select Employee Code</option>
+																		<option th:each="employee : ${listEmployee}"
+																			th:text="${employee.empCode}" th:value="${employee.empCode}"></option>
+																	</select>
+																	
+															</div> 
+															
+															
+															
+															
+
+															<div class="form-group sm col-md-4">
+																<label class="form-label">Hobbies 
+																</label> <input type="text"th:field="*{hobbies}"
+																	class="form-control ">
+															</div>
+														</div>
+
+
+
+														<div class="form-row">
+															<div class="form-group sm col-md-4">
+
+																<label class="form-label">Current CTC 
+																</label> <input name="toDate" type="text"th:field="*{currentCtc}"
+																class="form-control ">
+															</div>
+															<div class="form-group sm col-md-4">
+																<label class="form-label">Expected CTC 
+																</label> <input type="text"th:field="*{expectedCtc}"
+																	class="form-control ">
+															</div>
+
+
+															<div class="form-group sm col-md-4">
+																<label class="form-label">Reason for Leaving</label> 
+																 <input type="text" th:field="*{reasonToLeave}"
+																	class="form-control ">
+															</div>
+														</div>
+
+
+
+														
+
+													</div>
+												</div>
+
+
+											</div>
+											<!-- first validation block end  -->
+
+
+											<!-- second tab experience detail -->
+											
+											<div id="validation-step-2">
+											
+											
+											
+											<div class="table-responsive">
+											<table aria-describedby="example"
+												class="table table-striped display" style="width: 100%">
+												<thead>
+													<tr>
+														<th scope="col">Company Name</th>
+														<th scope="col">Last Salary Drawn"Annual"</th>
+														<th scope="col">Experience(In month)</th>
+														<th scope="col">Work Profile</th>
+														
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="row,stat : ${applicantInfo.applicantExpDetail}">
+
+
+														<td><input type="text" class="form-control" th:field="*{applicantExpDetail[__${stat.index}__].companyName}"></td>
+
+														<td><input type="text" class="form-control" th:field="*{applicantExpDetail[__${stat.index}__].lastSalary}"></td>
+
+
+
+														<td><input type="text" class="form-control" th:field="*{applicantExpDetail[__${stat.index}__].expInMonth}"></td>
+
+														<td><input type="text" class="form-control" th:field="*{applicantExpDetail[__${stat.index}__].workProfile}"></td>
+
+														
+													</tr>
+													<tr id='addr1' />
+													
+												</tbody>
+
+											</table>
+											</div>
+											
+							<input type= 'button' onclick='javascript:history.back();return false;' value='Back'
+							class="btn btn-primary">
+											</div>
+
+
+											
+
+
+
+
+
+
+
+
+												
+
+											
+
+
+
+
+										</div>
+
+
+									</form>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	
+	<script>
+	function reqCodeByDate(){
+		var advtValue = document.getElementById("advtCode").value;
+		//document.getElementById("reqDate").value = dValue;
+		
+	    const xhr = new XMLHttpRequest();
+	    xhr.open('GET','getAdvtDate/'+advtValue,true);
+	    xhr.getResponseHeader('content-type','application/json');
+	    xhr.onload = function(){
+	        if(this.status===200){
+	            //let obj = JSON.parse(this.responseText);
+	            console.log(this.responseText);
+
+				
+				
+				//console.log(" depARTMENT CODE :"+	deptCode);
+				
+				$('#advtDate').val(this.responseText); 
+				
+				
+	        }
+	        else{
+	            console.error("some error occured");
+	        }
+		
+	    }
+	    xhr.send();
+	}
+	</script>
+	
+	
+	<script>
+		$(function() {
+
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+	<script>
+		$(function() {
+			$("#smartwizard-default-primary").smartWizard({
+				theme : "default",
+				showStepURLhash : false
+			});
+
+			// Validation
+			var $validationForm = $("#smartwizard-validation");
+			$validationForm.validate({
+				errorPlacement : function errorPlacement(error, element) {
+					$(element).parents(".form-group").append(
+							error.addClass("invalid-feedback small d-block"))
+				},
+				highlight : function(element) {
+					$(element).addClass("is-invalid");
+				},
+				unhighlight : function(element) {
+					$(element).removeClass("is-invalid");
+				},
+				rules : {
+					"wizard-confirm" : {
+						equalTo : "input[name=\"wizard-password\"]"
+					}
+				}
+			});
+			$validationForm.smartWizard({
+				autoAdjustHeight : false,
+				backButtonSupport : false,
+				useURLhash : false,
+				showStepURLhash : false,
+
+			}).on("leaveStep",
+					function(e, anchorObject, stepNumber, stepDirection) {
+						if (stepDirection === "forward") {
+							return $validationForm.valid();
+						}
+						return true;
+					});
+			
+		});
+	</script>
+
+	<script type="text/javascript">
+		function changetextbox() {
+			if (document.getElementById("onDeputation").value === "Y")
+
+			{
+				document.getElementById("empDeputation").disabled = 'true';
+
+			} else {
+
+				document.getElementById("empDeputation").disabled = '';
+			}
+
+		}
+	</script>
+
+
+	
+
+	
+	
+	<script>
+	
+	$(document).ready(function(){
+		console.log("click function...");
+		var i=1;
+		counter = i;
+		$("#add_row").click(function(){
+		$('#addr'+i).html(
+				"<td><input type='text' class='form-control' name='applicantExpDetail["+i+"].companyName'></td>"+
+				"<td><input type='text' class='form-control' name='applicantExpDetail["+i+"].lastSalary'></td>"+
+				"<td><input type='text' class='form-control' name='applicantExpDetail["+i+"].expInMonth'></td>"+
+				"<td><input type='text' class='form-control' name='applicantExpDetail["+i+"].workProfile'></td>");
+
+		$('#example').append('<tr id="addr'+(i+1)+'"></tr>');
+		$('#_cr').val(i+1);
+		i++; 
+	});
+		
+		$("#delete_row").click(function(){
+		 	 if(i>1){
+				 $("#addr"+(i-1)).html('');
+				 $('#_cr').val(i - 1);
+				 i--;
+				 }
+			 });
+
+
+	});
+	
+	
+
+	
+	</script>
+	
+	<script>
+	$(document).ready(function() {
+		$('#example').DataTable({
+			"scrollY" : 200,
+			"scrollX" : true,
+			deferRender : true,
+			scrollCollapse : true,
+
+		});
+	});
+	</script>
+	
+	
+	
+	
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+
+
+</body>
+</html>

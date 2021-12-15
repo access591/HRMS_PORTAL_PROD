@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+									<div class="card-header" style="background: #f4f7fc;">
+							<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Award
+										Master</h5>
+							
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/updateAward}" th:object="${award}" method="post">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+
+													<label> Award Code </label> <input type="text"
+														class="form-control" id="id" name="id"
+														th:value="${awardEdit.id}" readonly="readonly">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Status</label>
+													<div class="custom-controls-stacked">
+
+														<label class="radio-inline"> <input type="radio"
+															value="Y" name="active" data-toggle="tooltip"
+															title="Active!" th:checked="${awardEdit.active}==Y " />&nbsp;&nbsp;Active
+														</label> &nbsp;&nbsp; <label class="radio-inline"> <input
+															type="radio" value="N" name="active"
+															data-toggle="tooltip" title="Inactive!"
+															th:checked="${awardEdit.active}==N" />
+															&nbsp;&nbsp;Inactive
+														</label>
+													</div>
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label"> Award Name</label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" id="awardName"
+														name="awardName" th:value="${awardEdit.awardName}"
+														required>
+												</div>
+											</div>
+										</div>
+										<button type="submit" class="btn btn-primary"><em class="fas fa-check"></em> &nbsp;Update</button>&nbsp;&nbsp;
+										<button type="button" class="btn btn-outline-primary"
+											onclick="window.location.href='../awardMaster';"><em class="fas fa-times"></em> &nbsp;Cancel</button>
+									</form>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+
+</body>
+</html>

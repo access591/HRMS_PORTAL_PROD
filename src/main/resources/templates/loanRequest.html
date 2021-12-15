@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+
+
+					</div>
+
+					<div class="row">
+
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Loan
+										Request</h5>
+								<input type="hidden" id="mess" name="mess"th:value="${message}">
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/saveLoanRequest}" th:object="${LoanRequest}"
+										method="post">
+										<div class="form-row">
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Application NO. </label> <input
+													type="text" id="appNo" name="appNo" class="form-control"
+													disabled="disabled">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Application Date <span
+													class="text-danger">*</span></label> <input type="date"
+													id="appDate" name="appDate" title="Eligibility   Date"
+													class="form-control required">
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Employee Name</label> <label
+													style="color: red">*</label> <select
+													class="form-control custom-select" name="empCode"
+													id="empCode" onchange="myFunctionEmpCode()" required
+													aria-required="true">
+													<option value="">Select Employee</option>
+													<option th:each="e :${listEmployee}"
+														th:value="${e.getEmpCode()}" th:text="${e.getEmpName()}"></option>
+												</select>
+
+											</div>
+
+
+
+
+										</div>
+
+										<div class="form-row">
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Employee Pay Code </label> <input
+													type="text" id="empPayCode" name="empPayCode"
+													title="Employee Pay Code" class="form-control " disabled>
+											</div>
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Designation</label> <input
+													type="text" id="desgName" name="desgName"
+													title="Designation" class="form-control" disabled>
+
+
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Department</label> <input
+													type="text" id="deptName" name="deptName"
+													title="Department" class="form-control" disabled>
+											</div>
+
+										</div>
+
+
+										<div class="form-row">
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Loan Type </label> <select
+													class="form-control custom-select required" name="loanType"
+													id="loanType">
+													<option value="">Select Type</option>
+													<option th:Value="H">Home</option>
+													<option th:Value="P">personal</option>
+													<option th:Value="T">Car</option>
+													<option th:Value="W">Two-Wheeler</option>
+												</select>
+
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Loan Name</label> <span
+													class="text-danger">*</span> <select
+													class="form-control custom-select required" name="loanCode"
+													oninvalid="this.setCustomValidity('Please select Loan Name')"
+													oninput="setCustomValidity('')" id="loanCode" required
+													aria-required="true">
+													<option value="" title="Tooltip">Select Loan Name
+													</option>
+
+													<option th:each="lo :${listLoan}"
+														th:value="${lo.getLoanCode()}"
+														th:text="${lo.getLoanName()}"></option>
+
+												</select>
+
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Effective Schedule Date <span
+													class="text-danger">*</span></label> <input type="date"
+													id="effScheduleDate" name="effScheduleDate"
+													title="Eligibility   Date" class="form-control" required
+													aria-required="true">
+											</div>
+
+										</div>
+
+
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Amount Required <span
+													class="text-danger">*</span></label> <input type="text"
+													id="amountRequired" name="amountRequired" maxlength="15"
+													class="form-control noHTML"
+													oninvalid="this.setCustomValidity('Please Enter Amount Required')"
+													oninput="setCustomValidity('')" required
+													aria-required="true">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Loan(To be Return In) <span
+													class="text-danger">*</span></label> <input type="text"
+													id="amountSanctioned" maxlength="12"
+													name="amountSanctioned" class="form-control noHTML"
+													title="loan to be return"
+													oninvalid="this.setCustomValidity('Please Enter Loan(To be Return In)')"
+													oninput="setCustomValidity('')" required
+													aria-required="true">
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Status </label> <select
+													class="form-control required" name="loanStatus"
+													id="loanStatus">
+													<option value="">Select Type</option>
+													<option th:Value="Y">Approved</option>
+													<option selected="selected" th:Value="N ">Un
+														Approved</option>
+
+												</select>
+
+											</div>
+
+										</div>
+
+
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+
+									</form>
+								</div>
+
+							</div>
+
+						</div>
+
+
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="datatables-buttons"
+										class="table table-striped display" style="width: 100%"
+										aria-describedby="example">
+										<thead>
+											<tr>
+												<th scope="col">Application No</th>
+												<th scope="col">Employee Name</th>
+												<th scope="col">Application Date</th>
+												<th scope="col">Loan Name</th>
+												<th scope="col">Amount Required</th>
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="listLoanReq : ${listloanApplication}">
+												<td th:text="${listLoanReq.appNo}"></td>
+
+												<td th:text="${listLoanReq?.empCode?.empName}"></td>
+												<td
+													th:text="${#dates.format(listLoanReq.appDate,'dd-MM-yyyy')}"></td>
+												<td th:text="${listLoanReq.loanCode.loanName}"></td>
+												<td th:text="${listLoanReq.amountRequired}"></td>
+
+												<td><th:block th:switch="${listLoanReq.approvalStatus}">
+														<div th:case="'N'">
+															<a
+																th:href="@{/editLoanRequest/{id}(id=${listLoanReq.appNo})}"><em
+																class="fa fa-edit"></em></a> <a
+																th:href="@{/deleteLoanRequest/{id}(id=${listLoanReq.appNo})}"
+																onclick="return confirm('Are you sure?')"><em
+																class="fa fa-times" style="color: orangered;"></em></a>
+														</div>
+
+														<div th:case="'Y'">
+															 <a th:href="@{/viewLoanRequest/{id}(id=${listLoanReq.appNo})}"><em class="fa fa-eye"></em></a>
+															&nbsp;
+															<!--
+															<a
+																th:href="@{/deleteLoanRequest/{id}(id=${listLoanReq.appNo})}"
+																onclick="return confirm('Are you sure?')"><em
+																class="fa fa-times" style="color: orangered;"></em></a> -->
+														</div>
+													</th:block></td>
+
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+
+
+
+
+					</div>
+
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function() {
+
+			$("input[name='batchYear']").datepicker({
+
+				autoApply : true,
+				format : "yyyy",
+				autoclose : true,
+				minViewMode : "years",
+				locale : {
+					format : 'YYYY'
+				},
+				showDropdowns : true
+			});
+
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+	<script>
+		function myFunctionEmpCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var empCode = document.getElementById('empCode').value
+			console.log("ajax request : " + empCode);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewEmployeeDetailsLoan/' + empCode, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+					$('#empName').val(obj.empName);
+					$('#deptName').val(obj.deptName);
+					$('#desgName').val(obj.desgName);
+					$('#empPayCode').val(obj.empPayCode);
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+
+
+
+	<script>
+		function myFunctionCity() {
+			$('#cityCode').click(function() {
+				var name = $('#cityCode option:selected').text();
+				$('#district').val(name);
+			});
+		}
+	</script>
+
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+
+		});
+	</script>
+	
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+
+</body>
+
+</html>

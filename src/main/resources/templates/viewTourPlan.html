@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+
+<script  src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<style>
+body {
+	opacity: 0;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	 gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+<div class="wrapper">
+<nav id="sidebar" class="sidebar"aria-label="Site sidebar">
+ <div th:replace="/fragments/sidebar :: div"></div>
+ </nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title"> Master</h1>
+						<nav aria-label="breadcrumb">
+						</nav>
+					</div>
+					<form id="validation-form" action="#"  th:action="@{/tourPlanApproval}" th:object="${tourPlanEdit}" method="GET">
+					<div class="row">
+			           <div class="col-12">
+							<div class="card">
+								<div class="card-header border" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;"> View Tour Plan</h5>
+								<div class="alert-outline">
+									<div th:if="${message}" th:text="${message}" style="color: red">
+									</div> 
+									</div>	
+								</div>
+								<div class="card-body">
+								
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+											  <label>Tour Plan Id </label>
+											  	<label style="color: red">*</label>
+											   <input type="text" class="form-control" id="tourPlanId"th:field="*{tourPlanId}" name="tourPlanId" readonly="readonly">
+												</div>
+											
+											
+										<div class="form-group">
+											<label class="form-label"> Employee  Code</label>
+											<label style="color: red">*</label>
+											 <select class="form-control" id="empCode"name="empCode"th:field="*{empCode.empCode}">
+													<option value=""> Employee Name</option>
+													<option th:each="r :${listEmployee}" th:value="${r.empCode}" th:text="${r.empName}"></option>
+												</select>
+										</div>
+											
+											
+											
+											
+											
+										   	<div class="form-group">
+											<label class="form-label"> Designation </label>
+											<label style="color: red">*</label>
+											 <select class="form-control" id="desgCode"name="desgCode"th:field="*{desgCode.desgCode}">
+													<option value="">Designation</option>
+													<option th:each="designation : ${listDesignation}"
+														th:text="${designation.desgName}" 
+														th:value=" ${designation.desgCode}"></option>
+
+												</select>
+										</div>
+										
+										<div class="form-group">
+											  <label> Tour Start Date and Time </label>
+											  		<label style="color: red">*</label>	 
+											   <input
+														type="datetime-local" class="form-control" th:field="*{tourStartDate}"id="tourStartDate" name="tourStartDate"readonly>
+												</div>
+										
+									
+												
+											</div>
+											<div class="col-12 col-lg-6">
+											<div class="form-group">
+											<label class="form-label"> Tour Plan Date</label>
+											<label style="color: red">*</label>
+											 <input type="text" class="form-control " id="tourPlanDate" name="tourPlanDate">
+										</div>
+										
+										<div class="form-group">
+											  <label class="form-label">Department</label>
+												<label style="color: red">*</label>
+												<select class="form-control select2" name="departmentCode"id="departmentCode" th:field="*{departmentCode.departmentCode}" required aria-required="true"readonly>
+												 <option value=""> Department Name</option>
+												<option th:each="dep :${listDepartment}" th:value="${dep.getDepartmentCode()}" th:text="${dep.getDeptName()}"></option>
+											     	</select>
+												</div>
+												
+												<div class="form-group">
+											  <label> Mobile Number </label>
+											  
+											   <input type="tel" class="form-control" id="mobNumber" maxlength="11" th:field="*{mobNumber}"name="mobNumber" readonly>
+												</div>
+												
+													<div class="form-group">
+											<label class="form-label"> Tour End Date and Time</label>
+											<label style="color: red">*</label>
+											 <input type="datetime-local" class="form-control " maxlength="25"th:field="*{tourEndDate}" title="Tour End Date and Time " id="tourEndDate" name="tourEndDate" readonly >
+										</div>
+											
+											</div>
+										</div>
+										
+									
+								</div>
+							</div>
+						</div>						
+	                     <div class="col-12">
+	                     	<div class="card">
+	                      <div class="card-header">
+								</div>
+								<div class="card-body">
+								<input id="_cr" name="_cr" type="hidden"value="1">
+							
+								<table id="tab1" class="table table-striped display"
+															style="width: 100%" aria-describedby="datatables-buttons">
+															<thead>
+																<tr><th scope="col">id</th>
+																	<th scope="col">Start Place.</th>
+																	<th scope="col">End Place</th>
+                                                                    <th scope="col">From Date</th>
+																	<th scope="col">To Date</th>
+																	<th scope="col">Purpose/Task to be done</th>
+
+																</tr>
+															</thead>
+															<tbody>
+																<tr id='addr0'th:each="row, stat :${tourPlanEdit.tourPlanDetail}">
+															        <td><input type="text" name='id0'placeholder='Start Place' class="form-control" th:field="*{tourPlanDetail[__${stat.index}__].id}" readonly /></td>
+																	<td><input type="text" name='startPlace0'placeholder='Start Place' class="form-control" th:field="*{tourPlanDetail[__${stat.index}__].startPlace}" readonly /></td>
+																	<td><input type="text" name='endPlace0'placeholder='End  Place' class="form-control" th:field="*{tourPlanDetail[__${stat.index}__].endPlace}" readonly /></td>
+																	<td><input type="Date" name='fromDate0'placeholder='From Date' class="form-control"  th:value="*{tourPlanDetail[__${stat.index}__].fromDate}" readonly/></td>
+																	<td><input type="Date" name='toDate0'placeholder='To Date' class="form-control" th:value="*{tourPlanDetail[__${stat.index}__].toDate}" readonly /></td>
+																	<td><input type="text" name='purpose0'placeholder='Purpose/Task to be done' class="form-control"  th:field="*{tourPlanDetail[__${stat.index}__].purpose}" readonly/></td>
+														
+																</tr>
+																<tr id='addr1'></tr>
+
+															</tbody>
+														</table>
+								<hr>
+								 <button type="submit"class="btn btn-pill btn-secondary" value="cancel">Back</button>	
+								</div>
+								
+								
+	                     
+	                     
+	                     </div>
+	                     </div>
+	                     
+					
+					</div>
+
+							
+					</form>
+				</div>
+
+			</main>
+
+		<footer class="footer">
+		<div th:replace="/fragments/footer :: div"></div>
+		</footer>
+		</div>
+		</div>
+	<script>
+	$(document).ready(function() {
+		   var datatablesButtons =  $('#example').DataTable( {
+	        "scrollY": 200,
+	        "scrollX": true,
+	        deferRender:true,
+	        lengthChange: false,
+	    	buttons: [],
+            scrollCollapse: true,
+            
+	    } );
+	
+		datatablesButtons.buttons().container().appendTo("#example_wrapper .col-md-6:eq(0)")
+	    
+	} );
+	
+	</script>
+	
+<script>
+$(document).ready(function(){
+
+    var i=1;
+   $("#add_row").click(function(){
+    $('#addr'+i).html("<td><input name='startPlace"+i+"' type='text'  placeholder='Start Place'  class='form-control txt input-md'/> "+
+    		"</td><td><input  name='endPlace"+i+"' type='text' placeholder='end Place'  class='form-control input-md'>"+
+    		"</td><td><input  name='fromDate"+i+"' type='Date'  placeholder='From Date'class='form-control input-md'>"+
+    		"</td><td><input  name='toDate"+i+"' type='Date' placeholder='Purpose Of Vist'  class='pas form-control input-md'></td>"+
+    		"<td><input  name='purpose"+i+"' type='text' placeholder='Purpose/Task to be done'  class='form-control input-md'></td>"+
+    		"");
+
+    $('#tab1').append('<tr id="addr'+(i+1)+'"></tr>');
+    $('#_cr').val(i+1);
+    
+    i++; 
+});
+   
+   
+   $("#delete_row").click(function(){
+	  	 if(i>1){
+			 $("#addr"+(i-1)).html('');
+			 $('#_cr2').val(i - 1);
+			 i--;
+			 calculateSum(),calculateSumtotalPassing(),calculateSumtotalgovt()
+			 }
+		 });
+   
+   
+  
+  
+   
+   
+  
+function calculateSum() {
+
+    var sum = 0;
+    //iterate through each textboxes and add the values
+    $(".txt").each(function () {
+
+        //add only if the value is number
+        if (!isNaN(this.value) && this.value.length != 0) {
+            sum += parseFloat(this.value);
+        }
+
+    });
+    //.toFixed() method will roundoff the final sum to 2 decimal places
+   var fds=sum;
+   //$("#").html(sum.toFixed(2));
+   $("#sum").val(sum);
+    
+}
+
+$("table").on("keyup", ".txt", function () {
+    calculateSum();
+});
+
+
+function calculateSumtotalPassing() {
+
+    var sum = 0;
+    //iterate through each textboxes and add the values
+    $(".pas").each(function () {
+
+        //add only if the value is number
+        if (!isNaN(this.value) && this.value.length != 0) {
+            sum += parseFloat(this.value);
+        }
+
+    });
+    //.toFixed() method will roundoff the final sum to 2 decimal places
+   var fds=sum;
+   //$("#").html(sum.toFixed(2));
+   $("#totalPassing").val(sum);
+    
+}
+
+$("table").on("keyup", ".pas", function () {
+	calculateSumtotalPassing();
+});
+
+
+
+
+function calculateSumtotalgovt() {
+
+    var sum = 0;
+    //iterate through each textboxes and add the values
+    $(".govt").each(function () {
+
+        //add only if the value is number
+        if (!isNaN(this.value) && this.value.length != 0) {
+            sum += parseFloat(this.value);
+        }
+
+    });
+    //.toFixed() method will roundoff the final sum to 2 decimal places
+   var fds=sum;
+   //$("#").html(sum.toFixed(2));
+   $("#totalGovtExt").val(sum);
+    
+}
+
+$("table").on("keyup", ".govt", function () {
+	calculateSumtotalgovt();
+});
+$("input[name='tourPlanDate']").daterangepicker({
+	singleDatePicker: true,
+    autoApply: true,
+	locale: {
+        format: 'DD/MM/YYYY'
+    },
+	showDropdowns: true
+});
+
+
+});
+
+</script>
+	
+	
+	
+   
+
+		
+</body>
+</html>

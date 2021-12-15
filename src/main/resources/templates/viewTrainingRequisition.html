@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script  src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+
+<style>
+
+
+body {
+	opacity: 0;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+
+#loading {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  display: block;
+  opacity: 0.7;
+  background-color: #676565;
+  z-index: 99;
+  text-align: center;
+}
+
+#loading-image {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  z-index: 100;
+}
+</style>
+
+<script>
+
+
+
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	 gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+ 
+<body>
+
+<div class="wrapper">
+<nav id="sidebar" class="sidebar">
+ <div th:replace="/fragments/sidebar :: div"></div>
+ </nav>
+ 		
+		<div class="main">
+		<div th:replace="/fragments/header ::div"></div>
+		<main class="content">
+		<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">
+							Personal
+						</h1>
+						
+					
+					</div>
+						<form id="validation-form" action="#"  th:action="@{/saveTrainingRequisition}" th:object="${trainingRequisition}" method="post">
+					<div class="row">
+							<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title">Training Requisition </h5>
+								<div class="alert-outline">
+									<div th:if="${message}" th:text="${message}" style="color: red">
+									</div> 
+									</div>	
+								</div>
+								<div class="card-body">
+									<div class="form-row">
+												<div class="form-group sm col-md-4">
+												
+													<label class="form-label">Training Requisition Code <span
+														class="text-danger">*</span>
+													</label> <input name="tourClaimId" type="text" id="tourClaimId"
+														class="form-control" th:field="*{trReqCode}" readonly>
+												</div>
+												
+												
+											<div class="form-group sm col-md-4">
+											       <label class="form-label">Training Requisition Date
+											       <span class="text-danger">*</span></label>
+							                 <input  type="date"id="tourClaimDate"name="tourClaimDate" th:field="*{trReqDate}" class="form-control required">
+										     </div>
+										     	
+											<div class="form-group sm col-md-4">
+													<label class="form-label">Department Code</label>
+												<label style="color: red">*</label>
+												<select class="form-control select2" id="empCode" onchange="myFunctionEmpCode()" th:field="*{department.departmentCode}" >
+												 <option value="">Select Department</option>
+												<option th:each="e :${listDepartment}"th:value="${e.departmentCode}" th:text="${e.deptName}"></option>
+											     	</select>
+
+												</div>
+												
+												
+								</div>
+								
+											
+												
+													<div class="form-row">
+													
+											       <div class="form-group sm col-md-4">
+											       <label class="form-label">Remarks </label>
+											     
+											       <textarea class="form-control" th:field="*{remarks}" name="empCode" id="empCode"Style=" resize: none;" rows="2" placeholder="Remarks"></textarea>
+											      </div>
+													
+													
+													</div>
+												
+												
+												
+							</div>
+						</div>
+	              <div class="col-12">
+		<div id="smartwizard">
+		
+			<ul>
+			<li><a href="#validation-step-1"><br /><small>Topic Details</small></a></li>
+			<li><a href="#validation-step-2"><br /><small>Topic Wise Employees </small></a></li>
+		
+
+								</ul>
+								<div class="form-row">
+								
+                         <div id="validation-step-1">
+									     
+						<div class="form-row">
+								<div class="card">
+								<div class="card-header">
+								</div>
+								<div class="card-body">
+								
+														<div class="table-responsive">
+											<table id="example" aria-describedby="example" class="table" style="width:100%">
+															<thead>
+																<tr>
+															
+																	<th scope="col">Topic Details.</th>
+																	<th scope="col">Topic Date.</th>
+																	<th scope="col">Topic priority</th>
+																	<th scope="col">Topic Remark</th>
+																	
+
+
+																</tr>
+															</thead>
+															<tbody>
+																<tr th:each="row,stat : ${trainingRequisition.listTransactionRequisitionDetail}">
+
+
+																	<td><input type="text" placeholder='Topic Details ' 
+																			th:field="*{listTransactionRequisitionDetail[__${stat.index}__].topicDetail}"
+																			 class="form-control" />
+																	</td>
+																	<td><input type="date" placeholder='Topic Date' 
+																			th:field="*{listTransactionRequisitionDetail[__${stat.index}__].trDate}"
+																				 class="form-control" />
+																	</td>
+																		<td>
+																		<select class="form-control" id="modeOfTravel0"
+																			th:field="*{listTransactionRequisitionDetail[__${stat.index}__].prioity}"
+																				>
+																			<option value="">Select Type</option>
+																			<option th:Value="H">High</option>
+																			<option th:Value="M">Medium</option>
+																			<option th:Value="L">Low</option>
+												                         </select></td>
+
+
+																	<td><input type="text" placeholder='Remark' class="form-control"
+																	th:field="*{listTransactionRequisitionDetail[__${stat.index}__].remarks}" 
+																			 /></td>
+
+																</tr>
+																
+															</tbody>
+													
+
+														</table>
+														</div>
+													</div>
+								
+							            </div>
+									</div>
+												
+										
+									
+						          	</div>
+	<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->					          	
+			<div id="validation-step-2">
+							
+										
+											
+				<div class="form-row">
+								<div class="card">
+								
+								<div class="card-body">
+								
+								
+											<div class="table-responsive">
+											<table id="example2" aria-describedby="example" class="table" style="width:100%">
+															<thead>
+																<tr>
+																	<th scope="col">Employee Code</th>
+																	<th scope="col">Name.</th>
+																	<th scope="col">Pay Code.</th>
+																	<th scope="col">Father Name</th>
+
+
+																</tr>
+															</thead>
+															<tbody>
+																<tr th:each="row,stat : ${trainingRequisition.listTransactionReqEmployeeDetail}">
+																		<td>
+																		<select class="form-control"
+																				th:field="*{listTransactionReqEmployeeDetail[__${stat.index}__].employee.empCode}">
+																			
+																			<option value="">Select Type</option>
+																			<option th:each="employee : ${listEmployee}"
+																			th:text="${employee.empName}" th:value="${employee.empCode}">Select Type</option>
+													                   </select></td>
+														
+																	<td>
+																	<input type="text" placeholder='Name' class="form-control" 
+																				th:field="*{listTransactionReqEmployeeDetail[__${stat.index}__].employee.empName}"/></td>
+																	<td>
+																	<input type="text" name="listTransactionReqEmployeeDetail[0].topicSrlNo" placeholder='Pay Code' 
+																		th:field="*{listTransactionReqEmployeeDetail[__${stat.index}__].employee.payeeCode}"class="form-control" /></td>
+
+																	<td>
+																	<input type="text" placeholder='Father Name' 
+																			class="form-control" /></td>
+																	
+																</tr>
+																
+
+															</tbody>
+															
+
+														</table>
+														</div>
+															<input
+    							
+								    							onclick="window.history.go(-2); return false;"
+								    							type="submit" class="btn btn-primary"
+								    							value="Back"
+															/> 
+							
+							 
+													</div>
+								
+							           
+							           
+							            </div>
+									</div>
+						
+									</div>
+
+<!-- third ta>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. -->
+							
+                     
+								</div>
+
+	
+	</div>
+			</div>
+				 
+	</div>
+					</div>
+</form>
+				</div>
+		</main>
+		<footer class="footer">
+		<div th:replace="/fragments/footer :: div"></div>
+		</footer>
+		</div>
+		</div>
+			<script>
+	$(document).ready(function() {
+	    $('#example').DataTable( {
+	        "scrollY": 200,
+	        "scrollX": true,
+	        deferRender:true,
+            scrollCollapse: true,
+            
+	    } );
+	} );
+	</script>
+	<script>
+		$(function() {
+
+			$("input[name='tourPlanDate']").daterangepicker({
+				singleDatePicker: true,
+			    autoApply: true,
+				locale: {
+		            format: 'YYYY/MM/DD'
+		        },
+				showDropdowns: true
+			});
+			
+		$("input[name='tourClaimDate']").daterangepicker({
+				singleDatePicker: true,
+			    autoApply: true,
+				locale: {
+		            format: 'YYYY/MM/DD'
+		        },
+				showDropdowns: true
+			});
+
+			
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive: true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons').DataTable({
+				  deferRender:true,
+		            scrollCollapse: true,
+		            scroller: false,
+				   responsive: true,
+				   lengthMenu :[[10,20,30,-1 ],['10 rows', '20 rows', '30 rows', 'Show all' ] ],
+					buttons :[]
+			});
+			datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+		
+	</script>
+	
+		<script>
+		$(document).ready(function(){
+
+			  
+			  $('#smartwizard').smartWizard();
+			  $('#smartwizard').smartWizard("loader", "show");
+
+			});
+	</script>
+
+	<script type="text/javascript">
+		function changetextbox() {
+			if (document.getElementById("onDeputation").value === "Y")
+
+			{
+				document.getElementById("empDeputation").disabled = 'true';
+
+			} else {
+
+				document.getElementById("empDeputation").disabled = '';
+			}
+
+		}
+	</script>
+
+
+	<script type='text/javascript'>
+		function preview_image(event) {
+			var reader = new FileReader();
+			reader.onload = function() {
+				var output = document.getElementById('output_image');
+				output.src = reader.result;
+			}
+			reader.readAsDataURL(event.target.files[0]);
+		}
+	</script>
+
+	<script>
+		function sync() {
+			var n1 = document.getElementById('empName');
+			var n2 = document.getElementById('name');
+			n2.value = n1.value;
+		}
+	</script>
+	<script>
+		function syncAddress() {
+			var n1 = document.getElementById('address1');
+			var n2 = document.getElementById('addressArms');
+			n2.value = n1.value;
+		}
+	</script>
+	<script>
+ function myFunctionState(){
+   $('#stateCode').click(function() {
+      	 var name= $('#stateCode option:selected').text();
+      	$('#state').val(name);
+      	}); 
+      }
+      
+</script>
+
+<script>
+ function myFunctionCity(){
+   $('#cityCode').click(function() {
+      	 var name= $('#cityCode option:selected').text();
+      	$('#district').val(name);
+      	}); 
+      }
+      
+</script>
+
+<script>
+	function myFunctionEmpCode(){
+
+		 var empCode= document.getElementById('empCode').value
+	    console.log("ajax request : "+ empCode);
+	    const xhr = new XMLHttpRequest();
+	    xhr.open('GET','./viewEmployeeTourClaim/'+empCode,true);
+	    xhr.getResponseHeader('content-type','application/json');
+	    xhr.onload = function(){
+	        if(this.status===200){
+	            let obj = JSON.parse(this.responseText);
+	            console.log(obj);
+	          
+	            $('#deptName').val(obj.deptName);
+	            $('#desgName').val(obj.desgName);
+	          
+	        }
+	        else{
+	            console.error("some error occured");
+	        }
+		
+	    }
+	    xhr.send();
+	}
+
+
+
+	
+	</script>
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			
+			success : function() {
+				
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+
+</body>
+</html>

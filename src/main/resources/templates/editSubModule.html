@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"style="background: #f4f7fc;">
+									<h5 class="card-title" style="text-decoration: underline;color: #dc2eaf;">Sub
+										Module Master</h5>
+
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/updateSubModule}" th:object="${submoduleupdate}"
+										method="post">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+
+
+
+												<div class="form-group">
+													<label> Sub Module Code </label> <label style="color: red">*</label>
+													<input type="text" class="form-control" maxlength="40"
+														title="Sub Module Code"
+														id="subModuleCode" name="subModuleCode"
+														th:value="${subModuleEdit.subModuleCode}" readonly>
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Module</label> <label
+														style="color: red">*</label> <select class="form-control"
+														name="moduleCode.moduleCode" id="moduleCode.moduleCode"
+														title="Module Name" required aria-required="true">
+														<option value="">Select Module</option>
+														<option th:each="module: ${modulesList}"
+															th:value="${module.getModuleCode()}"
+															th:text="${module.getModuleName()}"
+															th:field="${subModuleEdit.moduleCode.moduleCode}"></option>
+													</select>
+												</div>
+
+
+												<div class="form-group">
+													<label class="form-label">Status</label>
+													<div class="custom-controls-stacked">
+
+														<label class="radio-inline"> <input type="radio"
+															value="Y" name="acitveSubModule"
+															th:checked="${subModuleEdit.acitveSubModule}==Y " />&nbsp;&nbsp;Active&nbsp;&nbsp;
+														</label> <label class="radio-inline"> <input type="radio"
+															value="N" name="acitveSubModule"
+															th:checked="${subModuleEdit.acitveSubModule}==N" />&nbsp;&nbsp;Inactive
+														</label>
+													</div>
+												</div>
+
+
+
+											</div>
+
+
+
+											<div class="col-12 col-lg-6">
+
+												<div class="form-group">
+													<label class="form-label"> Sub Module Name</label> <label
+														style="color: red">*</label> <input type="text"
+														style="text-transform: capitalize;"
+														class="form-control noHTML" pattern="^[a-zA-Z\s]*$"
+														id="subModuleName" name="subModuleName" required
+														aria-required="true"
+														th:value="${subModuleEdit.subModuleName}">
+												</div>
+
+												<div class="form-group">
+													<label>Sequence No</label> <input type="text"
+														class="form-control required noHTML" id="seqNoSubModule"
+														name="seqNoSubModule" required aria-required="true"
+														th:value="${subModuleEdit.seqNoSubModule}" maxlength="2" pattern="\d{1,3}">
+
+												</div>
+
+											</div>
+										</div>
+
+										<button type="submit" class="btn btn-primary"><em class="fas fa-check"></em> &nbsp;Update</button>
+										&nbsp;
+										<button type="button" class="btn btn-outline-primary"
+											onclick="window.location.href='../subModule';"><em class="fas fa-times"></em> &nbsp;Cancel</button>
+
+									</form>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+</body>
+</html>

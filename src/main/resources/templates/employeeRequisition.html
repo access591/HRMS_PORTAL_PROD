@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script type="text/javascript" th:src="@{/js/ajax_leaveRequest.js}"></script>
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+		color: #FF0000;
+		font-size: 12px;
+		/* red */
+	}
+	
+	
+</style>
+<script>
+
+jQuery(document).ready(function ($) {
+
+		$('#validation-form').validate({
+			errorClass: "my-error-class",
+			submitHandler: function (form) { // for demo
+				//alert('valid form');
+				return true
+			}
+		});
+
+		jQuery.validator.addMethod("noHTML", function (value, element) {
+			return this.optional(element) || /^([a-zA-Z0-9]+)$/.test(value);
+		}, "No HTML tags are allowed!");
+
+
+	});
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<form action="#" id="validation-form" th:action="@{/saveEmployeeRequisition}"
+						th:object="${req}" method="post">
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Employee
+											Requisition</h5>
+									<input type="hidden" id="mess" name="mess"th:value="${message}">
+									</div>
+
+									<div class="card-body">
+
+
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Requisition Code </label> <input
+														class="form-control" id="" value="" th:field="*{reqCode}"
+														readonly />
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Requisition Date </label> <input
+														class="form-control" type="date" id="theDate" value=""
+														title="Requisition Date"
+														th:field="*{reqDate}" />
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Department Code </label> <input type="text"
+														class="form-control" id="departmentId" value=""
+														th:field="*{departmet.departmentCode}" 
+														title="Department Code"
+														readonly>
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+												<label class="form-label">Department Name</label> <label
+													style="color: red">*</label> <select class="form-control"
+													id="departmentDropdown" onchange="changeDepartment()"
+													title="Department Name"
+													required>
+													<option value="">Select Department</option>
+													<option th:each="department :  ${departmentList}"
+														th:text="${department.deptName}"
+														th:value=" ${department.departmentCode}"></option>
+												</select>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Requisition Priorty </label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" id="leave_type_id"
+														th:field="*{reqPriority}" 
+														title="Requisition Priority"
+														required>
+														<option value="" disabled>Please Select</option>
+														<option th:value="Low" th:text="Low">Low</option>
+														<option th:value="High" th:text="High">High</option>
+													</select>
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+												<label class="form-label">Requisition Fulfill Date</label> <label
+													style="color: red">*</label> <input type="date"
+													id="theDate2" class="form-control" 
+													title="Requisition Fulfill Date"
+													th:field="*{reqTill}">
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<label class="form-label">Remarks</label> <input type="text"
+													class="form-control noHTML" id="leaveDepartmentName" value=""
+													title="Remarks" name="remarks"
+													th:field="*{remarks}">
+											</div>
+
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header"></div>
+									<div class="card-body">
+
+										<input id="_cr" name="_cr" type="hidden" value="1" class="noHTML">
+
+										<div id="validation-step-3">
+
+											<div class="col-sm-12" style="text-align:right">
+
+
+
+
+												<a id="add_row" class="fa fa-plus" aria-hidden="true"
+													style="font-size: 24px; color: #001080"></a>&nbsp;&nbsp;&nbsp;
+												<a id='delete_row' class="fa fa-trash"
+													style="font-size: 24px; color: #399490fc"
+													aria-hidden="true"></a>
+											</div>
+
+											<div class="table-responsive">
+												<table id="example" aria-describedby="example"
+													class="table table-striped display" style="width: 100%">
+													<thead>
+														<tr>
+															<th scope="col" class="text-center" style="width: 90px;">Designation
+																Code</th>
+															<th scope="col" class="text-center" style="width: 130px;">Designation
+																Name</th>
+															<th scope="col" class="text-center" style="width: 100px;">Location</th>
+															<th scope="col" class="text-center" style="width: 90px;">Sex</th>
+															<th scope="col" class="text-center" style="width: 50px;">Age(From)</th>
+															<th scope="col" class="text-center" style="width: 50px;">Age(To)</th>
+															<th scope="col" class="text-center" style="width: 10px;">Academic
+																Qualification</th>
+															<th scope="col" class="text-center" style="width: 120px;">Technical
+																Qualification</th>
+															<th scope="col" class="text-center" style="width: 90px;">Experience
+																in month(Min)</th>
+															<th scope="col" class="text-center" style="width: 90px;">Experience
+																in month(Max)</th>
+															<th scope="col" class="text-center" style="width: 120px;">Vacancy
+																Type</th>
+															<th scope="col" class="text-center" style="width: 90px;">Total
+																Vacancies</th>
+															<th scope="col" class="text-center" style="width: 90px;">Salary
+																From</th>
+															<th scope="col" class="text-center" style="width: 90px;">Salary
+																To</th>
+															<th scope="col" class="text-center" style="width: 120px;">Detail</th>
+
+														</tr>
+													</thead>
+													<tbody>
+														<tr id="addr0">
+
+
+															<td><input type="text" style="width: 90px;"
+																id="desigCode0"
+																name="employeRequisitionDetail[0].designation.desgCode"
+																readonly 
+																title="Designation code"
+																required></td>
+
+															<td><select id="designationName0"
+																style="width: 130px;"
+																name="employeRequisitionDetail[0].designation.desgName"
+																required onchange="selectDesignation()"
+																title="Designation name">
+																	<option value=" ">Select</option>
+
+
+															</select></td>
+
+
+
+															<td><select id="location" style="width: 100px;"
+																name="employeRequisitionDetail[0].location" 
+																title="Location"
+																required>
+																	<option value=" ">Select</option>
+																	<option value="Court">Court</option>
+																	<option value="Department">Department</option>
+															</select></td>
+
+															<td><select id="sex" style="width: 90px;"
+																name="employeRequisitionDetail[0].sex" 
+																title="Sex"
+																required>
+																	<option value=" ">Select</option>
+																	<option value="Male">Male</option>
+																	<option value="Female">Female</option>
+															</select></td>
+
+															<td><input
+																name="employeRequisitionDetail[0].ageFrom" type="number"
+																style="width: 50px;text-align: right; " id="ageFrom" min="18" 
+																title="Age from" class="noHTML"
+																required></td>
+
+															<td><input name="employeRequisitionDetail[0].ageTo"
+																type="number" max="45" style="width: 50px;text-align: right; " id="ageTo"
+																required class="noHTML"
+																></td>
+
+															<td><input
+																name="employeRequisitionDetail[0].acadQuali" type="text"
+																style="width: 120px;" id="accademicQualificatio"
+																required class="noHTML"
+																title="Accademic qualification"></td>
+
+															<td><input
+																name="employeRequisitionDetail[0].techQuali" type="text"
+																style="width: 120px;" id="technicalQualification"
+																class="noHTML"
+																required title="Technical Qualification"></td>
+
+															<td><input
+																name="employeRequisitionDetail[0].minExperience"
+																type="number" style="width: 90px;text-align: right; " id="expMinMonth"
+																required title="minimum experience" class="noHTML"></td>
+
+															<td><input
+																name="employeRequisitionDetail[0].maxExperience"
+																type="number" style="width: 90px;text-align: right; " id="expMaxMonth"
+																required title="max experience" class="noHTML"></td>
+
+															<td><select id="vacancyType" style="width: 120px;"
+																name="employeRequisitionDetail[0].vacanncyType" required>
+																	<option value=" ">Select</option>
+																	<option value="Fresher">Fresher</option>
+																	<option value="Experience">Experience</option>
+															</select></td>
+
+															<td><input
+																name="employeRequisitionDetail[0].totalVacancy"
+																type="number" style="width: 60px;text-align: right; " id="totalvacancy"
+																required
+																title="Total vacancy"></td>
+
+															<td><input
+																name="employeRequisitionDetail[0].salaryFrom"
+																type="text" style="width: 120px;text-align: right; " id="salaryFrom"
+																required class="noHTML"
+																title="Salary"></td>
+
+															<td><input
+																name="employeRequisitionDetail[0].salaryTo" type="text"
+																style="width: 120px;text-align: right; " id="salaryTo" class="noHTML" required></td>
+
+															<td><input
+																name="employeRequisitionDetail[0].remarks" type="text"
+																style="width: 150px;" id="detail" class="noHTML" required></td>
+
+															<td></td>
+														</tr>
+														<tr id='addr1' />
+
+													</tbody>
+
+												</table>
+											</div>
+										</div>
+										<input type="hidden" id="hidden_field" th:value="${length}" />
+									<hr>
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									
+									
+									</div>
+
+
+								</div>
+							
+							</div>
+							
+						</div>
+						<p></p>
+					</form>
+
+<div class="row">
+					<div class="col-12">
+						<div class="card">
+							<div class="card-header"></div>
+							<div class="card-body">
+								<table id="datatables-buttons" class="table table-striped display"
+									style="width: 100%">
+									<thead>
+										<tr>
+											<th scope="col" class="text-center">Req Code</th>
+											<th scope="col" class="text-center">Req. Date</th>
+											<th scope="col" class="text-center">Priority</th>
+											<th scope="col" class="text-center">Till Date</th>
+											<th scope="col" class="text-center">Remarks</th>
+											<th scope="col" class="text-center">Status</th>
+											<th scope="col" class="text-center">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="leave : ${requisition}">
+											<td class="text-center" th:text="${leave.reqCode}"></td>
+											<td class="text-center" th:text="${#dates.format(leave.reqDate, 'dd-MM-yyyy')}"></td>
+											<td class="text-center" th:text="${leave.reqPriority}"></td>
+											<td class="text-center" th:text="${#dates.format(leave.reqTill, 'dd-MM-yyyy')}"></td>
+											<td class="text-center" th:text="${leave.remarks}"></td>
+
+											<th:block th:switch="${leave.status}">
+												<td th:case="'Y'" class="text-center">Approved</td>
+												<td th:case="'D'" class="text-center">Approved</td>
+												<td th:case="'C'" class="text-center">Cancel</td>
+												<td th:case="'N'" class="text-center">Pending</td>
+											</th:block>
+
+											<td class="text-center"><th:block
+													th:switch="${leave.status}">
+													<div th:case="'Y'">
+														<a th:href="@{viewRequisition/{id}(id=${leave.reqCode})}"><em
+															class="align-middle fas fa-fw fa-pen"></em></a> <a
+															th:href="@{deleteRequisition/{id}(id=${leave.reqCode})}"
+															onclick="return confirm('Are you sure?')"><em
+															class="align-middle fas fa-fw fa-trash"></em></a>
+													</div>
+													<div th:case="'D'">
+														<a th:href="@{viewRequisition/{id}(id=${leave.reqCode})}"><em
+															class="align-middle fas fa-fw fa-pen"></em></a> <a
+															th:href="@{deleteRequisition/{id}(id=${leave.reqCode})}"
+															onclick="return confirm('Are you sure?')"><em
+															class="align-middle fas fa-fw fa-trash"></em></a>
+													</div>
+													<div th:case="'N'">
+														<a th:href="@{editRequisition/{id}(id=${leave.reqCode})}"><em
+															class="align-middle fas fa-fw fa-pen"></em></a> <a
+															th:href="@{deleteRequisition/{id}(id=${leave.reqCode})}"
+															onclick="return confirm('Are you sure?')"><em
+															class="align-middle fas fa-fw fa-trash"></em></a>
+													</div>
+													<div th:case="'C'">
+														<a th:href="@{viewRequisition/{id}(id=${leave.reqCode})}"><em
+															class="align-middle fas fa-fw fa-pen"></em></a> <a
+															th:href="@{deleteRequisition/{id}(id=${leave.reqCode})}"
+															onclick="return confirm('Are you sure?')"><em
+															class="align-middle fas fa-fw fa-trash"></em></a>
+													</div>
+
+												</th:block></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+</div>
+
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+			
+			$('#example').DataTable({
+				"scrollY" : 200,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+		});
+
+		var size = "";
+		var idIndex = 0;
+		function changeDepartment() {
+
+			//set dept code value 
+			var dValue = document.getElementById("departmentDropdown").value;
+			document.getElementById("departmentId").value = dValue;
+
+			var selecteDepartmentValue = document
+					.getElementById("departmentDropdown").value;
+			console.log("select category : " + selecteDepartmentValue);
+			//$('#employeeName').append($('<option>', {value:0, text:'Select Employee'}));
+			var x = document.getElementById("designationName"+idIndex);
+			console.log("x value : " + x);
+
+			var length = x.options.length;
+			for (i = length - 1; i >= 1; i--) {
+				x.options[i] = null;
+			}
+
+			if (selecteDepartmentValue !== ""
+					|| document.getElementById("selecteDepartmentValue").selected == false) {
+				const xhr = new XMLHttpRequest();
+				xhr.open('GET', 'designationbydept/' + selecteDepartmentValue,
+						true);
+				xhr.getResponseHeader('content-type', 'application/json');
+				xhr.onload = function() {
+					if (this.status === 200) {
+						let obj = JSON.parse(this.responseText);
+						console.log(obj);
+						console.log("console.log size :" + obj.length);
+						//console.log("employee name : " +obj[0].empName)
+						$('select[name="designationName"]').prop("disabled",
+								false);
+						//$('select[name="employeeName"]').html(obj.empName);
+
+						$.each(obj,
+								function(i, item) {
+									console.log(" i " + i + " item : "
+											+ item.desigCode);
+									console.log(" i " + i + " item : "
+											+ item.desgName);
+									$('#employeeName').append($('<option>', {
+										value : i,
+										text : item.empName
+									}));
+									console
+											.log("dbIndex value is : "
+													+ idIndex);
+									$('#designationName' + idIndex).append(
+											$('<option>').val(this.desigCode)
+													.text(this.desgName));
+								});
+
+					} else {
+						console.error("some error occured");
+					}
+
+				}
+				xhr.send();
+			} else {
+				$('select[name="employeeName"]').prop("disabled", true);
+			}
+
+		}
+
+		function selectDesignation() {
+			console.log("designation selection");
+			var designationCode = document.getElementById("designationName"
+					+ idIndex).value;
+			console.log("desihnation code " + designationCode);
+			document.getElementById("desigCode" + idIndex).value = designationCode;
+
+		}
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			var date = new Date();
+
+			var day = ("0" + date.getDate()).slice(-2);
+			var month = ("0" + (date.getMonth() + 1)).slice(-2);
+
+			var today = date.getFullYear() + "-" + (month) + "-" + (day);
+
+			$('#theDate').val(today);
+
+		});
+
+		$(document).ready(function() {
+			var date = new Date();
+
+			var day = ("0" + date.getDate()).slice(-2);
+			var month = ("0" + (date.getMonth() + 1)).slice(-2);
+
+			var today = date.getFullYear() + "-" + (month) + "-" + (day);
+
+			$('#theDate2').val(today);
+
+		});
+	</script>
+
+	<script>
+		//add row 
+
+		$(document)
+				.ready(
+						function() {
+							console.log("click function...");
+							var i = 1;
+
+							console.log("idINdexin add buttton function"
+									+ idIndex);
+							$("#add_row")
+									.click(
+											function() {
+												idIndex++;
+												$('#addr' + i)
+														.html(
+																"<td><input type='text' style='width: 90px;'id='desigCode"+idIndex+"'name='employeRequisitionDetail["+i+"].designation.desgCode' required></td>"
+																		+
+
+																		"<td><select style='width: 130px;' id='designationName"
+																		+ idIndex
+																		+ "'name='employeRequisitionDetail["
+																		+ i
+																		+ "].designation.desgName'onchange='selectDesignation()' required><option value=''>Select</option></select></td>"
+																		+ "<td><select id='location'name='employeRequisitionDetail["+i+"].location' required><option value=''>Select</option><option value='Court'>Court</option><option value='Department'>Department</option></select></td>"
+																		+ "<td><select style='width: 90px;' id='sex'name='employeRequisitionDetail["+i+"].sex' required><option value=''>Select</option><option value='Male'>Male</option><option value='Female'>Female</option></select></td>"
+																		+ "<td><input type='text' style='width: 50px;text-align:right;'id='ageFrom'name='employeRequisitionDetail["+i+"].ageFrom' class='noHTML' required></td>"
+																		+ " </td><td><input type='text' style='width: 50px;text-align:right;'id='desigCode'name='employeRequisitionDetail["+i+"].ageTo' class='noHTML' required></td>"
+																		+
+
+																		"<td><input type='text' style='width: 120px;'id='acadQuali'name='employeRequisitionDetail["+i+"].acadQuali' class='noHTML' required></td>"
+																		+ "<td><input type='text' style='width: 120px;'id='techQuali'name='employeRequisitionDetail["+i+"].techQuali' class='noHTML' required></td>"
+																		+ "<td><input type='text' style='width: 90px;text-align: right; 'id='minExperience'name='employeRequisitionDetail["+i+"].minExperience' class='noHTML' required></td>"
+																		+ "<td><input type='text' style='width: 90px;text-align: right; 'id='maxExpierence'name='employeRequisitionDetail["+i+"].maxExperience' class='noHTML' required></td>"
+																		+ "<td><select style='width: 120px;id='vacanncyType' name='employeRequisitionDetail["+i+"].vacanncyType' required><option value=''>Select</option><option value='Fresher'>Fresher</option><option value='Experience'>Experience</option></select></td>"
+																		+ "<td><input type='text' style='width: 60px;text-align: right; 'id='totalVacancy'name='employeRequisitionDetail["+i+"].totalvacancy' class='noHTML' required></td>"
+																		+ "<td><input type='text' style='width: 120px;text-align: right; 'id='salaryFrom'name='employeRequisitionDetail["+i+"].salaryFrom' class='noHTML' required></td>"
+																		+ "<td><input type='text' style='width: 120px;text-align: right; 'id='salaryTo'name='employeRequisitionDetail["+i+"].salaryTo' class='noHTML' required></td>"
+																		+ "<td><input type='text' style='width: 150px;'id='remarks'name='employeRequisitionDetail["+i+"].remarks' class='noHTML' required></td>");
+
+												$('#example').append(
+														'<tr id="addr'
+																+ (i + 1)
+																+ '"></tr>');
+												$('#_cr').val(i + 1);
+												i++;
+
+												changeDepartment();
+
+											});
+
+							$("#delete_row").click(function() {
+								if (i > 1) {
+									$("#addr" + (i - 1)).html('');
+									$('#_cr').val(i - 1);
+									i--;
+									idIndex--;
+								}
+							});
+
+						});
+	</script>
+
+
+	<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+									[ 5, 10, 15, -1 ],
+									[ '5 rows', '10 rows', '15 rows',
+											'Show all' ] ],
+							buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+
+</body>
+
+</html>

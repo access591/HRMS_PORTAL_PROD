@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<script src="js/settings.js"></script>
+<script src="js/app.js"></script>
+<script type="text/javascript" th:src="@{/js/ajax_emp_pay_details.js}"></script>
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">HRMS</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Employee Pay Details</h5>
+
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/saveemployepaydetail}"
+										th:object="${employeePayDetail}" method="post">
+
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label"> Employee Code </label> <select
+														id="employeeDropdown" class="form-control" name="empCode"
+														onchange="display()">
+														<option value=" ">Select</option>
+														<option th:each="employee: ${listEmployee}"
+															th:text="${employee.empCode}">${employee.empCode}</option>
+													</select>
+
+
+												</div>
+												<div class="form-group">
+													<label class="form-label">name </label> <input type="text"
+														class="form-control" id="emp_name" name="empName"
+														maxlength="40" pattern="^[a-zA-Z\s]*$" required
+														aria-required="true">
+												</div>
+
+
+												<div class="form-group">
+													<label class="form-label">Old Emp. Code </label> <input
+														type="text" class="form-control" id="deptCode1"
+														name="deptCode1" maxlength="40" pattern="^[a-zA-Z\s]*$"
+														required aria-required="true">
+												</div>
+
+
+												<div class="form-group ">
+													<label class="form-label">WEF Date</label> <input
+														class="form-control required" type="text" id="wef_date"
+														name="wefdate" maxlength="40" pattern="^[a-zA-Z\s]*$"
+														required aria-required="true" />
+
+												</div>
+
+
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label">Department Code </label> <input
+														type="text" class="form-control" id="emp_dept_code"
+														name="deptCode">
+
+												</div>
+												<div class="form-group">
+													<label class="form-label">Department Name </label> <input
+														type="text" class="form-control" id="emp_dept_name"
+														name="deptName">
+
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Designation Code </label> <input
+														type="text" class="form-control" id="desigCode"
+														name="desigCode">
+
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Designation Name </label> <input
+														type="text" class="form-control" id="emp_desig_name"
+														name="emp_desig_name">
+
+												</div>
+
+
+											</div>
+										</div>
+										<div class="form-row">
+											<div class="container-fluid" style="margin-top: 50px;">
+												<div class="card">
+													<div class="row">
+														<div class="col-md-12 col-sm-3"></div>
+														<div class="col-md-12 col-sm-3">
+
+															<div class="row">
+																<div class="col-12 col-lg-4">
+																	<div class="form-group">
+																		<label class="form-label">Employee Ins No</label> <input
+																			type="text" class="form-control" id="emp_desig_name"
+																			name="emp_desig_name">
+
+																	</div>
+																</div>
+
+																<div class="col-12 col-lg-4">
+																	<div class="form-group">
+																		<label class="form-label">PF No</label> <input
+																			type="text" class="form-control" id="emp_desig_name"
+																			name="emp_desig_name">
+
+																	</div>
+																</div>
+
+																<div class="col-12 col-lg-4">
+																	<div class="form-group">
+																		<label class="form-label">Effective Date</label> <input
+																			type="text" class="form-control" id="emp_desig_name"
+																			name="emp_desig_name">
+
+																	</div>
+																</div>
+
+															</div>
+
+															<div class="row">
+																<div class="col-12 col-lg-4">
+																	<div class="form-group">
+																		<label class="form-label">Group Ins. No.</label> <input
+																			type="text" class="form-control" id="emp_desig_name"
+																			name="emp_desig_name">
+
+																	</div>
+																</div>
+
+																<div class="col-12 col-lg-4">
+																	<div class="form-group">
+																		<label class="form-label">Employee Esi No</label> <input
+																			type="text" class="form-control" id="emp_desig_name"
+																			name="emp_desig_name">
+
+																	</div>
+																</div>
+
+																<div class="col-12 col-lg-4">
+																	<div class="form-group">
+																		<label class="form-label">Effective Date</label> <input
+																			type="text" class="form-control" id="emp_desig_name"
+																			name="emp_desig_name">
+
+																	</div>
+																</div>
+
+															</div>
+
+
+															<div class="row">
+																<div class="col-12 col-lg-4">
+																	<div class="form-group">
+																		<label class="form-label">Arrear Due</label> <input
+																			type="text" class="form-control" id="emp_desig_name"
+																			name="emp_desig_name">
+
+																	</div>
+																</div>
+
+																<div class="col-12 col-lg-4">
+																	<div class="form-group">
+																		<label class="form-label">Arrear Paid</label> <input
+																			type="text" class="form-control" id="emp_desig_name"
+																			name="emp_desig_name">
+
+																	</div>
+																</div>
+
+
+
+															</div>
+
+
+
+
+														</div>
+														<div class="col-md-1 col-sm-3"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+
+
+
+
+										<div class="container-fluid">
+
+											<div class="row">
+
+												<div class="col-12">
+													<div id="smartwizard-validation"
+														class="wizard wizard-primary">
+														<ul>
+															<li><a href="#validation-step-1">Employee Pay
+																	Details<br />
+															</a></li>
+															<li><a href="#validation-step-2">Deductions<br /></a></li>
+															<li><a href="#validation-step-3">Allowances
+																	Deductions<br />
+															</a></li>
+														</ul>
+
+														<div>
+															<div id="validation-step-1">
+
+
+																<div class="row">
+
+																	<div class="form-group sm col-md-2">
+																		<label class="form-label">Basic Pay</label> <label
+																			class="form-label"> </label>
+																	</div>
+
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+																	<div class="form-group sm col-md-4">
+																		<label class="form-label"></label> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+
+																</div>
+
+
+																<div class="row">
+
+																	<div class="form-group sm col-md-2">
+																		<label class="form-label">Additional Pay</label> <label
+																			class="form-label"> </label>
+																	</div>
+
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+																	<div class="form-group sm col-md-4">
+																		<label class="form-label"></label> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+
+																</div>
+
+
+																<div class="row">
+
+																	<div class="form-group sm col-md-2">
+																		<label class="form-label">F.D.A Percentage</label>
+																	</div>
+
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay">
+																	</div>
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay">
+																	</div>
+
+																</div>
+
+																<div class="row">
+
+																	<div class="form-group sm col-md-2">
+																		<label class="form-label">VDA</label> <label
+																			class="form-label"> </label>
+																	</div>
+
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+																	<div class="form-group sm col-md-4">
+																		<label class="form-label"></label> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+
+																</div>
+
+																<div class="row">
+
+																	<div class="form-group sm col-md-2">
+																		<label class="form-label">H.R.A Rate</label>
+																	</div>
+
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay">
+																	</div>
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay">
+																	</div>
+
+																</div>
+
+																<div class="row">
+
+																	<div class="form-group sm col-md-2">
+																		<label class="form-label">L.T.A Rate</label>
+																	</div>
+
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay">
+																	</div>
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay">
+																	</div>
+
+																</div>
+
+
+																<div class="row">
+
+																	<div class="form-group sm col-md-2">
+																		<label class="form-label">Medical Allowance</label> <label
+																			class="form-label"> </label>
+																	</div>
+
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+																	<div class="form-group sm col-md-4">
+																		<label class="form-label"></label> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+
+																</div>
+
+																<div class="row">
+
+																	<div class="form-group sm col-md-2">
+																		<label class="form-label">Conveyance Allowance</label>
+																		<label class="form-label"> </label>
+																	</div>
+
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+																	<div class="form-group sm col-md-4">
+																		<label class="form-label"></label> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+
+																</div>
+
+																<div class="row">
+
+																	<div class="form-group sm col-md-2">
+																		<label class="form-label">Bonus/Exgratia</label> <label
+																			class="form-label"> </label>
+																	</div>
+
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+																	<div class="form-group sm col-md-4">
+																		<label class="form-label"></label> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+
+																</div>
+
+																<div class="row">
+
+																	<div class="form-group sm col-md-2">
+																		<label class="form-label">Overtime Rate</label> <label
+																			class="form-label"> </label>
+																	</div>
+
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+																	<div class="form-group sm col-md-4">
+																		<label class="form-label"></label> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+
+																</div>
+
+
+																<div class="row">
+
+																	<div class="form-group sm col-md-2">
+																		<label class="form-label">Total Allowance</label> <label
+																			class="form-label"> </label>
+																	</div>
+
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+																	<div class="form-group sm col-md-4">
+																		<label class="form-label"></label> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+
+																</div>
+
+
+																<div class="row">
+
+																	<div class="form-group sm col-md-2">
+																		<label class="form-label">Gross</label> <label
+																			class="form-label"> </label>
+																	</div>
+
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+																	<div class="form-group sm col-md-4">
+																		<label class="form-label"></label> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+
+																</div>
+
+																<div class="row">
+
+																	<div class="form-group sm col-md-2">
+																		<label class="form-label">Net</label> <label
+																			class="form-label"> </label>
+																	</div>
+
+																	<div class="form-group sm col-md-4">
+																		<input id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+																	<div class="form-group sm col-md-4">
+																		<label class="form-label"></label> <input
+																			id="basic_pay_m" type="number" value="0"
+																			class="input_size" onkeyup="basicPayCal(this.value);"
+																			onchange="" name="basicPay"> <label
+																			class="form-label"> </label>
+																	</div>
+
+																</div>
+															</div>
+
+
+
+
+
+
+
+
+
+
+															<div id="validation-step-2">
+																<table id="datatables-buttons"
+																	aria-describedby="datatables-buttons"
+																	class="table table-striped display" style="width: 100%">
+
+																	<thead>
+																		<tr>
+																			<th scope="col"></th>
+																			<th scope="col">Monthly Basis</th>
+																			<th scope="col">Yearly Basis</th>
+																			<td data-label=""></td>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr>
+																			<td data-label="">FPF %</td>
+																			<td data-label=""><input type="radio"
+																				name="radioBtn" id="r1" value="r1"
+																				onclick='calculateEsiAndEpf()'
+																				style="margin-left: 25px;"> Condition Not
+																				applicable<br> <input type="radio"
+																				name="radioBtn" id="r2" value="r2"
+																				onclick='calculateEsiAndEpf()'> Calculated
+																				on 15000<br> <input type="radio"
+																				name="radioBtn" id="r3" value="r3"
+																				onclick='calculateEsiAndEpf()'> Calculated
+																				on Actual<br> <input type="radio"
+																				name="radioBtn" id="r4" value="r4"
+																				style="margin-left: 35px;"
+																				onclick='calculateEsiAndEpf()'> Calculated
+																				FPF and PF on 15000 and EPF on Actual<br></td>
+
+																			<td data-label=""></td>
+
+																		</tr>
+
+																		<tr>
+																			<td data-label="">FPF %</td>
+																			<td data-label=""><input type="number"
+																				class="sm_input1" id="deduction_fpf_percent"
+																				value="0"
+																				onkeyup='calculateEsiAndEpfByFpf(this.value)'>&nbsp;&nbsp;
+																				<input type="number" class="sm_input4"
+																				id="deduction_fpf_m" value="0"></td>
+																			<td data-label=""><input type="number"
+																				class="sm_input5" id="deduction_fpf_y" value="0"></td>
+																			<td data-label=""></td>
+
+																		</tr>
+
+																		<tr>
+																			<td data-label="">Pension Fund (%)</td>
+																			<td data-label=""><input type="number"
+																				class="sm_input1" id="deduction_pf_percent"
+																				value='0'
+																				onkeyup='calculateEsiAndEpfByPf(this.value)'>&nbsp;&nbsp;
+
+																				<input type="number" class="sm_input4"
+																				id="deduction_pf_m" value="0"></td>
+																			<td data-label=""><input type="number"
+																				class="sm_input5" id="deduction_pf_y" value="0"></td>
+																			<td data-label=""></td>
+
+																		</tr>
+
+																		<tr>
+																			<td data-label="">EPF (%)</td>
+																			<td data-label=""><input type="number"
+																				class="sm_input1" id="deduction_epf_percent"
+																				value='0'
+																				onkeyup='calculateEsiAndEpfByEpf(this.value)'>&nbsp;&nbsp;
+
+																				<input type="number" class="sm_input4"
+																				id="deduction_epf_m" value="0"></td>
+																			<td data-label=""><input type="number"
+																				class="sm_input5" id="deduction_epf_y" value="0"></td>
+																			<td data-label=" "><select id='epfDropdown'
+																				name='epfChoose' onchange='calculateEpf()'>
+																					<option value=''>choose</option>
+																					<option value='y'>Yes</option>
+																					<option value='n'>No</option>
+																			</select></td>
+
+
+																		</tr>
+																		<tr>
+																			<td data-label="">ESI</td>
+
+																			<td data-label=" "><input type="number"
+																				class="sm_input5" id="deduction_esi_m" value="0"></td>
+
+																			<td data-label=""><input type="number"
+																				class="sm_input5" id="deduction_esi_y" value="0"></td>
+
+																			<td data-label=" "><select id='esiDropdown'
+																				name='ésiChoose' onchange='calculateEsi()'>
+																					<option value=''>choose</option>
+																					<option value='y'>Yes</option>
+																					<option value='n'>No</option>
+																			</select></td>
+
+
+
+																		</tr>
+																		<tr>
+																			<td data-label="">SI</td>
+
+																			<td data-label=" "><input type="number"
+																				class="sm_input5" id="deduction_si_m" value="0"
+																				onkeyup='calculateSi(this.value)'></td>
+
+																			<td data-label=""><input type="number"
+																				class="sm_input5" id="deduction_si_y" value="0"></td>
+
+																			<td data-label=""></td>
+
+
+																		</tr>
+																		<tr>
+																			<td data-label="">VPF</td>
+
+																			<td data-label=" "><input type="number"
+																				class="sm_input5" id="deduction_vpf_m" value="0"
+																				onkeyup="calculateVpf(this.value)"></td>
+
+																			<td data-label=""><input type="number"
+																				class="sm_input5" id="deduction_vpf_y" value="0"></td>
+
+																			<td data-label=""></td>
+
+
+																		</tr>
+																		<tr>
+																			<td data-label="">Labour Charges</td>
+
+																			<td data-label=" "><input type="number"
+																				class="sm_input5" id="deduction_labour_m" value="0"
+																				onkeyup="calculateLabour(this.value)"></td>
+
+																			<td data-label=""><input type="number"
+																				class="sm_input5" id="deduction_labour_y" value="0"></td>
+
+																			<td data-label=""></td>
+
+
+
+																		</tr>
+																		<tr>
+																			<td data-label="">Insurance Premium</td>
+
+																			<td data-label=" "><input type="number"
+																				class="sm_input5" id="deduction_insurance_m"
+																				value="0"
+																				onkeyup="calculateInsurancePremium(this.value)"></td>
+
+																			<td data-label=""><input type="number"
+																				class="sm_input5" id="deduction_insurance_y"
+																				value="0"></td>
+
+																			<td data-label=""></td>
+
+
+																		</tr>
+																		<tr>
+																			<td data-label="">TDS</td>
+
+																			<td data-label=" "><input type="number"
+																				class="sm_input5" id="deduction_tds" value="0"
+																				onkeyup="totalDeduction(this.value)"></td>
+
+																			<td data-label=""></td>
+
+																			<td data-label=""></td>
+
+
+																		</tr>
+																		<tr>
+																			<td data-label="">Surcharge</td>
+
+																			<td data-label=" "><input type="number"
+																				class="sm_input5" id="deduction_surcharge" value="0"
+																				onkeyup="totalDeduction(this.value)"></td>
+
+																			<td data-label=""><input type="text"
+																				class="sm_input5" id="deduction_surcharge_check"></td>
+
+																			<td data-label=""></td>
+
+
+																		</tr>
+																		<tr>
+																			<td data-label="">Education Cess</td>
+
+																			<td data-label=" "><input type="type"
+																				class="sm_input5" id="deduction_edu" value="0"
+																				onkeyup="totalDeduction(this.value)"></td>
+
+																			<td data-label=""><input type="text"
+																				class="sm_input5"></td>
+
+																			<td data-label=""></td>
+
+
+
+																		</tr>
+																		<tr>
+																			<td data-label="">Section Code</td>
+
+																			<td data-label=" "><input type="number "
+																				class="sm_input5" id="deduction_section"></td>
+
+																			<td data-label=""><input type="text"
+																				class="sm_input5"></td>
+
+																			<td data-label=""></td>
+
+																		</tr>
+																		<tr>
+																			<td data-label="">Total Deduction</td>
+
+																			<td data-label=" "><input type="number"
+																				class="sm_input5" id="deduction_total_m"></td>
+
+																			<td data-label=""><input type="number"
+																				class="sm_input5" id="deduction_total_y"></td>
+
+																		</tr>
+																		<tr>
+																			<td data-label="">CTC</td>
+
+																			<td data-label=" "><input type="number"
+																				class="sm_input5" id="deduction_total_ctc"></td>
+
+																			<td data-label=""></td>
+
+																			<td data-label=""></td>
+
+
+																		</tr>
+
+																	</tbody>
+																</table>
+															</div>
+
+
+															<div id="validation-step-3">
+																<table id="example" aria-describedby="example"
+																	class="table table-striped display" style="width: 100%">
+																	<thead>
+																		<tr>
+																			<th scope="col">Code*</th>
+																			<th scope="col">Type</th>
+																			<th scope="col">Allowances Deductions Names</th>
+																			<th scope="col">ESI Effected</th>
+																			<th scope="col">Head Desc.</th>
+																			<th scope="col">Effect With Work Days</th>
+																			<th scope="col">Amount* Monthly Basis</th>
+																			<th scope="col">Amount* Yearly Basis</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr
+																			th:each=" listMiscAllowanceDeduction : ${listMiscAllowanceDeduction} ">
+
+																			<td><select id="spicealAllowanceCode"
+																				name="allowanceCode">
+																					<option value=" ">Select</option>
+																					<option
+																						th:each="emp: ${listMiscAllowanceDeduction}"
+																						th:text="${emp.allowanceCode}">${emp.allowanceCode}</option>
+																			</select></td>
+
+
+
+
+																			<td data-label="Allowance-Type"><input
+																				name="type" type="text" class="tab3"
+																				th:value="${listMiscAllowanceDeduction.type}"
+																				id="allowanceType"></td>
+
+																			<td data-label="Allowance-Account"><input
+																				type="text" name="accountName" id="accountName"
+																				class="tab3"
+																				th:value="${listMiscAllowanceDeduction.accountName}"></td>
+
+																			<td><input type="checkbox"
+																				id="allowanceDeductionEsiEffectiveDate"></td>
+
+																			<td><input type="text" class="tab3"
+																				th:value="${listMiscAllowanceDeduction.head}"
+																				id="head"></td>
+
+																			<td><input type="checkbox"
+																				id="allowanceDeductionEffectiveWorkDate"></td>
+
+																			<td><input type="text" class="tab3"></td>
+
+																			<td><input type="text" class="tab3"></td>
+																		</tr>
+																	</tbody>
+
+																</table>
+															</div>
+
+
+														</div>
+													</div>
+												</div>
+											</div>
+
+
+
+
+
+
+
+											<!--  tab3 end -->
+
+
+
+										</div>
+
+
+
+
+
+
+
+
+
+
+
+
+										<button type="reset" class="btn btn-primary" value="Reset">Reset</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+
+			</main>
+			<footer class="footer">
+				<div th:replace="fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			$("input[name='wefdate']").daterangepicker({
+				singleDatePicker : true,
+				autoApply : true,
+				locale : {
+					format : 'YYYY/MM/DD'
+				},
+				showDropdowns : true
+			});
+
+			$("input[name='pfEffectiveDate']").daterangepicker({
+				singleDatePicker : true,
+				autoApply : true,
+				locale : {
+					format : 'YYYY/MM/DD'
+				},
+				showDropdowns : true
+			});
+			$("input[name='esiEffectiveDate']").daterangepicker({
+				singleDatePicker : true,
+				autoApply : true,
+				locale : {
+					format : 'YYYY/MM/DD'
+				},
+				showDropdowns : true
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			$('#example').DataTable({
+				"scrollY" : 200,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+		});
+	</script>
+	<script>
+		$(function() {
+			$("#smartwizard-default-primary").smartWizard({
+				theme : "default",
+				showStepURLhash : false
+			});
+			$("#smartwizard-default-success").smartWizard({
+				theme : "default",
+				showStepURLhash : false
+			});
+			$("#smartwizard-default-danger").smartWizard({
+				theme : "default",
+				showStepURLhash : false
+			});
+			$("#smartwizard-default-warning").smartWizard({
+				theme : "default",
+				showStepURLhash : false
+			});
+			$("#smartwizard-arrows-primary").smartWizard({
+				theme : "arrows",
+				showStepURLhash : false
+			});
+			$("#smartwizard-arrows-success").smartWizard({
+				theme : "arrows",
+				showStepURLhash : false
+			});
+			$("#smartwizard-arrows-danger").smartWizard({
+				theme : "arrows",
+				showStepURLhash : false
+			});
+			$("#smartwizard-arrows-warning").smartWizard({
+				theme : "arrows",
+				showStepURLhash : false
+			});
+			// Validation
+			var $validationForm = $("#smartwizard-validation");
+			$validationForm.validate({
+				errorPlacement : function errorPlacement(error, element) {
+					$(element).parents(".form-group").append(
+							error.addClass("invalid-feedback small d-block"))
+				},
+				highlight : function(element) {
+					$(element).addClass("is-invalid");
+				},
+				unhighlight : function(element) {
+					$(element).removeClass("is-invalid");
+				},
+				rules : {
+					"wizard-confirm" : {
+						equalTo : "input[name=\"wizard-password\"]"
+					}
+				}
+			});
+			$validationForm.smartWizard({
+				autoAdjustHeight : false,
+				backButtonSupport : false,
+				useURLhash : false,
+				showStepURLhash : false,
+
+			})
+
+			$validationForm.find(".btn-submit").on("click", function() {
+				if (!$validationForm.valid()) {
+					return;
+				}
+				alert("Great! The form is valid and ready to submit.");
+				return false;
+			});
+		});
+	</script>
+
+
+</body>
+</html>

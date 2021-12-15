@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+
+<style>
+table.dataTable thead .sorting:after, table.dataTable thead .sorting:before,
+	table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_asc:before,
+	table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_asc_disabled:before,
+	table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_desc:before,
+	table.dataTable thead .sorting_desc_disabled:after, table.dataTable thead .sorting_desc_disabled:before
+	{
+	bottom: .5em;
+}
+
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">HRMS</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+
+					<form id="validation-form" action="#"
+						th:action="@{/addInterviewDetail}" th:object="${interviewMaster}"
+						method="post">
+
+						<div class="row">
+
+							<div class="col-12">
+								<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Interview
+											Details</h5>
+							<input type="hidden" id="mess" name="mess"th:value="${message}">
+									</div>
+									<div class="card-body">
+
+
+										<div class="col-sm-12" align="right">
+
+											<a id="add_row" class="fa fa-plus" aria-hidden="true"
+												style="font-size: 24px; color: #001080"></a>&nbsp;&nbsp;&nbsp;
+
+
+											<a id='delete_row' class="fa fa-trash"
+												style="font-size: 24px; color: #399490fc" aria-hidden="true"></a>
+											<br>
+
+										</div>
+
+
+										<table id="example1"
+											class="table table-striped table-bordered table-sm"
+											style="width: 100%">
+											<thead>
+												<tr>
+													<th scope="col" class="text-center" title="interview code">Interview Code</th>
+													<th scope="col" class="text-center" title="interview date">Interview Date</th>
+													<th scope="col" class="text-center" title="applicant name">Application Name</th>
+													<th scope="col" class="text-center" title="applicant date">Application Date</th>
+													<th scope="col" class="text-center" title="remarks">Remarks</th>
+													<th scope="col" title="ovaerall rating">Overall Rating<label
+														style="color: red">*</label>
+													</th>
+
+
+												</tr>
+											</thead>
+											<tbody>
+												<tr id="addr0">
+
+
+													<td><input type="text"
+														class="form-control text-center"
+														name="interviewForm[0].interviewCode" readonly title="interview code"></td>
+
+													<td><input type="date" class="form-control"
+														id="theDate" name="interviewForm[0].interviewDate" title="interview date"></td>
+
+													<td><select class="form-control text-center"
+														id="applicantCode" onchange="chooseAppliCode()"
+														name="interviewForm[0].applicantCode.applicantCode"
+														style="width: auto;" required title="applicant code">
+															<option value="">Select</option>
+															<option th:each="applicantCode : ${listApplicantInfo}"
+																th:text="${applicantCode.applicantName}"
+																th:value="${applicantCode.applicantCode}"></option>
+													</select></td>
+
+													<td><input type="date"
+														class="form-control text-center" id="applicantDate"
+														th:field="*{interviewForm[0].applicantDate}" title="applicant date"></td>
+
+													<td><input type="text"
+														class="form-control text-center noHTML"
+														name="interviewForm[0].remarks" title="remarks"></td>
+
+													<td><select class="form-control text-center"
+														name="interviewForm[0].overAllRating" title="over all rating">
+															<option value="">Rating</option>
+															<option value="A+">A+</option>
+															<option value="A">A</option>
+															<option value="B">B</option>
+															<option value="C">C</option>
+															<option value="D" selected>D</option>
+													</select></td>
+
+
+												</tr>
+												<tr id='addr1' />
+
+											</tbody>
+
+										</table>
+
+
+
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+									<div class="card-body">
+
+										<table id="example2"
+											class="table table-striped table-bordered table-sm"
+											style="width: 100%">
+											<thead>
+												<tr>
+													<th scope="col" class="text-center" title="rating">Round 1 (Rating)<label
+														style="color: red">*</label></th>
+													<th scope="col" class="text-center" title="detail">Round-1 Details</th>
+													<th scope="col" class="text-center" title="rating">Round-2(Rating)</th>
+													<th scope="col" class="text-center" title="detail">Round-2 Details</th>
+													<th scope="col" class="text-center" title="rating">Round-3 Rating</th>
+													<th scope="col" class="text-center" title="detail">Round-3 Details</th>
+
+
+												</tr>
+											</thead>
+											<tbody>
+												<tr id="adds0">
+
+
+													<td><select class="form-control text-center"
+														name="interviewForm[0].rating1" required title="rating">
+															<option value="">Rating</option>
+															<option value="A+">A+</option>
+															<option value="A">A</option>
+															<option value="B">B</option>
+															<option value="C">C</option>
+															<option value="D">D</option>
+													</select></td>
+
+													<td><input type="text"
+														class="form-control text-center noHTML"
+														name="interviewForm[0].round1" required title=""></td>
+
+													<td><select class="form-control text-center"
+														name="interviewForm[0].rating2" title="">
+															<option value="">Rating</option>
+															<option value="A+">A+</option>
+															<option value="A">A</option>
+															<option value="B">B</option>
+															<option value="C">C</option>
+															<option value="D">D</option>
+													</select></td>
+
+													<td><input type="text"
+														class="form-control text-center noHTML"
+														name="interviewForm[0].round2" title="round"></td>
+
+													<td><select class="form-control text-center"
+														name="interviewForm[0].rating3" title="">
+															<option value="">Rating</option>
+															<option value="A+">A+</option>
+															<option value="A">A</option>
+															<option value="B">B</option>
+															<option value="C">C</option>
+															<option value="D">D</option>
+													</select></td>
+
+													<td><input type="text"
+														class="form-control text-center noHTML"
+														name="interviewForm[0].round3" title="round"></td>
+
+
+												</tr>
+												<tr id='adds1' />
+
+											</tbody>
+
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+									<div class="card-body">
+										<table id="example3"
+											class="table table-striped table-bordered table-sm"
+											style="width: 100%">
+											<thead>
+												<tr>
+													<th scope="col" class="text-center" title="rating">Round 4 (Rating)</th>
+													<th scope="col" class="text-center" title="detail">Round-4 Details</th>
+													<th scope="col" class="text-center" title="rating">Round 5 (Rating)</th>
+													<th scope="col" class="text-center" title="detail">Round-5 Details</th>
+													<th scope="col" class="text-center" title="rating">Round 6 (Rating)</th>
+													<th scope="col" class="text-center" title="detail">Round-6 Details</th>
+
+
+												</tr>
+											</thead>
+											<tbody>
+												<tr id="addt0">
+
+
+													<td><select class="form-control text-center"
+														name="interviewForm[0].rating4" title="rating">
+															<option value="">Rating</option>
+															<option value="A+">A+</option>
+															<option value="A">A</option>
+															<option value="B">B</option>
+															<option value="C">C</option>
+															<option value="D">D</option>
+													</select></td>
+
+													<td><input type="text"
+														class="form-control text-center noHTML"
+														name="interviewForm[0].round4" title="round"></td>
+
+													<td><select class="form-control text-center"
+														name="interviewForm[0].rating5" title="detail">
+															<option value="">Rating</option>
+															<option value="A+">A+</option>
+															<option value="A">A</option>
+															<option value="B">B</option>
+															<option value="C">C</option>
+															<option value="D">D</option>
+													</select></td>
+
+													<td><input type="text"
+														class="form-control text-center noHTML"
+														name="interviewForm[0].round5" title="rating"></td>
+
+													<td><select class="form-control text-center"
+														name="interviewForm[0].rating6" title="round">
+															<option value="">Rating</option>
+															<option value="A+">A+</option>
+															<option value="A">A</option>
+															<option value="B">B</option>
+															<option value="C">C</option>
+															<option value="D">D</option>
+													</select></td>
+
+													<td><input type="text"
+														class="form-control text-center noHTML"
+														name="interviewForm[0].round6" title="rating"></td>
+
+
+												</tr>
+												<tr id='addt1' />
+
+											</tbody>
+
+										</table>
+										<hr>
+											<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+										
+									</div>
+									
+								</div>
+							</div>
+						</div>
+
+
+					</form>
+
+				</div>
+
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+
+
+	<script>
+		$(document)
+				.ready(
+						function() {
+							console.log("click function...");
+							var i = 1;
+							counter = i;
+							$("#add_row")
+									.click(
+											function() {
+												$('#addr' + i)
+														.html(
+																"_$ta_$tag_________________________________________________________________________________________$tag"
+																		+ "_$ta_$tag__________________________________________________________________________________$tag"
+																		+ "_$ta_$tag________________________________________________________________________________________________________$tag____________Select _$tag_____$tag_____$tag"
+																		+ "_$ta<input type='date' class='form-control' id='applicantDate["
+																		+ i
+																		+ "]'name='interviewForm["
+																		+ i
+																		+ "].applicantDate'_$tag"
+																		+ "_$ta_$tag___________________________________________________________________________________$tag"
+																		+ "_$ta_$tag____________________________________________________________________________________$tag____________Rating_$tag_____$tag______________A+_$tag____ _$tag_____________A_$tag____ _$tag_____________B_$tag____ _$tag_____________C_$tag____ _$tag_____________D_$tag_____$tag_____$tag");
+
+												$('#example1').append(
+														'<tr id="addr'
+																+ (i + 1)
+																+ '">_$tag');
+
+												$('#adds' + i)
+														.html(
+																"_$ta_$tag______________________________________________________________________________$tag____________Rating_$tag_____$tag______________A+_$tag____ _$tag_____________A_$tag____ _$tag_____________B_$tag____ _$tag_____________C_$tag____ _$tag_____________D_$tag_____$tag_____$tag"
+																		+ "_$ta_$tag__________________________________________________________________________________$tag"
+																		+
+
+																		"_$ta_$tag______________________________________________________________________________$tag____________Rating_$tag_____$tag______________A+_$tag____ _$tag_____________A_$tag____ _$tag_____________B_$tag____ _$tag_____________C_$tag____ _$tag_____________D_$tag_____$tag_____$tag"
+																		+ "_$ta_$tag__________________________________________________________________________________$tag"
+																		+ "_$ta_$tag______________________________________________________________________________$tag____________Rating_$tag_____$tag______________A+_$tag____ _$tag_____________A_$tag____ _$tag_____________B_$tag____ _$tag_____________C_$tag____ _$tag_____________D_$tag_____$tag_____$tag"
+																		+ "_$ta_$tag__________________________________________________________________________________$tag");
+
+												$('#example2').append(
+														'<tr id="adds'
+																+ (i + 1)
+																+ '">_$tag');
+
+												$('#addt' + i)
+														.html(
+																"_$ta_$tag______________________________________________________________________________$tag____________Rating_$tag_____$tag______________A+_$tag____ _$tag_____________A_$tag____ _$tag_____________B_$tag____ _$tag_____________C_$tag____ _$tag_____________D_$tag_____$tag_____$tag"
+																		+ "_$ta_$tag__________________________________________________________________________________$tag"
+																		+
+
+																		"_$ta_$tag______________________________________________________________________________$tag____________Rating_$tag_____$tag______________A+_$tag____ _$tag_____________A_$tag____ _$tag_____________B_$tag____ _$tag_____________C_$tag____ _$tag_____________D_$tag_____$tag_____$tag"
+																		+ "_$ta_$tag__________________________________________________________________________________$tag"
+																		+ "_$ta_$tag______________________________________________________________________________$tag____________Rating_$tag_____$tag______________A+_$tag____ _$tag_____________A_$tag____ _$tag_____________B_$tag____ _$tag_____________C_$tag____ _$tag_____________D_$tag_____$tag_____$tag"
+																		+ "_$ta_$tag__________________________________________________________________________________$tag");
+
+												$('#example3').append(
+														'<tr id="addt'
+																+ (i + 1)
+																+ '">_$tag');
+
+												i++;
+											});
+
+							$("#delete_row").click(function() {
+								if (i > 1) {
+									$("#addr" + (i - 1)).html('');
+									$("#adds" + (i - 1)).html('');
+									$("#addt" + (i - 1)).html('');
+
+									i--;
+								}
+							});
+
+						});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			$('#example1').DataTable({
+				"scrollY" : "200px",
+				"scrollCollapse" : true,
+			});
+			$('.dataTables_length').addClass('bs-select');
+		});
+	</script>
+
+	<script>
+		function chooseAppliCode() {
+			var applicantCode = document.getElementById("applicantCode").value;
+
+			console.log("applicant code " + applicantCode);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', 'getApplicantDate/' + applicantCode, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+					$('#applicantDate').val(obj); //applicantDate
+
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+			
+			
+			
+			var date = new Date();
+
+			var day = ("0" + date.getDate()).slice(-2);
+			var month = ("0" + (date.getMonth() + 1)).slice(-2);
+
+			var today = date.getFullYear() + "-" + (month) + "-" + (day);
+
+			$('#theDate').val(today);
+
+		});
+
+		$(document).ready(function() {
+			var date = new Date();
+
+			var day = ("0" + date.getDate()).slice(-2);
+			var month = ("0" + (date.getMonth() + 1)).slice(-2);
+
+			var today = date.getFullYear() + "-" + (month) + "-" + (day);
+
+			$('#theDate2').val(today);
+
+		});
+
+		jQuery(document).ready(
+				function($) {
+
+					$('#validation-form').validate({
+						errorClass : "my-error-class",
+						submitHandler : function(form) { // for demo
+							//alert('valid form');
+							return true
+						}
+					});
+
+					jQuery.validator.addMethod("noHTML", function(value,
+							element) {
+						return this.optional(element)
+								|| /^([a-zA-Z0-9]+)$/.test(value);
+					}, "No HTML tags are allowed!");
+
+				});
+	</script>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+
+
+
+</body>
+
+</html>

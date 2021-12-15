@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+<style>
+	body {
+		opacity: 0;
+	}
+
+	.uppercase {
+		text-transform: uppercase;
+	}
+
+	#loading {
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		position: fixed;
+		display: block;
+		opacity: 0.7;
+		background-color: #676565;
+		z-index: 99;
+		text-align: center;
+	}
+
+	#loading-image {
+		position: absolute;
+		top: 25%;
+		left: 50%;
+		z-index: 100;
+	}
+
+	.my-error-class {
+		color: #FF0000;
+		font-size: 12px;
+		/* red */
+	}
+</style>
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+<head>
+	<meta charset="utf-8" />
+	<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+
+
+					</div>
+					<form id="validation-form" action="#" enctype="multipart/form-data"
+						th:action="@{/updateEmployeeTransfer}" th:object="${employeeTransferEdit}" method="post">
+						<div class="row">
+
+							<div class="col-12">
+								<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Employee
+											Transfer</h5>
+										<div class="alert-outline">
+											<div th:if="${message}" th:text="${message}" style="color: red"></div>
+										</div>
+									</div>
+									<div class="card-body">
+										<div class="form-row">
+
+
+
+
+											<div class="form-group sm col-md-6">
+												<label class="form-label">ID </label> <label
+													style="color: red">*</label> <input type="text" id="id" name='id'
+													th:field='*{id}' placeholder='id' class="form-control " readonly />
+											</div>
+
+
+											<div class="form-group sm col-md-6">
+												<label class="form-label">Employee </label> <label
+													style="color: red">*</label> <select class="form-control select2"
+													name="empCode" id="empCode" onchange="myFunctionEmpCode()"
+													th:field="*{empCode.empCode}" required aria-required="true"
+													disabled>
+													<option value="">Select Employee</option>
+													<option th:each="e :${listEmployee}" th:value="${e.getEmpCode()}"
+														th:text="${e.getEmpName()}"></option>
+												</select>
+
+											</div>
+										</div>
+									</div>
+
+									<div class="form-row"></div>
+
+								</div>
+							</div>
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header"></div>
+									<div class="card-body">
+										<input id="_cr" name="_cr" type="hidden" value="1">
+
+										<div class="col-sm-12" style="text-align: right;">
+
+
+											<div class="table-responsive">
+												<table id="example" aria-describedby="example" class="table"
+													style="width: 100%">
+													<thead>
+														<tr>
+															<th scope="col">Employee Code</th>
+															<th scope="col" class="text-center">Transfer Date</th>
+															<th scope="col" class="text-center">From Date</th>
+															<th scope="col" class="text-center">To Date</th>
+
+															<th scope="col" style="text-align: center">Documents</th>
+
+														</tr>
+													</thead>
+													<tbody>
+														<tr id='addr0'>
+
+															<td><input type="text" id='empCode.empCode'
+																	th:field='*{empCode.empCode}' name='empCode.empCode'
+																	placeholder='Employee Code' size='8' class="noHTML"/></td>
+
+															<td><input type="date" id='transferDate0'
+																	name='transferDate' th:field='*{transferDate}'
+																	placeholder='Transfer Date' size='4' /></td>
+															<td><input type="date" id='fromDate0' name='fromDate'
+																	th:field='*{fromDate}' placeholder='From Date'
+																	size='5' value="" /></td>
+															<td><input type="date" id="toDate0" name='toDate'
+																	th:field='*{toDate}' placeholder='To Date'
+																	size='5' /></td>
+															<td><input type="file" id='file' name='file'
+																	th:src="@{'/employeedoc/'+*{empTransferDoc}}"
+																	placeholder='Upload Document'  th:text="${employeeTransferEdit.empTransferDoc}"
+														accept="application/pdf" /></td>
+
+
+														</tr>
+														<tr id='addr1'></tr>
+
+													</tbody>
+
+
+
+
+												</table>
+											</div>
+
+										</div>
+										<hr>
+						<button type="submit" class="btn btn-primary"><em class="fas fa-check"></em>&nbsp;Update</button>
+						&nbsp; &nbsp;
+						<button type="button" class="btn btn-outline-primary"
+							onclick="window.location.href='../employeeTransfer';"><em class="fas fa-times"></em>&nbsp;Cancel</button>
+					
+
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+
+				</div>
+
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(this).datepicker('destroy').datepicker({
+			showOn: 'focus'
+		}).focus();
+		$(function () {
+
+			$('body').on('click', '.acryear', function () {
+
+				$(".acryear").datepicker({
+					format: "yyyy",
+					autoclose: true,
+					minViewMode: "years",
+					locale: {
+						format: 'YYYY'
+					},
+					showDropdowns: true,
+
+				})
+
+				$(this).datepicker('destroy').datepicker({
+					showOn: 'focus'
+				}).focus();
+
+			});
+
+		});
+	</script>
+
+
+
+	<script>
+		$(document).ready(function () {
+			$('#example').DataTable({
+				"scrollY": 200,
+				"scrollX": true,
+				deferRender: true,
+				scrollCollapse: true,
+
+			});
+
+		});
+	</script>
+
+
+
+	<script>
+		function myFunctionDeptCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var departmentCode = document.getElementById('departmentCode').value
+			console.log("ajax request : " + departmentCode);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewEmployeeTrnsBydepartment/' + departmentCode,
+				true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function () {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+					$('#empCode').empty();
+					$('#empCode').append(
+						$('<option>').val("").text("Select Employee"));
+
+					$('#empName').val(obj.empName);
+					$('#empCode').val(obj.empCode);
+
+					$.each(obj, function (i, item) {
+						/* console.log(" i " + i + " item : "
+								+ item.empCode);
+						console.log(" i " + i + " item : "
+								+ item.empName); */
+
+						$('#empCode').append(
+							$('<option>').val(this.empCode).text(
+								this.empName));
+					});
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+
+
+
+	<script>
+		var countI = 0;
+		function myFunctionEmpCode() {
+
+			var empCode = document.getElementById('empCode').value
+			console.log("ajax request : " + empCode);
+
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewEmployeeTrnsByEmployee/' + empCode, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function () {
+
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+					// $('#example tr').slice(1).remove()
+
+					if (countI == 0) {
+						$('#empCode2').val(obj.empCode);
+
+					}
+
+					if (countI > 0) {
+
+						$('#addr' + countI)
+							.html(
+								"<td><input id='empCode2" + countI + "' name='empCode2" + countI + "' size='3' type='hidden'/> "
+								+ "</td><td><input   id='transferDate" + countI + "'name='transferDate" + countI + "' size='5'  type='date' placeholder='Transfer date'/>"
+								+ "</td><td><input  id='fromDate" + countI + "'name='fromDate" + countI + "'size='5' type='date'/>"
+								+ "</td><td><input id='toDate" + countI + "' name='toDate" + countI + "'size='5' type='date'/></td>"
+								+
+
+								"<td><input  name='empTransferDoc" + countI + "' type='file'  title='Choose File'size='8'/></td>"
+								+ "");
+						$('#empCode2' + countI).val(obj.empCode);
+						$('#example').append(
+							'<tr id="addr' + (countI + 1) + '"></tr>');
+						$('#_cr').val(countI + 1);
+					}
+					countI++;
+				} else {
+					console.error("some error occured");
+				}
+			}
+			xhr.send();
+		}
+	</script>
+
+	<script>
+		$("#delete_row").click(function () {
+
+			if (countI > 1) {
+				$("#addr" + (countI - 1)).html('');
+				$('#_cr').val(countI - 1);
+				countI--;
+
+			}
+		});
+	</script>
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success: function () {
+				// hiding the image here
+				//debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+
+
+</body>
+
+</html>

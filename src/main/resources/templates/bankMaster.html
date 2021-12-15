@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#error {
+	display: block;
+	color: red;
+	margin: 5px 0 0 0;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	
+
+	dow.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+
+
+<head>
+
+
+
+
+
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+	<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">
+										Bank Master</h5>
+										<input type="hidden" id="mess" name="mess"th:value="${message}">
+
+								</div>
+
+
+								<div class="card-body">
+									<form id="validation-form" action="#" th:action="@{/saveBank}"
+										th:object="${bank}" method="post">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+
+													<label>Bank Code </label> <input type="text"
+														class="form-control" maxlength="9" id="bankCode"
+														name="bankCode" disabled />
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Account No</label> <label
+														style="color: red">*</label> <input type="text"
+														class="noHTML form-control uppercase" name="accountNo" title="Only digits" />
+												</div>
+
+
+
+												<div class="form-group">
+													<label class="form-label">Bank Primary Address</label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" name="bankAdd1">
+												</div>
+												<div class="form-group">
+													<label class="form-label">Bank Secondary Address</label> <input
+														type="text" class="form-control noHTML" maxlength="50"
+														id="bankAddr2" name="bankAddr2">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Country Name</label> <span
+														class="text-danger">*</span> <select
+														class="form-control required"
+														name="countryCode.countryCode" id="countryCode"
+														title="Country" onchange="myFunctionStateCode()" required
+														aria-required="true">
+														<option value="">Select Country</option>
+														<option th:each="lco :${listCountry}"
+															th:value="${lco.getCountryCode()}"
+															th:text="${lco.getCountryName()}">Select Country
+															Type</option>
+
+													</select>
+												</div>
+
+
+												<div class="form-group">
+													<label class="form-label">Mobile No</label> <input
+														type="text" class="form-control noHTML" maxlength="11"
+														id="mobileNo" name="mobileNo"/>
+												</div>
+
+
+
+												<div class="form-group">
+
+													<label class="form-label">Status</label>
+													<div class="custom-controls-stacked">
+
+														<label class="radio-inline"> <input type="radio"
+															value="Y" name="active" checked>
+															&nbsp;&nbsp;Active&nbsp;
+														</label> <label class="radio-inline"> <input type="radio"
+															value="N" name="active">&nbsp; Inactive
+														</label>
+
+													</div>
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+
+												<div class="form-group">
+													<label class="form-label">Bank Name</label> <label
+														style="color: red">*</label> <input type="text"
+														class="noHTML form-control" required name="banKName"
+														aria-required="true"> 
+												</div>
+
+
+
+												<div class="form-group">
+													<label class="form-label">IFSC Code</label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control uppercase noHTML" maxlength="11"
+														id="ifscCode" name="ifscCode" required
+														aria-required="true" pattern="^[a-zA-Z0-9_.-]*$" />
+												</div>
+												<div class="form-group">
+													<label class="form-label">Swift Code</label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" maxlength="11" id="swiftCode"
+														name="swiftCode" required aria-required="true"
+														pattern="\d{1,11}" title="Only digits" />
+												</div>
+												<div class="form-group">
+													<label class="form-label">Telephone No</label> <input
+														type="text" class="form-control noHTML" maxlength="11"
+														id="telephoneNo" name="telephoneNo" />
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">State Name</label> <span
+														class="text-danger">*</span> <select
+														class="form-control select2" name="stateCode.stateCode"
+														id="stateCode" onchange="myFunctionStateCityCode()"
+														required aria-required="true">
+														<option value="">Select State</option>
+													</select>
+
+
+												</div>
+												<!--   <div class="form-group">
+											<label class="form-label">Mobile No</label>
+											
+											 <input type="text" class="form-control " maxlength="11" id="mobileNo" name="mobileNo"/>
+										   </div>	 -->
+
+
+												<div class="form-group">
+													<label class="form-label">City Name</label> <span
+														class="text-danger">*</span> <select
+														class="form-control select2" name="cityCode.cityCode"
+														id="cityCode" onchange="myFunctionCity()" required
+														aria-required="true">
+														<option value="">Select City</option>
+													</select>
+
+
+												</div>
+
+											</div>
+
+										</div>
+										
+													<hr style="height:4px;border-width:0;color:gray;background-color:gray">
+										
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="datatables-buttons"
+										aria-describedby="datatables-buttons"
+										class="table table-striped display" style="width: 100%">
+										<thead>
+											<tr>
+												<th scope="col">Bank code</th>
+												<th scope="col">Bank Name</th>
+												<th scope="col">Country Code</th>
+												<th scope="col">Account No</th>
+												<th scope="col">Mobile No</th>
+												<th scope="col">Status</th>
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="listbank : ${listBank}">
+												<td th:text="${listbank.bankCode}"></td>
+												<td th:text="${listbank.bankName}"></td>
+												<td th:text="${listbank?.countryCode?.countryName}"></td>
+												<td th:text="${listbank.accountNo}"></td>
+												<td th:text="${listbank.mobileNo}"></td>
+												<td th:text="${listbank.active}"></td>
+												<td><a
+													th:href="@{/editBank/{id}(id=${listbank.bankCode})}"><em
+														class="fa fa-edit"></em></a> <a
+													th:href="@{/deleteBank/{id}(id=${listbank.bankCode})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times"></em></a></td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		function myFunctionStateCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var id = document.getElementById('countryCode').value
+			console.log("ajax request : " + id);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewStateByCountryCode/' + id, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+					$('#stateCode').empty();
+					$('#stateCode').append(
+							$('<option>').val("").text("Select State"));
+
+					$('#stateName').val(obj.stateName);
+					$('#stateCode').val(obj.stateCode);
+
+					$.each(obj, function(i, item) {
+						$('#stateCode').append(
+								$('<option>').val(this.stateCode).text(
+										this.stateName));
+					});
+				} else {
+					console.error("some error occured");
+				}
+			}
+			xhr.send();
+		}
+	</script>
+
+	<script>
+		function myFunctionStateCityCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var id = document.getElementById('stateCode').value
+			console.log("ajax request : " + id);
+			$('#stateCode').click(function() {
+				var name = $('#stateCode option:selected').text();
+				$('#state').val(name);
+			});
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewCityBySatateCode/' + id, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+					$('#cityCode').empty();
+					$('#cityCode').append(
+							$('<option>').val("").text("Select City"));
+
+					$('#cityName').val(obj.cityName);
+					$('#cityCode').val(obj.cityCode);
+
+					$.each(obj, function(i, item) {
+						$('#cityCode').append(
+								$('<option>').val(this.cityCode).text(
+										this.cityName));
+					});
+				} else {
+					console.error("some error occured");
+				}
+			}
+			xhr.send();
+		}
+	</script>
+
+
+
+
+
+	<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+
+<script>
+		$(document).ready(function() {
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+
+		});
+	</script>
+	
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+							<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Shift
+										Master</h5>
+										
+										<input type="hidden" id="mess" name="mess"th:value="${message}">
+									
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#" th:action="@{/saveShift}"
+										th:object="${shift}" method="post">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label>Code </label> <label style="color: red">*</label> <input
+														type="text" class="form-control" id="shiftCode"
+														name="shiftCode" readonly="readonly">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label"> Start Time</label> <label
+														style="color: red">*</label> <input type="time"
+														class="form-control " id="startTime" name="startTime"
+														required aria-required="true">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Break Start Time</label> <label
+														style="color: red">*</label> <input type="time"
+														class="form-control" id="brkstTime" name="brkstTime"
+														required aria-required="true">
+												</div>
+
+
+
+												<div class="form-group">
+													<label class="form-label">Status</label>
+													<div class="custom-controls-stacked">
+														<label class="radio-inline"> <input type="radio"
+															value="Y" name="active" checked> Active
+														</label> <label class="radio-inline"> <input type="radio"
+															value="N" name="active"> Inactive
+														</label>
+													</div>
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+
+
+												<div class="form-group">
+													<label class="form-label">Name</label> <label
+														style="color: red">*</label> <select class="form-control"
+														name="shiftName" id="shiftName">
+														<option value="General">General</option>
+														<option value="Morning">Morning</option>
+														<option value="Night">Night</option>
+													</select>
+												</div>
+
+												<div class="form-group">
+													<label class="form-label"> End Time </label> <label
+														style="color: red">*</label> <input type="time"
+														class="form-control" id=" endTime" name="endTime" required
+														aria-required="true">
+												</div>
+												<div class="form-group">
+													<label class="form-label"> Break End Time</label> <label
+														style="color: red">*</label> <input type="time"
+														class="form-control " id="brkndTime" name="brkndTime"
+														required aria-required="true">
+												</div>
+
+											</div>
+										</div>
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="example" aria-describedby="example"
+										class="table table-striped dataTable dtr-inline collapsed"
+										style="width: 100%">
+										<thead>
+											<tr>
+												<th scope="col">Shift Code</th>
+												<th scope="col">Shift Name</th>
+												<th scope="col">Start Time</th>
+												<th scope="col">End Time</th>
+												<th scope="col">Break Start Time</th>
+												<th scope="col">Break End Time</th>
+												<th scope="col">Status</th>
+												<th scope="col" class="text-center">Action</th>
+
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="listOfShift : ${listShift}">
+												<td th:text="${listOfShift.shiftCode}"></td>
+												<td th:text="${listOfShift.shiftName}"></td>
+												<td th:text="${listOfShift.startTime}"></td>
+												<td th:text="${listOfShift.endTime}"></td>
+												<td th:text="${listOfShift.brkstTime}"></td>
+												<td th:text="${listOfShift.brkndTime}"></td>
+
+												<td th:text="${listOfShift.active}"></td>
+												<td class="text-center"><a
+													th:href="@{/editShift/{id}(id=${listOfShift.shiftCode})}"><em
+														class="fa fa-edit"> Edit</em></a> <a
+													th:href="@{/deleteShift/{id}(id=${listOfShift.shiftCode})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times" style="color: red"> Remove</em></a></td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function() {
+			$('#example').DataTable({
+				"scrollY" : 200,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+			
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+
+			
+		});
+	</script>
+
+
+</body>
+</html>

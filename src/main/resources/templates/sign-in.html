@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Responsive Bootstrap 4 Admin &amp; Dashboard Template">
+<meta name="author" content="Bootlab">
+
+
+
+<head>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"
+		rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+	<meta charset="utf-8" />
+	<title>HRMS</title>
+</head>
+<style>
+	body {
+		opacity: 0;
+			
+	}
+
+	.background-dark {
+	 background-image: linear-gradient(to bottom, rgb(124 211 255 / 55%) 80%, rgb(242, 242, 253), rgb(164, 164, 235));
+	}
+	.card-dark {
+		 background-image: linear-gradient(to bottom, rgb(255, 255, 255) 80%, rgb(242, 242, 253), rgb(164, 164, 235));
+	}
+	
+	.border-primary {
+    border-color: #007bff!important;
+}
+.border-bottom {
+    border-bottom: 1px solid #dee2e6!important;
+}
+
+
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" th:href="@{/css/modern.css}" href="/css/main.css" />
+
+
+<script src="/js/settings.js"></script>
+<!-- END SETTINGS -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script>
+
+
+
+
+
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+</head>
+<!-- SET YOUR THEME -->
+
+<body class="background-dark">
+
+	<main class="main h-100 w-100">
+
+		<div class="container h-100">
+
+			<div class="row h-100">
+
+				<div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+
+
+
+
+
+					<div class="d-table-cell align-middle">
+						<div class="text-center">
+							<img src="img/avatars/logo1.png" alt="image">
+						</div>
+
+						<h1 style="color: #a7133c;" class="text-center">Government of
+							Haryana</h1>
+						<h3 style="color: #a7133c;" class="text-center">Ministry of
+							home And Administration of justice</h3>
+
+						<div class="card card-dark" style="border:groove;border:groove;box-shadow:0 2px 4px #4523ffad;">
+
+							<div th:if="${param.error}" class="alert alert-danger text-center">Invalid User Name
+								and Password</div>
+							<div class="error" th:if="${param.error}"
+								th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
+								Reason: <span th:text="${errorMsg}">Wrong input!</span>
+							</div>
+							<div th:if="${param.logout}" class="alert alert-danger">
+								You have been logout</div>
+							<div class="card-body">
+								<div class="m-sm-4">
+
+									<form action="#" th:action="@{/doLogin}" method="post" id="myForm"
+										th:object="${user}">
+
+										<div class="form-group">
+											<label>User Code</label>&nbsp;&nbsp; <span class="input-group-addon"><em
+													class="fa fa-user"></em></span>
+											<input class="form-control form-control-lg border-bottom border-primary" type="text" maxlength="20"
+												name="username" placeholder="Enter your User Code" required
+												aria-required="true" />
+										</div>
+										<div class="form-group">
+											<label>Password</label>&nbsp;&nbsp; <span class="input-group-addon"><em
+													class="fa fa-lock"></em></span>
+											<input class="form-control form-control-lg border-bottom border-primary" title="Password" type="password"
+												id="password" maxlength="30" name="password"
+												placeholder="Enter your password" required aria-required="true" />
+
+										</div>
+
+										<br>
+										<div class="form-group text-center">
+											<img th:src="*{'data:realCaptcha/jpg;base64,'+ realCaptcha}" />
+										</div>
+
+										<div class="form-group text-center">
+											<!-- <label>ENTER CAPTCHA</label> -->
+
+											<div class="row">
+												<div class="col-md-3"></div>
+												<div class="col-md-6">
+													<input type="hidden" th:field="*{hiddenCaptcha}" /> <input
+														style="text-align: center" type="text" th:field="*{captcha}"
+														class="form-control" placeholder="Enter Captcha" />
+												</div>
+												<div class="col-md-3"></div>
+
+											</div>
+
+
+										</div>
+
+
+										<div class="text-center mt-3">
+
+											<input type="button" name="Sign in" id="Sign in"
+												class="form-control btn btn-secondary " value="Log In" onclick="myFunction()">
+
+										</div>
+
+
+									</form>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<a href="/" th:href="@{/forgetPassword}"> Forget Password? </a>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<svg width="0" height="0" style="position: absolute">
+		<defs>
+			<symbol viewBox="0 0 512 512" id="ion-ios-pulse-strong">
+				<path
+					d="M448 273.001c-21.27 0-39.296 13.999-45.596 32.999h-38.857l-28.361-85.417a15.999 15.999 0 0 0-15.183-10.956c-.112 0-.224 0-.335.004a15.997 15.997 0 0 0-15.049 11.588l-44.484 155.262-52.353-314.108C206.535 54.893 200.333 48 192 48s-13.693 5.776-15.525 13.135L115.496 306H16v31.999h112c7.348 0 13.75-5.003 15.525-12.134l45.368-182.177 51.324 307.94c1.229 7.377 7.397 11.92 14.864 12.344.308.018.614.028.919.028 7.097 0 13.406-3.701 15.381-10.594l49.744-173.617 15.689 47.252A16.001 16.001 0 0 0 352 337.999h51.108C409.973 355.999 427.477 369 448 369c26.511 0 48-22.492 48-49 0-26.509-21.489-46.999-48-46.999z">
+				</path>
+			</symbol>
+		</defs>
+	</svg>
+
+	<script src="/js/app.js"></script>
+	<script>
+		$(document).ready(function () {
+
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "warning", {
+					button: "OK",
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+
+		});
+	</script>
+
+	<script>
+		$(document).ready(function () {
+
+			var message = document.getElementById('message').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "warning", {
+					button: "OK",
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+
+		});
+	</script>
+
+
+
+	<script>
+		function myFunction() {
+
+			//document.getElementById("myForm").submit();
+
+			console.log("myfunction")
+			var hiddenCaptcha = document.getElementById("hiddenCaptcha").value;
+			var captcha = document.getElementById("captcha").value;
+			if (hiddenCaptcha == captcha) {
+				//alert("true")
+
+				var Base64 = {_keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", encode: function (e) {var t = ""; var n, r, i, s, o, u, a; var f = 0; e = Base64._utf8_encode(e); while (f < e.length) {n = e.charCodeAt(f++); r = e.charCodeAt(f++); i = e.charCodeAt(f++); s = n >> 2; o = (n & 3) << 4 | r >> 4; u = (r & 15) << 2 | i >> 6; a = i & 63; if (isNaN(r)) {u = a = 64} else if (isNaN(i)) {a = 64} t = t + this._keyStr.charAt(s) + this._keyStr.charAt(o) + this._keyStr.charAt(u) + this._keyStr.charAt(a)} return t}, decode: function (e) {var t = ""; var n, r, i; var s, o, u, a; var f = 0; e = e.replace(/[^A-Za-z0-9\+\/\=]/g, ""); while (f < e.length) {s = this._keyStr.indexOf(e.charAt(f++)); o = this._keyStr.indexOf(e.charAt(f++)); u = this._keyStr.indexOf(e.charAt(f++)); a = this._keyStr.indexOf(e.charAt(f++)); n = s << 2 | o >> 4; r = (o & 15) << 4 | u >> 2; i = (u & 3) << 6 | a; t = t + String.fromCharCode(n); if (u != 64) {t = t + String.fromCharCode(r)} if (a != 64) {t = t + String.fromCharCode(i)} } t = Base64._utf8_decode(t); return t}, _utf8_encode: function (e) {e = e.replace(/\r\n/g, "\n"); var t = ""; for (var n = 0; n < e.length; n++) {var r = e.charCodeAt(n); if (r < 128) {t += String.fromCharCode(r)} else if (r > 127 && r < 2048) {t += String.fromCharCode(r >> 6 | 192); t += String.fromCharCode(r & 63 | 128)} else {t += String.fromCharCode(r >> 12 | 224); t += String.fromCharCode(r >> 6 & 63 | 128); t += String.fromCharCode(r & 63 | 128)} } return t}, _utf8_decode: function (e) {var t = ""; var n = 0; var r = c1 = c2 = 0; while (n < e.length) {r = e.charCodeAt(n); if (r < 128) {t += String.fromCharCode(r); n++} else if (r > 191 && r < 224) {c2 = e.charCodeAt(n + 1); t += String.fromCharCode((r & 31) << 6 | c2 & 63); n += 2} else {c2 = e.charCodeAt(n + 1); c3 = e.charCodeAt(n + 2); t += String.fromCharCode((r & 15) << 12 | (c2 & 63) << 6 | c3 & 63); n += 3} } return t}}
+
+
+
+				console.log("user pass testing ")
+				var userPass = document.getElementById("password").value;
+
+				console.log("user pass testing " + userPass);
+				// Encode the String
+				var encodedString = Base64.encode(userPass);
+				console.log("encode string : " + encodedString); // Outputs: "SGVsbG8gV29ybGQh"
+
+
+
+				
+				document.getElementById("password").value = encodedString;
+
+				document.getElementById("myForm").submit();
+				
+				
+			} else {
+				alert("invalid captcha ")
+				location.reload();
+			}
+
+			//document.getElementById("myForm").submit();
+		}
+	</script>
+
+
+</body>
+
+
+</html>

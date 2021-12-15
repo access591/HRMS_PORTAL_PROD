@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/myStyle.css}" />
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+.border {
+	border: double;
+}
+
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+/* .disabledbutton {
+	pointer-events: none;
+	opacity: 0.4;
+	
+} */
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container">
+
+					<div class="header">
+						<h2 class="header-title" style="text-decoration: underline;">
+							Master</h2>
+
+
+					</div>
+					<div class="row body">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title" style="text-decoration: underline;">Employee
+										Master</h5>
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}"
+											style="color: red"></div>
+									</div>
+								</div>
+
+								<form id="smartwizard-validation" enctype="multipart/form-data"
+									class="wizard wizard-primary" th:action="@{/updateEmployee}"
+									th:object="${employeeDto}" method="post">
+									<ul>
+										<li><a href="#validation-step-1"><br /> <small>Officer
+													Details</small></a></li>
+										<li><a href="#validation-step-2"><br /> <small>Other
+													Details </small></a></li>
+										<li><a href="#validation-step-3"><br /> <small>Arm
+													Licence Details</small></a></li>
+										<li><a href="#validation-step-4"><br /> <small>Promotion</small></a></li>
+										<li><a href="#validation-step-5"><br /> <small>ACR</small></a></li>
+										<li><a href="#validation-step-6"><br /> <small>Transfer</small></a></li>
+
+									</ul>
+									<div>
+
+										<div id="validation-step-1">
+
+											<div class="form-row">
+												<div class="form-group sm col-md-4">
+
+													<label class="form-label">Employee Code </label> <input
+														type="text" id="empCode" class="form-control"
+														th:field="*{employee.empCode}" readonly>
+												</div>
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Name </label> <input type="text"
+														id="empName" title="Name" onkeyup="sync()" maxlength="50"
+														pattern="^[a-zA-Z\s]*$" class="form-control"
+														th:field="*{employee.empName}">
+												</div>
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Category</label> <select
+														class="form-control select" id="categoryCode"
+														onchange="changeCategory()"
+														th:field="*{employee.category.categoryCode}">
+														<option value="">Select Category</option>
+														<option value="0">IPS</option>
+														<option value="1">DDA</option>
+
+
+
+													</select>
+												</div>
+
+
+
+
+											</div>
+
+
+
+											<!-- optional row in case of ips/dda -->
+
+
+											<div class="form-row disabledbutton">
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Payee Code</label> <input
+														type="text" id="" class="form-control"
+														th:field="*{employee.payeeCode}">
+												</div>
+
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Home/District</label> <select
+														class="form-control select2 select" id=""
+														th:field="*{employee.homeDistrict}">
+														<option value="">--Select--</option>
+														<option value="H">Home</option>
+														<option value="D">District</option>
+
+													</select>
+												</div>
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Department/Court</label> <select
+														class="form-control select"
+														th:field="*{employee.departmentCourt}">
+														<option value="">Select Type</option>
+														<option value="D">Department</option>
+														<option value="C">Court</option>
+
+
+													</select>
+												</div>
+
+
+
+
+
+											</div>
+
+
+											<div class="form-row disabledbutton">
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Department</label> <select
+														class="form-control select2 select" id="departmentCode"
+														aria-required="true" th:field="*{employee.department.departmentCode}">
+														<option value="">Select Department</option>
+														<option th:each="dep :${listDepartment}"
+															th:value="${dep.getDepartmentCode()}"
+															th:text="${dep.getDeptName()}"></option>
+													</select>
+												</div>
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Order Number</label> <input
+														type="text" id="" class="form-control"
+														th:field="*{employee.orederNumber}">
+												</div>
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Order Date</label> <input
+														type="date" id="" class="form-control"
+														th:field="*{employee.orderDate}">
+												</div>
+
+
+											</div>
+
+											<!-- end optional row -->
+
+
+
+											<div class="form-row">
+
+
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Designation</label> <select
+														class="form-control select" id="designationCode"
+														th:field="*{employee.designation.desgCode}">
+														<option value="">Select Type</option>
+														<option th:each="des :${listDesignation}"
+															th:value="${des.getDesgCode()}"
+															th:text="${des.getDesgName()}"></option>
+
+													</select>
+												</div>
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Type</label> <select
+														class="form-control select" id="typeCourtDepartment"
+														th:field="*{employee.type}">
+
+														<option value="">Select Type</option>
+														<option value="P" selected="selected">Permanent</option>
+														<option value="T">Temporary</option>
+
+													</select>
+												</div>
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Date of Birth</label> <input
+														type="date" id="empDob" class="form-control"
+														th:field="*{employee.dob}">
+												</div>
+
+
+											</div>
+
+
+
+
+											<div class="form-row">
+
+
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Date Of Joining</label> <input
+														type="date" id="dateOfJoining" class="form-control"
+														th:field="*{employee.doj}">
+												</div>
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Date Of Posting </label> <input
+														class="form-control" type="date" id="dateOfPosting"
+														th:field="*{employee.dop}" />
+
+												</div>
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Place Of Present Posting
+
+													</label> <input name="presentPosting" type="text"
+														id="presentPosting" title="Present Posting"
+														class="form-control"
+														th:field="*{employee.placePresentPosting}">
+												</div>
+
+											</div>
+
+
+											<div class="form-row">
+
+
+
+
+
+
+
+
+
+												<div class="form-group sm col-md-4">
+
+													<label class="form-label">Batch Year</label> <input
+														class="form-control" type="text" id="batchYear"
+														th:field="*{employee.batchYear}" />
+
+												</div>
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Pan No </label> <input
+														type="text" id="panNo" title="Pan No" maxlength="10"
+														class="form-control" th:field="*{employee.panNo}">
+												</div>
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Aadhar No </label> <input
+														type="text" id="aadharNo" title="Aadhar No"
+														pattern="\d{1,16}" maxlength="16" class="form-control"
+														th:field="*{employee.aadharNo}">
+												</div>
+
+											</div>
+
+
+
+
+											<div class="form-row">
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Gender</label> <select
+														class="form-control select" title="Gender" id="gender"
+														th:field="*{employee.gender}">
+														<option value="">Select Type</option>
+														<option value="M">MALE</option>
+														<option value="F">FEMALE</option>
+
+													</select>
+												</div>
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label ">Martial Status</label> <select
+														class="form-control select" title="Martial Status"
+														id="martialStatus" th:field="*{employee.martialStatus}">
+														<option value="">Select Type</option>
+														<option value="M">MARRIED</option>
+														<option value="U">UNMARRIED</option>
+
+													</select>
+												</div>
+
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label select">Date Of Retirement</label>
+													<input class="form-control" type="date"
+														id="dateOfRetirement" th:field="*{employee.dor}" />
+
+												</div>
+											</div>
+
+											<div class="row" id="ddaDiv">
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label ">Active Status</label> <select
+														class="form-control select" id="expired"
+														th:field="*{employee.activeStatus}">
+														<option value="">Select Type</option>
+														<option value="Y">YES</option>
+														<option value="N" selected>NO</option>
+
+													</select>
+
+												</div>
+
+												<div class="form-group ddaDiv sm col-md-4">
+													<label class="form-label">Upload Image </label> <input
+														type="file" id="image" name="image"
+														accept="image/png,image/jpeg" title="image"
+														onchange="preview_image(event)" /> <img id="output_image"
+														width="100px" height="100px" style="border-radius: 50px;"
+														alt="output_image">
+												</div>
+
+
+											</div>
+
+											<div class="row" style="display: none" id="ipsDiv">
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label select">Active Status</label> <select
+														class="form-control " id="expired"
+														th:field="*{employee.activeStatus}">
+														<option value="">Select Type</option>
+														<option value="Y">YES</option>
+														<option value="N" selected>NO</option>
+
+													</select>
+
+												</div>
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Date Of Retirement</label> <input
+														class="form-control" type="text" id="dateOfRetirement"
+														th:field="*{employee.dor}" />
+
+												</div>
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Upload Image </label> <input
+														type="file" id="image" accept="image/png,image/jpeg"
+														title="image" onchange="preview_image(event)" /> <img
+														id="output_image" width="100px" height="100px"
+														style="border-radius: 50px;" alt="output_image">
+												</div>
+
+
+											</div>
+
+											<div class="form-row"></div>
+
+
+
+										</div>
+
+
+
+
+
+										<div id="validation-step-2">
+
+
+											<div class="form-row">
+
+												<div class="form-group sm col-md-5">
+													<label class="form-label">Highest Qualification </label> <input
+														type="text" id="qualification" title="Qualification"
+														maxlength="40" class="form-control"
+														th:field="*{employee.qualification}">
+												</div>
+
+												<div class="form-group sm col-md-7">
+													<label class="form-label">Email </label> <input type="text"
+														id="email" title="Email"
+														pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+														class="form-control" th:field="*{employee.email}">
+												</div>
+
+
+											</div>
+
+											<div class="form-row">
+
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label"> Primary Mobile Number </label> <input
+														type="text" title="Mobile Number1" maxlength="10"
+														class="form-control" th:field="*{employee.mobileNumber1}">
+												</div>
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Secondary Mobile Number </label>
+													<input type="text" title="Mobile Number 2" maxlength="10"
+														class="form-control" th:field="*{employee.mobileNumber2}">
+												</div>
+
+
+												<div class="form-group sm col-md-4">
+													<label class="form-label">Telephone No </label> <input
+														type="text" title="Telephone No" maxlength="12"
+														class="form-control " th:field="*{employee.telephone}">
+												</div>
+											</div>
+
+
+
+
+
+											<div style="padding: 10px;">
+
+
+												<div class="row">
+													<div class="col-md-6" style="padding: 10px;">
+														<div class="row text-center">
+															<h5>Correspondence Address</h5>
+														</div>
+														<div class="border" style="padding: 30px">
+															<div class="form-row">
+																<div class="form-group sm col-md-12">
+
+																	<label class="form-label">Address </label> <input
+																		type="text" class="form-control "
+																		th:field="*{employee.corrAdd1}">
+																</div>
+
+															</div>
+
+
+
+															<div class="form-row">
+																<div class="form-group sm col-md-12">
+
+																	<label class="form-label">Address2 </label> <input
+																		type="text" class="form-control "
+																		th:field="*{employee.corrAdd2}">
+																</div>
+
+															</div>
+
+															<div class="form-row">
+
+																<div class="form-group sm col-md-12">
+																	<label class="form-label">Country </label> <select
+																		class="form-control select">
+
+																		<option value="">Select Country</option>
+																		<option th:each="lco :${listCountry}"
+																			th:value="${lco.getCountryCode()}"
+																			th:text="${lco.getCountryName()}">Select
+																			Country Type</option>
+
+
+																	</select>
+																</div>
+															</div>
+															<div class="form-row">
+
+																<div class="form-group sm col-md-12">
+																	<label class="form-label">State </label> <select
+																		class="form-control select">
+																		<option value="">Select State</option>
+																		<option th:each="ls :${listState}"
+																			th:value="${ls.getStateCode()}"
+																			th:text="${ls.getStateName()}">Select State
+																			Country Type</option>
+
+
+
+																	</select>
+																</div>
+
+
+
+
+															</div>
+															<div class="form-row">
+
+																<div class="form-group sm col-md-12">
+																	<label class="form-label select">City </label> <select
+																		class="form-control "
+																		th:field="*{employee.city1.cityCode}">
+																		<option value="">Select City</option>
+																		<option th:each="lc :${CityList}"
+																			th:value="${lc.getCityCode()}"
+																			th:text="${lc.getCityName()}">Select City</option>
+
+
+
+																	</select>
+																</div>
+															</div>
+
+
+
+															<div class="form-row">
+
+																<div class="form-group sm col-md-12">
+																	<label class="form-label">Contact No </label> <input
+																		type="text" class="form-control "
+																		th:field="*{employee.corrContactNumber}">
+																</div>
+
+
+
+
+															</div>
+
+														</div>
+													</div>
+
+													<!-- 2nd row 2nd collumn -->
+													<div class="col-md-6" style="padding: 10px;">
+														<div class="row">
+															<h5>Permanent Address</h5>
+														</div>
+														<div class="border" style="padding: 30px">
+															<div class="form-row">
+																<div class="form-group sm col-md-12">
+
+																	<label class="form-label">Address </label> <input
+																		type="text" class="form-control "
+																		th:field="*{employee.permAdd1}">
+																</div>
+
+															</div>
+
+
+
+															<div class="form-row">
+																<div class="form-group sm col-md-12">
+
+																	<label class="form-label">Address2 </label> <input
+																		name="toDate" type="text" class="form-control "
+																		th:field="*{employee.permAdd2}">
+																</div>
+
+															</div>
+
+															<div class="form-row">
+
+																<div class="form-group sm col-md-12">
+																	<label class="form-label">Country </label> <select
+																		class="form-control select">
+																		<option value="">Select Country</option>
+																		<option th:each="lco :${listCountry}"
+																			th:value="${lco.getCountryCode()}"
+																			th:text="${lco.getCountryName()}">Select
+																			Country Type</option>
+
+
+
+																	</select>
+																</div>
+															</div>
+															<div class="form-row">
+
+																<div class="form-group sm col-md-12">
+																	<label class="form-label">State </label><select
+																		class="form-control select">
+																		<option value="">Select State</option>
+																		<option th:each="ls :${listState}"
+																			th:value="${ls.getStateCode()}"
+																			th:text="${ls.getStateName()}">Select State</option>
+																	</select>
+																</div>
+
+
+
+
+															</div>
+
+
+															<div class="form-row">
+
+																<!--  CityList-->
+																<div class="form-group sm col-md-12">
+																	<label class="form-label">City </label> <select
+																		class="form-control select"
+																		th:field="*{employee.city2.cityCode}">
+																		<option value="">Select City</option>
+																		<option th:each="lc :${CityList}"
+																			th:value="${lc.getCityCode()}"
+																			th:text="${lc.getCityName()}">Select City</option>
+
+
+
+																	</select>
+																</div>
+
+															</div>
+
+
+
+															<div class="form-row">
+
+																<div class="form-group sm col-md-12">
+																	<label class="form-label">Contact No </label> <input
+																		type="text" class="form-control "
+																		th:field="*{employee.permContactNumber}">
+																</div>
+
+
+
+
+															</div>
+
+														</div>
+													</div>
+
+												</div>
+												<!--second block end  -->
+											</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+										</div>
+
+
+										<div id="validation-step-3">
+
+											<div class="container">
+												<div class="form-row">
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Arms Code </label> <input
+															type="text" id="armsCode" name="armsCode"
+															class="form-control" th:field="*{armsLicenses.armsCode}"
+															readonly>
+													</div>
+												</div>
+
+												<div class="form-row">
+
+													<div class="form-group sm col-md-6">
+														<label class="form-label"> Name </label> <input
+															type="text" id="name" name="name" maxlength="40"
+															title=" Name" pattern="^[a-zA-Z\s]*$"
+															class="form-control" th:field="*{armsLicenses.name}">
+													</div>
+
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Father Name </label> <input
+															type="text" id="fatherName" name="fatherName"
+															maxlength="40" title="Father Name"
+															pattern="^[a-zA-Z\s]*$" class="form-control"
+															th:field="*{armsLicenses.fatherName}">
+													</div>
+
+												</div>
+
+												<div class="form-row">
+
+													<div class="form-group sm col-md-6">
+														<div class="form-row"
+															style="padding-right: 3px; width: 100%; height: 100%;">
+															<label class="form-label">Address </label>
+															<textarea style="width: 100%; height: parent;"
+																th:field="*{armsLicenses.addressArms}"></textarea>
+														</div>
+													</div>
+
+													<div class="form-group sm col-md-6">
+														<div class="form-row" style="padding-left: 3px">
+															<label class="form-label">District</label> <select
+																class="form-control select">
+																<option value="">Select Type</option>
+																<option th:each="lc :${CityList}"
+																	th:value="${lc.getCityCode()}"
+																	th:text="${lc.getCityName()}">Select City</option>
+
+
+
+															</select>
+														</div>
+														<div class="form-row" style="padding-left: 3px">
+															<label class="form-label">State</label> <select
+																class="form-control select">
+																<option value="">Select Type</option>
+																<option th:each="ls :${listState}"
+																	th:value="${ls.getStateCode()}"
+																	th:text="${ls.getStateName()}">Select State</option>
+
+															</select>
+														</div>
+													</div>
+
+												</div>
+
+												<div class="form-row">
+
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Arms Area </label> <select
+															class="form-control select"
+															th:field="*{armsLicenses.armsArea}">
+															<option value="">Select Type</option>
+														</select>
+													</div>
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Arms Location </label> <input
+															type="text" title="DOI" maxlength="45"
+															class="form-control"
+															th:field="*{armsLicenses.armsLocation}">
+													</div>
+
+
+
+												</div>
+
+												<div class="form-row">
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Type of Arms </label> <input
+															type="text" title="DOV" maxlength="45"
+															class="form-control" th:field="*{armsLicenses.toa}">
+													</div>
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Type of Position </label> <input
+															type="text" title="TOA" maxlength="45"
+															class="form-control" th:field="*{armsLicenses.top}">
+													</div>
+												</div>
+
+												<div class="form-row">
+													<div class="form-group sm col-md-4">
+														<label class="form-label">Date of Issue </label> <input
+															type="date" title="TOP" maxlength="45"
+															class="form-control" th:field="*{armsLicenses.doi}">
+													</div>
+													<div class="form-group sm col-md-4">
+														<label class="form-label">Valid Upto </label> <input
+															type="date" id="armsNol" title="NOL" class="form-control"
+															th:field="*{armsLicenses.dov}">
+													</div>
+													<div class="form-group sm col-md-4">
+														<label class="form-label">Type of Person </label> <select
+															class="form-control select"
+															th:field="*{armsLicenses.typeOfPerson}">
+															<option value="">--Select--</option>
+														</select>
+													</div>
+
+
+
+												</div>
+
+												<div>
+													<label class="form-label">Number of Licenses </label>
+
+													<div class="card-body">
+
+
+
+														<div class="table-responsive">
+															<table id="example" aria-describedby="example"
+																class="table" style="width: 100%">
+																<thead>
+																	<tr>
+																		<th scope="col">Sr No</th>
+																		<th scope="col">Licenses Number</th>
+																		<th scope="col">Date of Issue</th>
+																		<th scope="col">Date of Expiry</th>
+
+
+
+
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr id='addr0'
+																		th:each="row, stat :${employeeDto.armsLicensesDetail}">
+																		<td><input value="1" class="form-control"></td>
+
+																		<td><input type="text"
+																			th:field="*{armsLicensesDetail[__${stat.index}__].armsLicenseNumber}"
+																			placeholder='Topic Details ' class="form-control" /></td>
+
+																		<td><input type="date" placeholder='Topic Date'
+																			class="form-control"
+																			th:field="*{armsLicensesDetail[__${stat.index}__].dateOfIssue}" /></td>
+
+																		<td><input type="date" placeholder='Topic Date'
+																			class="form-control"
+																			th:field="*{armsLicensesDetail[__${stat.index}__].dateOfExpire}" /></td>
+
+
+																	</tr>
+																	<tr id='addr1'></tr>
+
+																</tbody>
+															</table>
+														</div>
+													</div>
+
+
+												</div>
+
+												<!-- <button type="submit" class="btn btn-primary">Submit</button>
+												&nbsp;
+												<button type="reset" class="btn btn-primary" value="Reset">Cancel</button> -->
+
+											</div>
+
+
+
+										</div>
+
+
+										<!-- tab 3 end -->
+
+										<!-- Employee promotion tab  -->
+										<!-- tab-4 start -->
+
+										<div id="validation-step-4">
+											<div class="container">
+
+												<div class="form-row">
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Memo Number </label> <input
+															type="text" class="form-control"
+															th:field="*{employeePromotion.edpMemoNo}">
+													</div>
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Promotion Date </label> <input
+															type="date" class="form-control"
+															th:field="*{employeePromotion.promotionDate}">
+													</div>
+
+
+												</div>
+
+												<div class="form-row">
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Department </label> <input
+															type="text" class="form-control">
+													</div>
+
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Employee </label> <input
+															type="text" class="form-control"
+															th:field="*{employee.empName}">
+													</div>
+												</div>
+
+												<div class="form-row">
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Old Post </label> <input
+															type="text" class="form-control"
+															th:field="*{employeePromotion.oldPost}">
+													</div>
+													<div class="form-group sm col-md-6">
+														<label class="form-label">New Post </label> <input
+															type="text" class="form-control"
+															th:field="*{employeePromotion.newPost}">
+													</div>
+
+
+												</div>
+
+											</div>
+										</div>
+
+
+										<!-- tab-4 end  -->
+
+
+										<!-- tab 5 /  acr -->
+										<div id="validation-step-5">
+											<div class="container">
+
+
+												<div class="form-row">
+													<div class="form-group sm col-md-4">
+														<label class="form-label">Year </label> <input type="text"
+															class="form-control" th:field="*{employeeAcr.year}">
+													</div>
+
+													<div class="form-group sm col-md-4">
+														<label class="form-label">From Date </label> <input
+															type="date" class="form-control"
+															th:field="*{employeeAcr.fromDate}">
+													</div>
+
+													<div class="form-group sm col-md-4">
+														<label class="form-label">To Date </label> <input
+															type="date" class="form-control"
+															th:field="*{employeeAcr.toDate}">
+													</div>
+												</div>
+
+												<div class="form-row">
+
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Grading </label> <input
+															type="text" class="form-control"
+															th:field="*{employeeAcr.grading}">
+													</div>
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Remark </label> <input
+															type="text" class="form-control"
+															th:field="*{employeeAcr.remarks}">
+													</div>
+
+
+												</div>
+
+											</div>
+										</div>
+
+
+
+										<div id="validation-step-6">
+											<div class="container">
+
+												<!-- <div class="form-row">
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Employee Name </label> <input
+															type="text" class="form-control">
+													</div>
+													<div class="form-group sm col-md-6">
+														<label class="form-label">Department </label> <input
+															type="text" class="form-control">
+													</div>
+
+													
+												</div>
+												 -->
+												<div class="form-row">
+													<div class="form-group sm col-md-4">
+														<label class="form-label">Transfer Date </label> <input type="text"
+															class="form-control">
+													</div>
+
+													<div class="form-group sm col-md-4">
+														<label class="form-label">From Date </label> <input
+															type="date" class="form-control">
+													</div>
+
+													<div class="form-group sm col-md-4">
+														<label class="form-label">To Date </label> <input
+															type="date" class="form-control">
+													</div>
+												</div>
+
+												
+
+											</div>
+										</div>
+
+									</div>
+								</form>
+
+
+								<div class="card-body">
+									<input type='button'
+										onclick='javascript:history.back();return false;'
+										value='Cancel' class="btn btn-primary">
+								</div>
+							</div>
+
+
+						</div>
+
+
+
+
+					</div>
+
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	
+
+	<script>
+		$(function() {
+			$("#smartwizard-default-primary").smartWizard({
+				theme : "default",
+				showStepURLhash : false
+			});
+
+			// Validation
+			var $validationForm = $("#smartwizard-validation");
+			$validationForm.validate({
+				errorPlacement : function errorPlacement(error, element) {
+					$(element).parents(".form-group").append(
+							error.addClass("invalid-feedback small d-block"))
+				},
+				highlight : function(element) {
+					$(element).addClass("is-invalid");
+				},
+				unhighlight : function(element) {
+					$(element).removeClass("is-invalid");
+				},
+				rules : {
+					"wizard-confirm" : {
+						equalTo : "input[name=\"wizard-password\"]"
+					}
+				}
+			});
+			$validationForm.smartWizard({
+				autoAdjustHeight : false,
+				backButtonSupport : false,
+				useURLhash : false,
+				showStepURLhash : false,
+
+			}).on("leaveStep",
+					function(e, anchorObject, stepNumber, stepDirection) {
+						if (stepDirection === "forward") {
+							return $validationForm.valid();
+						}
+						return true;
+					});
+			/* $validationForm.find(".btn-submit").on("click", function() {
+				if (!$validationForm.valid()) {
+					return;
+				}
+				
+				return false;
+			}); */
+		});
+	</script>
+
+	<script type="text/javascript">
+		function changetextbox() {
+			if (document.getElementById("onDeputation").value === "Y")
+
+			{
+				document.getElementById("empDeputation").disabled = 'true';
+
+			} else {
+
+				document.getElementById("empDeputation").disabled = '';
+			}
+
+		}
+	</script>
+
+
+	<script type='text/javascript'>
+		function preview_image(event) {
+			var reader = new FileReader();
+			reader.onload = function() {
+				var output = document.getElementById('output_image');
+				output.src = reader.result;
+			}
+			reader.readAsDataURL(event.target.files[0]);
+		}
+	</script>
+
+	<script>
+		function sync() {
+			var n1 = document.getElementById('empName');
+			var n2 = document.getElementById('name');
+			n2.value = n1.value;
+		}
+	</script>
+	<script>
+		function syncAddress() {
+			var n1 = document.getElementById('address1');
+			var n2 = document.getElementById('addressArms');
+			n2.value = n1.value;
+		}
+	</script>
+	<!-- 	<script>
+ function myFunctionState(){
+   $('#stateCode').click(function() {
+      	 var name= $('#stateCode option:selected').text();
+      	$('#state').val(name);
+      	}); 
+      }
+      
+</script>
+ -->
+	<script>
+		function myFunctionCity() {
+			$('#cityCode').click(function() {
+				var name = $('#cityCode option:selected').text();
+				$('#district').val(name);
+			});
+		}
+	</script>
+	<script>
+		function myFunctionStateCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var id = document.getElementById('countryCode').value
+			console.log("ajax request : " + id);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewStateByCountryCode/' + id, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+					$('#stateCode').empty();
+					$('#stateCode').append(
+							$('<option>').val("").text("Select State"));
+
+					$('#stateName').val(obj.stateName);
+					$('#stateCode').val(obj.stateCode);
+
+					$.each(obj, function(i, item) {
+						$('#stateCode').append(
+								$('<option>').val(this.stateCode).text(
+										this.stateName));
+					});
+				} else {
+					console.error("some error occured");
+				}
+			}
+			xhr.send();
+		}
+	</script>
+
+	<script>
+		function myFunctionStateCityCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var id = document.getElementById('stateCode').value
+			console.log("ajax request : " + id);
+			$('#stateCode').click(function() {
+				var name = $('#stateCode option:selected').text();
+				$('#state').val(name);
+			});
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewCityBySatateCode/' + id, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+					$('#cityCode').empty();
+					$('#cityCode').append(
+							$('<option>').val("").text("Select City"));
+
+					$('#cityName').val(obj.cityName);
+					$('#cityCode').val(obj.cityCode);
+
+					$.each(obj, function(i, item) {
+						$('#cityCode').append(
+								$('<option>').val(this.cityCode).text(
+										this.cityName));
+					});
+				} else {
+					console.error("some error occured");
+				}
+			}
+			xhr.send();
+		}
+	</script>
+
+
+
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+
+
+	<!-- New Script goes here  -->
+
+	<!-- $(document).ready(function(){
+	$('select[name="categoryCode"]').change(function(){
+	$('.disabledbutton').prop('disabled',this.value != 0 ?false:true);
+	}); }); -->
+
+	<script>
+		function changeCategory() {
+			var value = document.getElementById("categoryCode").value
+			var ipsDiv = document.getElementById("ipsDiv");
+			var ddaDiv = document.getElementById("ddaDiv");
+
+			console.log("hii");
+			if (value == '0') {
+				console.log("0 value ");
+				$(".disabledbutton").hide();
+				ipsDiv.style.display = "block";
+				ddaDiv.style.display = "none";
+
+			} else {
+				console.log("1 value ");
+				$(".disabledbutton").show();
+				ipsDiv.style.display = "none";
+				ddaDiv.style.display = "block";
+			}
+		}
+	</script>
+
+	<script>
+		$(document)
+				.ready(
+						function() {
+							console.log("function is ready");
+							var i = 1;
+							$("#add_row")
+									.click(
+											function() {
+												$('#addr' + i)
+														.html(
+
+																"<td><input value='"
+																		+ (i + 1)
+																		+ "' class='form-control'></td>"
+																		+ "<td><input name='armsLicensesDetail["+i+"].armsLicenseNumber ' type='text' placeholder='Topic Details.'  class='form-control  input-md'/> </td>"
+																		+ "<td><input  name='armsLicensesDetail["+i+"].dateOfIssue' type='Date' placeholder='Topic Date'  class='form-control input-md'>"
+																		+ "<td><input type='date' name='armsLicensesDetail["+i+"].dateOfExpire ' placeholder='Topic Date'class='form-control' /></td>"
+
+																		+ "");
+
+												$('#example').append(
+														'<tr id="addr'
+																+ (i + 1)
+																+ '"></tr>');
+												$('#_cr').val(i + 1);
+
+												i++;
+											});
+							$("#delete_row").click(function() {
+								if (i > 1) {
+									$("#addr" + (i - 1)).html('');
+									$('#_cr').val(i - 1);
+									i--;
+
+								}
+
+							});
+						});
+	</script>
+
+
+
+
+
+
+
+	<!--  end Script -->
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+
+
+</body>
+</html>

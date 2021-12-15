@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">User
+										Rights Master</h5>
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}"
+											style="color: red"></div>
+									</div>
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/saveUserRights}" th:object="${UserRights}"
+										method="post">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+
+
+												<div class="mb-3">
+													<label class="form-label">Users</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" name="userCode.userCode"
+														id="userCode.userCode" title="User" required
+														aria-required="true">
+														<option value="">Select User</option>
+														<option th:each="users: ${listUsers}"
+															th:value="${users.getUserCode()}"
+															th:text="${users.getUserName()}"></option>
+													</select>
+												</div>
+
+												<div class="mb-3">
+													<label class="form-label">Sub Module</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" title="Sub Module"
+														name="subModuleCode.subModuleCode" id="subModuleCode"
+														onchange="myFunctionProgram()" required
+														aria-required="true">
+														<option value=" ">Select Module</option>
+													</select>
+
+
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Status</label>
+													<div class="custom-controls-stacked">
+														<label class="radio-inline"> <input type="radio"
+															value="Y" name="active" checked>
+															&nbsp;&nbsp;Active
+														</label> &nbsp;&nbsp;&nbsp; <label class="radio-inline"> <input
+															type="radio" value="N" name="active">
+															&nbsp;&nbsp;Inactive
+														</label>
+													</div>
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="mb-3">
+													<label class="form-label">Module</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" title="Module"
+														name="moduleCode.moduleCode" id="moduleCode.moduleCode"
+														onchange="myFunctionSubModule()" required
+														aria-required="true">
+														<option value=" ">Select Module</option>
+														<option value="ALL">ALL</option>
+														<option th:each="module: ${modulesList}"
+															th:value="${module.getModuleCode()}"
+															th:text="${module.getModuleName()}"></option>
+													</select>
+												</div>
+
+
+												<div class="mb-3">
+													<label class="form-label">Program</label> <label
+														style="color: red">*</label> <select
+														class="form-control select2" title="Program"
+														name="prgCode.programCode" id="programCode" required
+														aria-required="true">
+														<option value="ALL">Select Program Name</option>
+													</select>
+
+
+												</div>
+
+											</div>
+
+
+
+										</div>
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="datatables-buttons"
+										class="table table-striped display" style="width: 100%"
+										aria-describedby="datatables-buttons">
+										<thead>
+											<tr>
+												<th scope="col">User Name</th>
+												<th scope="col">Module Name</th>
+												<th scope="col">Sub Module Name</th>
+												<th scope="col">Program Name</th>
+												<th scope="col">Status</th>
+												<th scope="col">Action</th>
+
+
+
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="listUserR : ${listUserRight}">
+												<td th:text="${listUserR?.userCode?.userName}"></td>
+												<td th:text="${listUserR?.moduleCode?.moduleName}"></td>
+												<td th:text="${listUserR?.subModuleCode?.subModuleName}"></td>
+												<td th:text="${listUserR?.prgCode?.programName}"></td>
+
+												<td th:text="${listUserR.active}"></td>
+												<td><a
+													th:href="@{/editUserRights/{id}(id=${listUserR.id})}"><em
+														class="fa fa-edit"></em></a> &nbsp; <a
+													th:href="@{/deleteUserRights/{id}(id=${listUserR.id})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times-circle" style="color: red"></em></a></td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+	<script>
+		function myFunctionSubModule() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var id = document.getElementById('moduleCode.moduleCode').value
+			console.log("ajax request : " + id);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewModuleBySubModule/' + id, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+					$('#subModuleCode').empty();
+					$('#subModuleCode').append(
+							$('<option>').val(" ").text(" Select Sub Module"),
+							$('<option>').val("ALL").text("ALL"));
+					$('#subModuleName').val(obj.subModuleName);
+					$('#subModuleCode').val(obj.subModuleCode);
+
+					$.each(obj, function(i, item) {
+						$('#subModuleCode').append(
+								$('<option>').val(this.subModuleCode).text(
+										this.subModuleName));
+					});
+				} else {
+					console.error("some error occured");
+				}
+			}
+			xhr.send();
+		}
+	</script>
+
+	<script>
+		function myFunctionProgram() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var id = document.getElementById('subModuleCode').value
+			var id2 = document.getElementById('moduleCode.moduleCode').value
+			console.log("SubModule request : " + id);
+			console.log("Module request : " + id2);
+			$('#stateCode').click(function() {
+				var name = $('#stateCode option:selected').text();
+				$('#state').val(name);
+			});
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewSubModuleByProgramCode/' + id + '/' + id2,
+					true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function() {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+					$('#programCode').empty();
+					$('#programCode').append(
+							$('<option>').val("ALL").text("ALL"));
+
+					$('#programName').val(obj.programName);
+					$('#programCode').val(obj.programCode);
+
+					$.each(obj, function(i, item) {
+						$('#programCode').append(
+								$('<option>').val(this.programCode).text(
+										this.programName));
+					});
+				} else {
+					console.error("some error occured");
+				}
+			}
+			xhr.send();
+		}
+	</script>
+
+</body>
+</html>

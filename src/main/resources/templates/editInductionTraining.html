@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+#loading {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	display: block;
+	opacity: 0.7;
+	background-color: #676565;
+	z-index: 99;
+	text-align: center;
+}
+
+#loading-image {
+	position: absolute;
+	top: 25%;
+	left: 50%;
+	z-index: 100;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+
+
+					</div>
+					<form id="validation-form" action="#"
+						th:action="@{/updateInductionTraining}"
+						th:object="${inductionTrainingEdit}" method="post">
+						<div class="row">
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header" style="background: #f4f7fc;">
+										<h5 class="card-title" style="text-decoration: underline;color: #dc2eaf;">Induction
+											Training</h5>
+										<div class="alert-outline">
+											<div th:if="${message}" th:text="${message}"
+												style="color: red"></div>
+										</div>
+									</div>
+									<div class="card-body">
+
+										<div class="form-row">
+
+
+											<input type="hidden" id="idMast" name="idMast"
+												class="form-control  noHTML" th:field="*{idMast}" readonly>
+
+											<div class="form-group sm col-md-6">
+												<label class="form-label">Department Name </label> <label
+													style="color: red">*</label> <select
+													class="form-control select2"
+													th:field="*{deptCode.departmentCode}"
+													title="Department Name" id="deptCode">
+													<option value="">Select Department</option>
+													<option th:each="e :${listDepartment}"
+														th:value="${e.getDepartmentCode()}"
+														th:text="${e.getDeptName()}"></option>
+												</select>
+											</div>
+
+											<div class="form-group sm col-md-6">
+												<label class="form-label">Employee Name</label> <label
+													style="color: red">*</label> <select
+													class="form-control select2" title="Employee Name"
+													th:field="*{empCode.empCode}" disabled="disabled">
+													<option value="">Select</option>
+													<option th:each="e :${listEmployee}"
+														th:value="${e.getEmpCode()}" th:text="${e.getEmpName()}"></option>
+												</select>
+
+											</div>
+
+
+
+
+										</div>
+
+									</div>
+
+								</div>
+							</div>
+
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header"></div>
+									<div class="card-body">
+										<input id="_cr" name="_cr" type="hidden" value="1">
+
+										<div class="table-responsive">
+											<table id="example" aria-describedby="example" class="table"
+												style="width: 100%">
+												<thead>
+													<tr>
+														<th scope="col">ID</th>
+														<th scope="col">Department Code.</th>
+														<th scope="col">Department Name.</th>
+														<th scope="col">Contact Person</th>
+														<th scope="col">Induction Date</th>
+														<th scope="col">Duration</th>
+
+
+													</tr>
+												</thead>
+												<tbody>
+													<tr id='addr0'
+														th:each="row, stat :${inductionTrainingEdit.inductionTrainingDetail}">
+														<td><input type="text"
+															size='10' 
+															th:field="*{inductionTrainingDetail[__${stat.index}__].indId}"title="ID"
+															class="noHTML"/></td>
+														<td><input type="text" placeholder='Department Code '  title='Department Code '
+															size='10' name="departmentCode"
+															th:field="*{inductionTrainingDetail[__${stat.index}__].deptCode.departmentCode}"
+															class="noHTML" /></td>
+														<td><input type="text" placeholder='department  Name' name="deptName"title='Department  Name'
+															th:field="*{inductionTrainingDetail[__${stat.index}__].deptCode.deptName}"
+															class="noHTML" /></td>
+
+														<td><input type="text"  title='Contact Person'placeholder='Contact Person' name="contactPerson"
+															th:field="*{inductionTrainingDetail[__${stat.index}__].contPerson}"
+															class="noHTML" /></td>
+														<td><input type="date" placeholder='Duration'title='Induction Date'
+															th:field="*{inductionTrainingDetail[__${stat.index}__].trainingDate}" /></td>
+														<td><select class="form-control Select"
+															name="duration0" id="duration0"title='Duration'
+															th:field="*{inductionTrainingDetail[__${stat.index}__].duration}">
+																<option value="">Select Type</option>
+																<option th:Value="1">1St Half</option>
+																<option th:Value="2">2nd Half</option>
+																<option th:Value="3">Full day</option>
+														</select></td>
+													</tr>
+													<tr id='addr1'></tr>
+
+												</tbody>
+
+
+
+
+											</table>
+											<hr>
+											<button type="submit" class="btn btn-primary"><em class="fas fa-check"></em> &nbsp; Update</button>
+						                    &nbsp; &nbsp;
+											<button type="button" class="btn btn-outline-primary"
+												onclick="window.location.href='../inductionTraining';"><em class="fas fa-times"></em> &nbsp;Cancel</button>
+											</div>
+
+									</div>
+
+
+
+
+								</div>
+							</div>
+						</div>
+						
+					</form>
+
+				</div>
+
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function() {
+			$('input[id=date]').datepicker({
+				dateFormat : 'yyyy-MM-yyyy' // HTML 5 
+			});
+			$('#example').DataTable({
+				"scrollY" : 200,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+			});
+		});
+	</script>
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+</body>
+</html>

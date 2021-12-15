@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+h5.tittle-w3l {
+	color: #000;
+	font-size: 17px;
+	letter-spacing: 1px;
+	text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.19);
+}
+
+h5.tittle-w3l span {
+	color: #0879c9;
+	font-size: 20px;
+	letter-spacing: 0;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Skill
+										Category Master</h5>
+								<input type="hidden" id="mess" name="mess"th:value="${message}">
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/saveSkillCategory}" th:object="${skillCategory}"
+										method="post">
+										<div class="row">
+											<div class="border col-12 col-lg-6">
+												<br>
+												<h5 class="tittle-w3l">
+													<span>Skill </span>Detail <span> Description</span>
+												</h5>
+												<div class="form-group">
+													<label> Skill Level Code </label> <label style="color: red">*</label>
+													<input type="text" class="form-control" id="skillLevelCode"
+														name="skillLevelCode" readonly="readonly">
+												</div>
+												<div class="form-group">
+													<label class="form-label"> Skill Category
+														Description </label> <label style="color: red">*</label> <input
+														type="text" class="form-control noHTML" id="skillCatDesc"
+														name="skillCatDesc" pattern="^[a-zA-Z\s]*$" maxlength="50"
+														required aria-required="true">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label"> Level</label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" maxlength="10"
+														pattern="^[a-zA-Z\s]*$" id="skillLevel" name="skillLevel"
+														required aria-required="true">
+												</div>
+
+
+											</div>
+											<div class="border col-12 col-lg-6">
+												<br>
+												<h5 class="tittle-w3l">
+													<span>Skill </span>Set <span> Description </span>
+												</h5>
+
+
+												<div class="form-group">
+													<label class="form-label"> Skill Parameter Code </label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" maxlength="10"
+														id=" skillParaCode" name="skillParaCode" required
+														aria-required="true">
+												</div>
+												<div class="form-group">
+													<label class="form-label"> Skill Parameter
+														Description</label> <label style="color: red">*</label> <input
+														type="text" class="form-control noHTML" maxlength="50"
+														id="skillParaDes" name="skillParaDes" required
+														aria-required="true">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label"> Skill Parameter Max Mark</label>
+													<label style="color: red">*</label> <input type="text"
+														class="form-control noHTML" maxlength="12"
+														id="skillParaMaxMark" name="skillParaMaxMark" required
+														aria-required="true">
+												</div>
+
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label class="form-label">Status</label>
+													<div class="custom-controls-stacked">
+														<label class="radio-inline"> <input type="radio"
+															value="Y" name="active" checked> &nbsp;Active
+														</label> <label class="radio-inline"> <input type="radio"
+															value="N" name="active">&nbsp; Inactive
+														</label>
+													</div>
+												</div>
+											</div>
+										</div>
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="example"
+										class="table table-striped dataTable dtr-inline collapsed"
+										aria-describedby="example" style="width: 100%">
+										<thead>
+											<tr>
+												<th scope="col">Skill Level Code</th>
+												<th scope="col">Skill Category Description</th>
+												<th scope="col">Level</th>
+												<th scope="col">Skill Parameter Code</th>
+												<th scope="col">Skill Parameter Description</th>
+												<th scope="col">Skill Parameter Max Mark</th>
+												<th scope="col">Status</th>
+												<th scope="col">Action</th>
+
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="listOfCity : ${listSkillCategory}">
+												<td th:text="${listOfCity.skillLevelCode}"></td>
+												<td th:text="${listOfCity.skillCatDesc}"></td>
+												<td th:text="${listOfCity.skillLevel}"></td>
+												<td th:text="${listOfCity.skillParaCode}"></td>
+												<td th:text="${listOfCity.skillParaDes}"></td>
+												<td th:text="${listOfCity.skillParaMaxMark}"></td>
+
+												<td th:text="${listOfCity.active}"></td>
+												<td><a
+													th:href="@{/editSkillCategory/{id}(id=${listOfCity.skillLevelCode})}"><em
+														class="fa fa-edit"></em></a> <a
+													th:href="@{/deleteSkillCategory/{id}(id=${listOfCity.skillLevelCode})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times" style="color: red"> </em></a></td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function() {
+			$('#example').DataTable({
+				"scrollY" : 200,
+				"scrollX" : true,
+				deferRender : true,
+				scrollCollapse : true,
+
+			});
+			
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+			
+		});
+	</script>
+
+
+</body>
+</html>

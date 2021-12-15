@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.17.0.final using JasperReports Library version 6.17.0-6d93193241dd8cc42629e188b94f9e0bc5722efd  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="budgetProvision" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8fac1aeb-5233-4986-a790-b2644f81df57">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFCFC"/>
+			<topPen lineWidth="0.5" lineColor="#FFFCFC"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFCFC"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFCFC"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFCFC"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFCFC"/>
+			<topPen lineWidth="0.5" lineColor="#FFFCFC"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFCFC"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFCFC"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFCFC"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFCFC"/>
+			<topPen lineWidth="0.5" lineColor="#FFFCFC"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFCFC"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFCFC"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFCFC"/>
+		</box>
+	</style>
+	<subDataset name="Dataset1" uuid="9864d9a2-839d-4cb5-bfd3-2a50613e82fd">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="budgetHead" class="java.lang.String"/>
+		<field name="expenditurePurpose" class="java.lang.String"/>
+		<field name="fileNo" class="java.lang.String"/>
+		<field name="dateOfSanction" class="java.util.Date"/>
+		<field name="expenditureAmount" class="java.lang.Long"/>
+		<field name="budgetYear" class="java.util.Date"/>
+		<field name="balanceAmount" class="java.lang.Long"/>
+	</subDataset>
+	<parameter name="Parameter1" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="deptName" class="java.lang.String"/>
+	<parameter name="year" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="135" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="800" height="50" uuid="95a2ba6a-195d-4604-9da9-0beb86035c1a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Goverment of haryana Ministry of Home and Administration of Justice]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="50" width="800" height="30" uuid="89b4b37a-1eda-40b2-a867-a2f76848a672"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Budget Provision]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="110" width="180" height="20" uuid="3c6192c9-7d3b-46c3-9597-fb264fbb1aba">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{deptName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="90" width="180" height="20" uuid="b611913a-bac8-4c36-a89c-f25a687e19cc">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{year}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="213" splitType="Stretch">
+			<componentElement>
+				<reportElement x="0" y="0" width="800" height="213" uuid="94d0bfcf-2ce6-440b-a6cb-ecbcf4c384aa">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Dataset1" uuid="35231216-9869-49af-b071-ffac286c847e">
+						<dataSourceExpression><![CDATA[$P{Parameter1}]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="115" uuid="9fc7a08a-6752-491b-b1c0-597d20af02ca">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="115" height="30" forecolor="#FFFCFC" backcolor="#050505" uuid="db116ec2-6ea6-4258-af09-1470d433f918"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Budget Head]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="115" height="30" uuid="f1eb49c1-0ece-4167-a89d-6dff23dc6f2f"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{budgetHead}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="114" uuid="edc24a57-aa91-4499-827e-6d6e183cba60">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="114" height="30" forecolor="#FFFCFC" backcolor="#050505" uuid="eb41fd1e-677e-4058-bf44-ed11758480bb"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Expenditure Purpose]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="114" height="30" uuid="c7f4b485-a7ee-47b8-98a7-8de8269093f8"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{expenditurePurpose}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="114" uuid="85eea5f5-d2c1-4a72-aba6-98cabfd09277">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="114" height="30" forecolor="#FFFCFC" backcolor="#050505" uuid="dc2d877d-cc17-404a-831d-d1b12e509aad"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[File No]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="114" height="30" uuid="c5337d44-273e-48df-ad8a-ef2eecb48f4d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{fileNo}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="114" uuid="1ea3ee9f-6f3a-4872-9378-9a0e4e62e871">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="114" height="30" forecolor="#FFFCFC" backcolor="#050505" uuid="945b87f9-198f-42a0-8cc4-43a115f6e07d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Date of Sanction/Permission]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="114" height="30" uuid="bd7b622f-e8ed-4a76-bdf2-1e57924934c2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{dateOfSanction}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="114" uuid="07556665-8e7a-4d07-a982-64d631f543c7">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="114" height="30" forecolor="#FFFCFC" backcolor="#050505" uuid="ef5e3409-ff4a-4e6a-a735-269129da48da"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Expenditure Amount]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="114" height="30" uuid="3b96989e-bc56-47e4-9602-01a6aa04fe9c"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{expenditureAmount}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="115" uuid="aaa5bdef-3309-4075-9324-b2c2ca880c52">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="115" height="30" forecolor="#FFFCFC" backcolor="#050505" uuid="61c9dcfa-8dd1-40ed-9b81-9cd2734fc608"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Balance Amount]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="115" height="30" uuid="0c0df5c0-d93b-4baf-84f8-58c3c4de132d"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{balanceAmount}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="114" uuid="cef01c41-380f-423e-8535-04f37ee6d53a">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="114" height="30" forecolor="#FFFCFC" backcolor="#050505" uuid="f3833d76-f12d-4cf7-afdc-a77cb20babc3"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Budget Year]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="114" height="30" uuid="addb6399-fbbe-44ad-bd1c-e7f34e85de78"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{budgetYear}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="90" splitType="Stretch"/>
+	</summary>
+</jasperReport>

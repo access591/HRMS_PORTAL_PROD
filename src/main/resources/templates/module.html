@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.css"rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.2.0/sweetalert2.min.js"></script>
+
+
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+
+
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:insert="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Module
+										Master</h5>
+									<input type="hidden" id="mess" name="mess"th:value="${message}">
+
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/saveModule}" th:object="${module}" method="post">
+										<div class="row">
+											<div class="col-12 col-lg-6">
+
+												<div class="form-group">
+													<label> Module Code </label> <label style="color: red">*</label>
+
+													<input type="text" class="form-control" id="moduleCode"
+														name="moduleCode" maxlength="12" title="Module Code !"
+														readonly>
+												</div>
+
+												<div class="form-group">
+
+													<label class="form-label">Status</label>
+													<div class="custom-controls-stacked">
+
+														<label class="radio-inline"> <input type="radio"
+															value="Y" name="active" checked>
+															&nbsp;&nbsp;Active &nbsp;
+														</label> <label class="radio-inline"> <input type="radio"
+															value="N" name="active"> &nbsp;&nbsp; Inactive
+														</label>
+
+													</div>
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+
+												<div class="form-group">
+													<label class="form-label"> Module Name</label> <label
+														style="color: red">*</label> <input type="text"
+														class="form-control noHTML" name="moduleName"
+														style="text-transform: capitalize;"
+														pattern="^[a-zA-Z\s]*$" maxlength="50"
+														title="Module Name!" required aria-required="true">
+												</div>
+
+												<div class="form-group">
+													<label>Sequence No</label> <label style="color: red">*</label>
+													<input type="text" class="form-control noHTML required"
+														id="seqNo" name="seqNo" title="Sequence No" pattern="\d{1,3}"maxlength="2"
+														required>
+
+												</div>
+
+
+
+											</div>
+										</div>
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header"></div>
+								<div class="card-body">
+									<table id="datatables-buttons"
+										aria-describedby="datatables-buttons"
+										class="table table-striped display" style="width: 100%">
+										<thead>
+											<tr>
+												<th scope="col">Module Code</th>
+												<th scope="col">Module Name</th>
+												<th scope="col">Seq No.</th>
+												<th scope="col">Status</th>
+												<th scope="col">Operation</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="module : ${modules1}">
+												<td id="module_code" th:text="${module.moduleCode}"></td>
+												<td id="module_name" th:text="${module.moduleName}"></td>
+												<td id="seq_no" th:text="${module.seqNo}"></td>
+												<td id="module_status" th:text="${module.active}"></td>
+												<td><a
+													th:href="@{/editModule/{id}(id=${module.moduleCode})}"><em
+														class="fa fa-edit"> Edit</em></a> &nbsp; <a
+													th:href="@{/deleteModule/{id}(id=${module.moduleCode})}"
+													onclick="return confirm('Are you sure?')"><em
+														class="fa fa-times" style="color: red"> Remove</em></a></td>
+
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</main>
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive : true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+					.DataTable(
+							{
+								deferRender : true,
+								scrollCollapse : true,
+								scroller : false,
+								responsive : true,
+								lengthMenu : [
+										[ 10, 20, 30, -1 ],
+										[ '10 rows', '20 rows', '30 rows',
+												'Show all' ] ],
+								buttons : []
+							});
+			datatablesButtons.buttons().container().appendTo(
+					"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			var message = document.getElementById('mess').value
+			if (message != null && message !== "") {
+
+				swal(message, "", "success", {
+					button : "OK",
+					hideClass : {
+						popup : 'animate__animated animate__fadeOutUp'
+					},
+				});
+			} else {
+				console.log("ajax request : " + message);
+			}
+
+		});
+	</script>
+
+
+</body>
+</html>

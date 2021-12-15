@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+<style>
+	body {
+		opacity: 0;
+	}
+
+	.uppercase {
+		text-transform: uppercase;
+	}
+
+	#loading {
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		position: fixed;
+		display: block;
+		opacity: 0.7;
+		background-color: #676565;
+		z-index: 99;
+		text-align: center;
+	}
+
+	#loading-image {
+		position: absolute;
+		top: 25%;
+		left: 50%;
+		z-index: 100;
+	}
+
+	.my-error-class {
+		color: #FF0000;
+		font-size: 12px;
+		/* red */
+	}
+</style>
+
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+<head>
+	<meta charset="utf-8" />
+	<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">Personal</h1>
+
+
+					</div>
+					<form id="validation-form" action="#" th:action="@{/saveLoanTracking}" th:object="${localtrack}"
+						method="post">
+						<div class="row">
+
+							<div class="col-12">
+								<div class="card">
+										<div class="card-header border" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Loan
+											Tracking</h5>
+										<div class="alert-outline">
+											<div th:if="${message}" th:text="${message}" style="color: red"></div>
+										</div>
+										<h5 class="card-title">Application Details</h5>
+									</div>
+
+									<div class="card-body" style="border-style: solid;">
+
+										<div class="form-row">
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Application NO. <span
+														class="text-danger">*</span></label> <select
+													class="form-control select2" name="appNo" id="appNo"
+													onchange="myFunctionEmpCode()" required aria-required="true">
+													<option value="">Select Employee</option>
+													<option th:each="l :${listloanApplication}"
+														th:value="${l.getAppNo()}" th:text="${l.getAppNo()}"></option>
+												</select>
+
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Application Date <span
+														class="text-danger">*</span></label> <input type="text"
+													th:id="appDate" name="appDate" title="Application   Date"
+													class="form-control" disabled>
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Employee Code</label> <label
+													style="color: red">*</label> <select class="form-control select2"
+													name="empCode" id="empCode" disabled>
+													<option value="">Select Employee</option>
+													<option th:each="e :${listEmployee}" th:value="${e.getEmpCode()}"
+														th:text="${e.getEmpName()}"></option>
+												</select>
+
+											</div>
+
+
+
+										</div>
+
+										<div class="form-row">
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Employee Name </label> <input type="text"
+													id="empName" name="empName" title="Eligibility   Date"
+													class="form-control required" disabled>
+											</div>
+
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Employee Payee Code </label> <input
+													type="text" id="empPayCode" name="empPayCode"
+													title="Eligibility   Date" class="form-control required" disabled>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Department </label> <input type="text"
+													id="deptName" name="deptName" title="Name" maxlength="50"
+													pattern="^[a-zA-Z\s]*$" class="form-control" disabled>
+											</div>
+
+										</div>
+
+
+										<div class="form-row">
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Designation</label> <input type="text"
+													id="desgName" name="desgName" title="Designation"
+													class="form-control" disabled>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Loan Name</label> <select
+													class="form-control required" name="loanCode" id="loanCode"
+													disabled>
+													<option value="">Select Type</option>
+													<option th:each="lo :${listLoan}" th:value="${lo.getLoanCode()}"
+														th:text="${lo.getLoanName()}"></option>
+
+												</select>
+
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Amount Required <span
+														class="text-danger">*</span></label> <input type="text"
+													id="amountRequired" name="amountRequired" title="Amount"
+													class="form-control required" readonly>
+											</div>
+										</div>
+
+
+
+
+
+										<div class="form-row">
+
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Number Of Installments <span
+														class="text-danger">*</span>
+												</label> <input type="text" id="noOfInstallments"
+													name="noOfInstallments" title="Number Of Installments"
+													class="form-control noHTML" required aria-required="true">
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Effective Schedule Date <span
+														class="text-danger">*</span></label> <input type="text"
+													id="effScheduleDate" name="effScheduleDate"
+													title="Eligibility   Date" class="form-control required" disabled>
+											</div>
+
+
+
+
+
+
+										</div>
+
+
+
+
+									</div>
+
+
+								</div>
+
+
+							</div>
+
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header border"style="background: #f4f7fc;">
+
+										<div class="alert-outline">
+											<div th:if="${message}" th:text="${message}" style="color: red"></div>
+										</div>
+										<h5 class="card-title">Approval Details</h5>
+									</div>
+									<div class="card-body" style="border-style: solid;">
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Amount Sanctioned </label> <input type="text"
+													id="amountSanctioned" name="amountSanctioned" title="Amount"
+													class="form-control" disabled>
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Cheque No </label> <input type="text"
+													id="chequeNo " name="chequeNo" title="Cheque No"
+													class="form-control noHTML">
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Cheque Date </label> <input type="text"
+													id="chequeDate" name="chequeDate" title="Eligibility   Date"
+													class="form-control">
+											</div>
+										</div>
+
+										<div class="form-row">
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Cheque Amount <span
+														class="text-danger">*</span></label> <input type="text"
+													id="chequeAmount" name="chequeAmount" title=" Cheque Amount"
+													class="form-control required noHTML" required aria-required="true">
+											</div>
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Bank Name </label> <input type="text"
+													id="bankName" name="bankName" title="Bank Name"
+													class="form-control noHTML">
+											</div>
+
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Interest (in %) <span
+														class="text-danger">*</span></label> <input type="text"
+													id="interestRate" name="interestRate" title="Interest Rate"
+													class="form-control required noHTML" required aria-required="true">
+											</div>
+
+										</div>
+
+										<div class="form-row">
+
+											<div class="form-group sm col-md-4">
+												<label class="form-label">Status </label> <select
+													class="form-control required" name="approvalStatus"
+													id="approvalStatus" disabled>
+													<option value="">Select Type</option>
+													<option th:Value="Y">Approved</option>
+													<option th:Value="N">Un Approved</option>
+
+												</select>
+
+											</div>
+
+										</div>
+
+									</div>
+								</div>
+
+							</div>
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header"></div>
+									<div class="card-body">
+										<input id="_cr" name="_cr" type="hidden" value="1">
+										<div class="col-sm-12" style="text-align: right;">
+
+
+											<a id="add_row" class="fa fa-plus" aria-hidden="true"
+												style="font-size: 28px; color: #001080"></a>&nbsp;&nbsp;&nbsp;
+											<a id='delete_row' class="fa fa-trash"
+												style="font-size: 28px; color: #399490fc" aria-hidden="true"></a>
+										</div>
+										<table id="tab1" class="table table-striped display" style="width: 100%"
+											aria-describedby="datatables-buttons">
+											<thead>
+												<tr>
+													<th scope="col">Installment No</th>
+													<th scope="col">Installment Date</th>
+													<th scope="col">Installment Amount</th>
+													<th scope="col">Installment Paid</th>
+													<th scope="col">Date of Adjustment</th>
+													<th scope="col">Balance</th>
+
+
+
+
+
+
+												</tr>
+											</thead>
+											<tbody>
+												<tr id='addr0'>
+													<td><input type="text" name='instNo0' placeholder='Installment No'
+															class="form-control noHTML" /></td>
+													<td><input type="Date" name='instDate0'
+															placeholder='Installment Date' class="form-control"
+															value="" /></td>
+													<td><input type="text" name='instAmt0'
+															placeholder='Installment Amount'
+															class="form-control noHTML" /></td>
+													<td><input type="text" name='instPaid0'
+															placeholder='Installment Paid'
+															class="form-control noHTML" /></td>
+													<td><input type="Date" name='instPaidDate0'
+															placeholder='Date of Adjustment' class="form-control"
+															value="" /></td>
+													<td><input type="text" name='ltaRate0' placeholder='Balance'
+															class="form-control noHTML" /></td>
+
+												</tr>
+												<tr id='addr1'></tr>
+
+											</tbody>
+
+
+										</table>
+										<hr>
+
+										<button type="submit" class=" btn mb-1 btn-success">
+											<em class="fas fa-check"></em> &nbsp; Save
+										</button>
+										&nbsp;
+										<button type="reset" class="btn mb-1 btn-danger" value="Reset">
+											<em class="fas fa-times"></em> &nbsp;Cancel
+										</button>
+									</div>
+
+
+
+
+								</div>
+							</div>
+
+
+
+
+
+						</div>
+					</form>
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		$(function () {
+
+			$("input[name=\"chequeDate\"]").daterangepicker({
+				singleDatePicker: true,
+				autoApply: true,
+				locale: {
+					format: 'YYYY/MM/DD'
+				},
+				showDropdowns: true
+			});
+
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive: true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+				.DataTable(
+					{
+						deferRender: true,
+						scrollCollapse: true,
+						scroller: false,
+						responsive: true,
+						lengthMenu: [
+							[10, 20, 30, -1],
+							['10 rows', '20 rows', '30 rows',
+								'Show all']],
+						buttons: []
+					});
+			datatablesButtons.buttons().container().appendTo(
+				"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+	<script>
+		$(document)
+			.ready(
+				function () {
+
+					var i = 1;
+					$("#add_row")
+						.click(
+							function () {
+								$('#addr' + i)
+									.html(
+										"<td><input name='instNo" + i + "' type='text'placeholder='Installment No'  class='form-control txt input-md noHTML'/> "
+										+ "</td><td><input  name='instDate" + i + "' type='Date' placeholder='Installment Date'  class='form-control input-md'>"
+										+ "</td><td><input  name='instAmt" + i + "' type='text'  placeholder='Installment Amount'class='form-control input-md' noHTML>"
+										+ "</td><td><input  name='instPaid" + i + "' type='text' placeholder='Installment Paid'  class='pas form-control input-md noHTML'></td>"
+										+
+
+										"<td><input  name='instPaidDate" + i + "' type='Date' placeholder='Date of Adjustment'  class='form-control input-md'></td>"
+										+ "<td><input  name='ltaRate" + i + "' type='text' placeholder='Balance'  class='form-control input-md noHTML'></td>"
+										+
+
+										"");
+
+								$('#tab1').append(
+									'<tr id="addr'
+									+ (i + 1)
+									+ '"></tr>');
+								$('#_cr').val(i + 1);
+
+								i++;
+							});
+
+					$("#delete_row").click(
+						function () {
+							if (i > 1) {
+								$("#addr" + (i - 1)).html('');
+								$('#_cr2').val(i - 1);
+								i--;
+								calculateSum(),
+									calculateSumtotalPassing(),
+									calculateSumtotalgovt()
+							}
+						});
+
+					function calculateSum() {
+
+						var sum = 0;
+						//iterate through each textboxes and add the values
+						$(".txt").each(
+							function () {
+
+								//add only if the value is number
+								if (!isNaN(this.value)
+									&& this.value.length != 0) {
+									sum += parseFloat(this.value);
+								}
+
+							});
+						//.toFixed() method will roundoff the final sum to 2 decimal places
+						var fds = sum;
+						//$("#").html(sum.toFixed(2));
+						$("#sum").val(sum);
+
+					}
+
+					$("table").on("keyup", ".txt", function () {
+						calculateSum();
+					});
+
+					function calculateSumtotalPassing() {
+
+						var sum = 0;
+						//iterate through each textboxes and add the values
+						$(".pas").each(
+							function () {
+
+								//add only if the value is number
+								if (!isNaN(this.value)
+									&& this.value.length != 0) {
+									sum += parseFloat(this.value);
+								}
+
+							});
+						//.toFixed() method will roundoff the final sum to 2 decimal places
+						var fds = sum;
+						//$("#").html(sum.toFixed(2));
+						$("#totalPassing").val(sum);
+
+					}
+
+					$("table").on("keyup", ".pas", function () {
+						calculateSumtotalPassing();
+					});
+
+					function calculateSumtotalgovt() {
+
+						var sum = 0;
+						//iterate through each textboxes and add the values
+						$(".govt").each(
+							function () {
+
+								//add only if the value is number
+								if (!isNaN(this.value)
+									&& this.value.length != 0) {
+									sum += parseFloat(this.value);
+								}
+
+							});
+						//.toFixed() method will roundoff the final sum to 2 decimal places
+						var fds = sum;
+						//$("#").html(sum.toFixed(2));
+						$("#totalGovtExt").val(sum);
+
+					}
+
+					$("table").on("keyup", ".govt", function () {
+						calculateSumtotalgovt();
+					});
+
+				});
+	</script>
+
+
+	<script>
+		function myFunctionEmpCode() {
+			/* 		 var empCode= $('#empCode option:selected').value; */
+			var appNo = document.getElementById('appNo').value
+			console.log("ajax request : " + appNo);
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', './viewLoanTracking/' + appNo, true);
+			xhr.getResponseHeader('content-type', 'application/json');
+			xhr.onload = function () {
+				if (this.status === 200) {
+					let obj = JSON.parse(this.responseText);
+					console.log(obj);
+					var date = obj.appDate;
+
+					var appDate = (new Date(date)).toISOString().split('T')[0];
+					var effS = obj.effScheduleDate;
+					var effScheduleDate = (new Date(effS)).toISOString().split(
+						'T')[0];
+					$('#approvalStatus').val(obj.approvalStatus);
+					$('#amountSanctioned').val(obj.amountSanctioned);
+					$('#amountRequired').val(obj.amountRequired);
+					$('#effScheduleDate').val(effScheduleDate);
+					$('#appDate').val(appDate);
+					$('#loanCode').val(obj.loanCode);
+					$('#empCode').val(obj.empCode);
+					$('#empName').val(obj.empName);
+					$('#deptName').val(obj.deptName);
+					$('#desgName').val(obj.desgName);
+					$('#empPayCode').val(obj.empPayCode);
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+			xhr.send();
+		}
+	</script>
+
+
+	<script>
+		function myFunctionCity() {
+			$('#cityCode').click(function () {
+				var name = $('#cityCode option:selected').text();
+				$('#district').val(name);
+			});
+		}
+	</script>
+
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success: function () {
+				// hiding the image here
+				debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+
+</body>
+
+</html>

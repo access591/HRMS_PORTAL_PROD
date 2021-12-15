@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script type="text/javascript" th:src="@{/js/ajax_leaveRequest.js}"></script>
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+
+
+
+
+<style>
+	body {
+		opacity: 0;
+	}
+
+	.uppercase {
+		text-transform: uppercase;
+	}
+
+	.my-error-class {
+		color: #FF0000;
+		font-size: 12px;
+		/* red */
+	}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+
+<head>
+	<meta charset="utf-8" />
+	<title>HRMS</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="/fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">HRMS</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<form action="#" th:action="@{/updateRequisition}" th:object="${req}" method="post">
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h5 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Employee Requisition</h5>
+										<div class="alert-outline">
+											<div th:if="${message}" th:text="${message}" style="color: red"></div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div th:if="${session.message}"
+											class="alert alert-primary alert-dismissible fade show">
+											<p class="text-center" th:text="${session.message.content}"></p>
+											<button type="button" class="close" data-dismiss="alert">&times;</button>
+											<th:block th:text="${#session.removeAttribute('message')}"></th:block>
+
+										</div>
+									</div>
+
+									<div class="card-body">
+
+
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Requisition Code </label> <input class="form-control"
+														id="reqCode" name="reqCode" th:field="*{reqCode}" readonly />
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Requisition Date </label> <input class="form-control"
+														type="date" id="" value="" th:field="*{reqDate}" />
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Department Code </label> <input type="text"
+														class="form-control" id="departmentId" value=""
+														th:field="*{departmet.departmentCode}" readonly>
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+												<label class="form-label">Department Name</label> <input type="text"
+													class="form-control" id="departmentId" value=""
+													th:field="*{departmet.deptName}" readonly>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<div class="form-group">
+													<label> Requisition Priorty </label> <select class="form-control"
+														id="reqPriority" th:field="*{reqPriority}">
+														<option value="" disabled>Please Select</option>
+														<option value="High">High</option>
+														<option value="Low">Low</option>
+
+													</select>
+
+
+												</div>
+											</div>
+											<div class="col-12 col-lg-6">
+												<label class="form-label">Requisition Fulfill Date</label> <label
+													style="color: red">*</label> <input type="date" class="form-control"
+													th:field="*{reqTill}">
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-12 col-lg-6">
+												<label class="form-label">Remarks</label>
+												 <input type="text" name="remarks"
+													class="form-control noHTML" id="leaveDepartmentName" value=""
+													th:field="*{remarks}">
+											</div>
+
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header"></div>
+									<div class="card-body">
+										<div id="validation-step-3">
+											<table id="example" aria-describedby="example"
+												class="table table-striped display" style="width: 100%">
+												<thead>
+													<tr>
+														<th scope="col" class="text-center" style="width: 130px;">
+															Designation
+															Code</th>
+														<th scope="col" class="text-center" style="width: 130px;">
+															Designation
+															Name</th>
+														<th scope="col" class="text-center" style="width: 130px;">
+															Location</th>
+														<th scope="col" class="text-center" style="width: 130px;">Sex
+														</th>
+														<th scope="col" class="text-center" style="width: 130px;">
+															Age(From)</th>
+														<th scope="col" class="text-center" style="width: 130px;">
+															Age(To)</th>
+														<th scope="col" class="text-center" style="width: 130px;">
+															Academic
+															Qualification</th>
+														<th scope="col" class="text-center" style="width: 130px;">
+															Technical
+															Qualification</th>
+														<th scope="col" class="text-center" style="width: 130px;">Exp.in
+															month(Min)</th>
+														<th scope="col" class="text-center" style="width: 130px;">
+															MaExp.in
+															month(Max)x</th>
+														<th scope="col" class="text-center" style="width: 130px;">
+															Vacancy
+															Type</th>
+														<th scope="col" class="text-center" style="width: 130px;">Total
+															Vacancies</th>
+														<th scope="col" class="text-center" style="width: 130px;">Salary
+															From</th>
+														<th scope="col" class="text-center" style="width: 130px;">Salary
+															To</th>
+														<th scope="col" class="text-center" style="width: 130px;">Detail
+														</th>
+														<th scope="col"></th>
+
+													</tr>
+												</thead>
+												<tbody>
+													<tr id="templateRow"
+														th:each="row, stat :${req.employeRequisitionDetail}">
+
+
+														<td><input type="text" id="desigCode"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].designation.desgCode}"
+																readonly
+																style="width: 130px; background-color: #FFFFFF"></td>
+
+														<td><input type="text" id="desigName"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].designation.desgName}"
+																readonly style="width: 130px; background-color: #FFFFFF"
+																class="noHTML"></td>
+
+														<td><select id="location" style="width: 130px;"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].location}">
+																<option value=" ">Select</option>
+																<option value="Court">Court</option>
+																<option value="Department">Department</option>
+															</select></td>
+
+														<td><select id="sex" style="width: 130px;"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].sex}">
+																<option value=" ">Select</option>
+																<option value="Male">Male</option>
+																<option value="Female">Female</option>
+															</select></td>
+
+
+
+
+
+
+														<td><input name="ageFrom" type="text" style="width: 130px; text-align: right; "
+																id="ageFrom"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].ageFrom}"
+																class="noHTML"></td>
+
+														<td><input name="ageTo" type="text" style="width: 130px;text-align: right;  "
+																id="ageTo"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].ageTo}"
+																class="noHTML"></td>
+
+														<td><input name="acadQuali" type="text" style="width: 130px;"
+																id="accademicQualificatio"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].acadQuali}"
+																class="noHTML"></td>
+
+														<td><input name="techQuali" type="text" style="width: 130px;"
+																id="technicalQualification"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].techQuali}"
+																class="noHTML"></td>
+
+														<td><input name="minExperience" type="text"
+																style="width: 130px;" id="expMinMonth"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].minExperience}"
+																class="noHTML"></td>
+
+														<td><input name="maxExperience" type="text"
+																style="width: 130px;" id="expMaxMonth"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].maxExperience}"
+																class="noHTML"></td>
+
+														<td><select id="vacancyType" style="width: 130px;"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].vacanncyType}"
+																required>
+																<option value=" ">Select</option>
+																<option value="Fresher">Fresher</option>
+																<option value="Experience">Experience</option>
+															</select></td>
+
+
+														<td><input name="totalVacancy" type="text" style="width: 130px;"
+																id="totalvacancy"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].totalVacancy}"
+																class="noHTML"></td>
+
+														<td><input name="salaryFrom" type="text" style="width: 130px; text-align: right;"
+																id="salaryFrom"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].salaryFrom}"
+																class="noHTML"></td>
+
+														<td><input name="salaryTo" type="text" style="width: 130px; text-align: right; "
+																id="salaryTo"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].salaryTo}"
+																class="noHTML"></td>
+
+														<td><input name="remarks" type="text" style="width: 130px;"
+																id="detail"
+																th:field="*{employeRequisitionDetail[__${stat.index}__].remarks}"
+																class="noHTML"></td>
+
+														<td></td>
+													</tr>
+
+												</tbody>
+
+											</table>
+											
+												<hr>
+						       <button type="submit" class="btn btn-primary">Update</button>
+										&nbsp;
+										<button type="button" class="btn btn-outline-primary"
+											onclick="window.location.href='../employeeRequisition';">Cancel</button>
+											
+										</div>
+										<input type="hidden" id="hidden_field" th:value="${length}" class="noHTML" />
+									
+									
+									
+									
+									</div>
+
+								</div>
+							</div>
+
+							<th:block th:text="${#session.removeAttribute('message')}"></th:block>
+							
+
+
+						</div>
+					</form>
+				</div>
+			</main>
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	<script>
+		document.getElementById('applyDate').value = new Date().toISOString()
+			.substring(0, 10);
+		document.getElementById('from_date').value = new Date().toISOString()
+			.substring(0, 10);
+		document.getElementById('to_date').value = new Date().toISOString()
+			.substring(0, 10);
+	</script>
+
+	<script>
+		$(document).ready(function () {
+			$('#example').DataTable({
+				"scrollY": 200,
+				"scrollX": true,
+				deferRender: true,
+				scrollCollapse: true,
+
+			});
+		});
+
+		var size = "";
+		function changeDepartment() {
+
+			//set dept code value 
+			var dValue = document.getElementById("departmentDropdown").value;
+			document.getElementById("departmentId").value = dValue;
+
+			var selecteDepartmentValue = document
+				.getElementById("departmentDropdown").value;
+			console.log("select category : " + selecteDepartmentValue);
+			//$('#employeeName').append($('<option>', {value:0, text:'Select Employee'}));
+			var x = document.getElementById("designationName");
+			console.log("x value : " + x);
+
+			var length = x.options.length;
+			for (i = length - 1; i >= 1; i--) {
+				x.options[i] = null;
+			}
+
+			if (selecteDepartmentValue !== ""
+				|| document.getElementById("selecteDepartmentValue").selected == false) {
+				const xhr = new XMLHttpRequest();
+				xhr.open('GET', 'designationbydept/' + selecteDepartmentValue,
+					true);
+				xhr.getResponseHeader('content-type', 'application/json');
+				xhr.onload = function () {
+					if (this.status === 200) {
+						let obj = JSON.parse(this.responseText);
+						console.log(obj);
+						console.log("console.log size :" + obj.length);
+						//console.log("employee name : " +obj[0].empName)
+						$('select[name="designationName"]').prop("disabled",
+							false);
+						// $('select[name="employeeName"]').html(obj.empName);
+
+						for (var i = 0; i < document
+							.getElementById("hidden_field").value; i++) {
+
+						}
+						$.each(obj,
+							function (i, item) {
+								console.log(" i " + i + " item : "
+									+ item.desigCode);
+								console.log(" i " + i + " item : "
+									+ item.desgName);
+								$('#employeeName').append($('<option>', {
+									value: i,
+									text: item.empName
+								}));
+								$('#designationName' + i).append(
+									$('<option>').val(this.desigCode)
+										.text(this.desgName));
+							});
+
+					} else {
+						console.error("some error occured");
+					}
+
+				}
+				xhr.send();
+			} else {
+				$('select[name="employeeName"]').prop("disabled", true);
+			}
+
+		}
+
+		function selectDesignation() {
+			console.log("designation selection");
+			var designationCode = document.getElementById("designationName").value;
+			console.log("desihnation code " + designationCode);
+			document.getElementById("desigCode").value = designationCode;
+		}
+	</script>
+
+
+
+	<script>
+		$(function () {
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive: true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons')
+				.DataTable(
+					{
+						deferRender: true,
+						scrollCollapse: true,
+						scroller: false,
+						responsive: true,
+						lengthMenu: [
+							[10, 20, 30, -1],
+							['10 rows', '20 rows', '30 rows',
+								'Show all']],
+						buttons: []
+					});
+			datatablesButtons.buttons().container().appendTo(
+				"#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+	</script>
+
+
+
+</body>
+
+</html>

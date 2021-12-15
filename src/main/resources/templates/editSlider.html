@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<script src="js/settings.js"></script>
+<script src="js/app.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+ <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.my-error-class {
+	color: #FF0000;
+	font-size: 12px;
+	/* red */
+}
+</style>
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar" aria-label="Site sidebar">
+			<div th:replace="fragments/sidebar :: div"></div>
+		</nav>
+		<div class="main">
+			<div th:replace="fragments/header ::div"></div>
+			<main class="content">
+				<div class="container-fluid">
+					<div class="header">
+						<h1 class="header-title">HRMS</h1>
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header" style="background: #f4f7fc;">
+									<h6 class="card-title"
+										style="text-decoration: underline; color: #dc2eaf;">Slider</h6>
+								</div>
+								<div class="card-body">
+									<form id="validation-form" action="#"
+										th:action="@{/updateSlider}" th:object="${slider}"
+										method="post"enctype="multipart/form-data">
+										<div class="form-row">
+
+											<div class="form-group sm col-md-4">
+												<label>ID </label> <label style="color: red">*</label> <input
+													type="text" class="form-control" id="id" name="id"
+													th:value="${sliderEdit.id}" readonly>
+											</div>
+
+											<div class="form-group sm col-md-4">
+												<label>Type</label> <label style="color: red">*</label> <input
+													type="text" class="form-control noHTMLtags" id="imageType"
+													name="imageType" th:value="${sliderEdit.imageType}"
+													maxlength="49" pattern="/^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};" required
+													aria-required="true">
+											</div>
+												<div class="form-group sm col-md-4">
+												<label>Image ID</label> 
+												<input title="ID" type="text" class="form-control" id="imgId" name="imgId" th:value="${sliderEdit.imgId}">
+											   </div>
+
+											<div class="form-group sm col-md-4"
+												style="border-color: coral;">
+												<label class="form-label">Status</label>
+												<div class="custom-controls-stacked">
+													&nbsp;&nbsp; <label class="radio-inline"> <input
+														type="radio" value="Y" name="active"
+														th:checked="${sliderEdit.active}==Y " /> &nbsp;&nbsp;
+														Active &nbsp;
+													</label> <label class="radio-inline"> <input type="radio"
+														value="N" name="active"
+														th:checked="${sliderEdit.active}==N " /> &nbsp; Inactive
+													</label>
+												</div>
+											</div>
+											<div class="form-group sm col-md-6">
+												<label class="form-label">Image</label>
+												<div>
+													<input id="fileUpload" class="validation-file" alt="Avatar"
+														width="75" height="100" name="fileUpload" 
+														multiple="multiple" accept="image/png, image/jpeg" th:text="${sliderEdit.imgSrc}"
+														type="file" />
+													
+												</div>
+											</div>
+										</div>
+										<button type="submit" class="btn btn-primary">Update</button>
+										&nbsp;
+										<button type="button" class="btn btn-outline-primary"
+											onclick="window.location.href='../slider';">Cancel</button>
+									</form>
+
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</main>
+			<footer class="footer">
+				<div th:replace="fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+
+</body>
+</html>

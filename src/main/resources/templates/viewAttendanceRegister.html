@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script  src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+
+<style>
+
+
+body {
+	opacity: 0;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+
+#loading {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  display: block;
+  opacity: 0.7;
+  background-color: #676565;
+  z-index: 99;
+  text-align: center;
+}
+
+#loading-image {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  z-index: 100;
+}
+</style>
+
+<script>
+
+
+
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	 gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+ 
+<body>
+
+<div class="wrapper">
+<nav id="sidebar" class="sidebar">
+ <div th:replace="/fragments/sidebar :: div"></div>
+ </nav>
+ 		
+		<div class="main">
+		<div th:replace="/fragments/header ::div"></div>
+		<main class="content">
+		<div class="container-fluid">
+
+					<div class="header">
+						<h1 class="header-title">
+							Personal
+						</h1>
+						
+					
+					</div>
+					<form id="validation-form" action="#"   th:object="${attendenceRegister}" method="post">
+				              	<div class="row">
+					
+							<div class="col-12">
+							<div class="card">
+								<div class="card-header"style="background: #f4f7fc;">
+									<h5 class="card-title"style="text-decoration: underline;color: #dc2eaf;"> View Attendance Register</h5>
+								<div class="alert-outline">
+									<div th:if="${message}" th:text="${message}" style="color: red">
+									</div> 
+									</div>	
+								</div>
+								<div class="card-body">
+									<div class="form-row">
+												<div class="form-group sm col-md-6">
+											      
+											     
+											       <label class="form-label">Date</label>
+											       <span class="text-danger">*</span>
+											       <input  type="hidden"id="id"name="id" disabled th:field="${attendenceRegisterView.id}" class="form-control">
+											       <input  type="date"id="attendenceDate"name="attendenceDate" disabled th:field="${attendenceRegisterView.attendenceDate}" class="form-control required">
+											      </div>
+												
+										
+										
+										<div class="form-group sm col-md-6">
+													<label class="form-label">Department Name </label>
+												<label style="color: red">*</label>
+												<select class="form-control select2" name="department" id="department" onchange="myFunctionDeptCode()" required aria-required="true"disabled>
+												 <option value="">Select Department</option>
+												<option th:each="d :${listDepartment}"th:value="${d.getDepartmentCode()}" th:text="${d.getDeptName()}" th:field="${attendenceRegisterView.department.departmentCode}"></option>
+											     	</select>
+												</div>
+								</div>
+								
+									
+											
+						      </div>
+	                      </div>
+	                      </div>
+	                     <div class="col-12">
+	                     	<div class="card">
+	                      <div class="card-header">
+								</div>
+								<div class="card-body">
+								<input id="_cr" name="_cr" type="text"value="1">
+								<div class="col-sm-12" style="text-align: right;">
+							
+								
+							<!-- 	<a id="add_row" class="fa fa-plus" aria-hidden="true"style="font-size:28px;color:#001080"></a>&nbsp;&nbsp;&nbsp; -->
+								<a id='delete_row'class="fa fa-trash" style="font-size:28px;color:#399490fc"aria-hidden="true"></a>	
+								</div>
+								<div class="table-responsive">
+											<table id="example" aria-describedby="example" class="table" style="width:100%">
+											<thead>
+												<tr>
+												  <th scope="col"  class="text-center"> ID</th>
+											        <th scope="col"  class="text-center"> </th>
+											        <th scope="col"	 class="text-center"> </th>
+													<th scope="col"  class="text-center">Department. Name</th>
+													<th scope="col"  class="text-center">Employee Name.</th>
+
+													<th scope="col"  class="text-center">Status</th>
+													<th scope="col"  class="text-center">Shift</th>
+													<th scope="col"  class="text-center">Shift In</th>
+													<th scope="col"  class="text-center">Shift Out</th>
+													<th scope="col"  class="text-center">Status</th>
+													<th scope="col"  class="text-center">Actual  In </th>
+													<th scope="col"  class="text-center">Actual  Out </th>
+													<th scope="col"  class="text-center">Over Time </th>
+													<th scope="col"  class="text-center">Status</th>
+													
+												</tr>
+											</thead>
+											<tbody>
+												<tr id='addr0' >
+													<td><input type="text" id="id0" name='id0'placeholder='id' th:field='${attendenceRegisterView.id}'disabled /></td>
+													<td><input type="hidden" id="deptCode0" name='deptCode0'placeholder='dept Code' /></td>
+													<td><input type="hidden" id="empCode0" name='empCode0'placeholder='Emp Code' /></td>
+													<td><input type="text" id="deptName0" name='deptName0'placeholder='Dept' th:field='${attendenceRegisterView.department.deptName}'disabled/></td>
+													<td><input type="text" id="empName0"name='empName0'placeholder='emp Name'th:field='${attendenceRegisterView.employee.empName}'disabled/></td>
+													
+													
+													<td><select name="status0" id="status0" >
+															<option value="">Select Type</option>
+															<option value="PR" th:selected="${attendenceRegisterView.status}==PR">Present</option>
+															<option value="AB"  th:selected="${attendenceRegisterView.status}==AB">Absent</option>
+													</select></td>
+
+													<td><input type="text" name='shiftCode0' size="12"placeholder='Shift'th:field='${attendenceRegisterView.shiftCode}' /></td>
+													<td><input type="time" name='timeIn0'placeholder='Shift In' th:field='${attendenceRegisterView.timeIn}' /></td>
+													<td><input type="time" name='timeOut0'placeholder='Shift Out'th:field='${attendenceRegisterView.timeOut}' /></td>
+													<td><select name="status20" id="status20">
+															<option value="">Select Type</option>
+															<option value="AH" th:selected="${attendenceRegisterView.status2}==AH">1st Half</option>
+															<option value="BH" th:selected="${attendenceRegisterView.status2}==BH">2nd Half</option>
+													</select></td>
+												 <td><input type="time" name='aTimeIn0'placeholder='Actual Time'th:field='${attendenceRegisterView.aTimeIn}'/></td>
+											    <td><input type="time" name=' aTimeOut0'placeholder='Actual Time out'th:field='${attendenceRegisterView.aTimeOut}'/></td>
+												<td><input type="text" name='overTime0'placeholder='over time'th:field='${attendenceRegisterView.overTime}' /></td>
+												<td><select name="statusTemp0" id="statusTemp0">
+															<option value="">Select Type</option>
+															<option value="Y"th:selected="${attendenceRegisterView.statusTemp}==Y">Yes</option>
+															<option value="N"th:selected="${attendenceRegisterView.statusTemp}==N">No</option>
+													</select></td>
+												</tr>
+												<tr id='addr1'></tr>
+
+											</tbody>
+
+
+											
+
+										</table>
+</div>
+<hr>
+<button type="button"class="btn btn-pill btn-secondary" th:onclick="window.location.href='../attendanceRegister';">Back</button>
+									</div>
+								
+								
+	                     
+	                     
+	                     </div>
+	                     </div>
+	                     
+					</div>
+				
+						
+</form>
+
+				</div>
+			
+		</main>
+		<footer class="footer">
+		<div th:replace="/fragments/footer :: div"></div>
+		</footer>
+		</div>
+		</div>
+	<script>
+		$(function() {
+
+	
+		
+
+
+
+			
+			// Datatables basic
+			$('#datatables-basic').DataTable({
+				responsive: true
+			});
+			// Datatables with Buttons
+			var datatablesButtons = $('#datatables-buttons').DataTable({
+				  deferRender:true,
+		            scrollCollapse: true,
+		            scrollX: true,
+				   responsive: true,
+				   lengthMenu :[[10,20,30,-1 ],['10 rows', '20 rows', '30 rows', 'Show all' ] ],
+					buttons :[]
+			});
+			datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)")
+		});
+		
+	</script>
+			
+		<script>
+	$(document).ready(function() {
+	    $('#example').DataTable( {
+	        "scrollY": 200,
+	        "scrollX": true,
+	        deferRender:true,
+            scrollCollapse: true,
+            
+	    } );
+	} );
+	</script>
+
+	
+
+	<script>
+	function myFunctionDeptCode(){
+		  
+	
+		 var deptCode= document.getElementById('department').value
+	    console.log("ajax request : "+ deptCode);
+	
+	    const xhr = new XMLHttpRequest();
+	    xhr.open('GET','./viewEmployeeDetailsBydepartment/'+deptCode,true);
+	    xhr.getResponseHeader('content-type','application/json');
+	    xhr.onload = function(){
+	    	 
+	        if(this.status===200){
+	            let obj = JSON.parse(this.responseText);
+	            console.log(obj);
+	         
+	           // $('#example tr').slice(1).remove()
+	            var i;
+	           
+	            for (i = 0; i < obj.length; i++) {
+	            	
+	            	
+	            	
+	            	 $('#deptCode'+i).val(obj[i].departmentCode);
+	            	 $('#empCode'+i).val(obj[i].empCode);
+	            	 $('#deptName'+i).val(obj[i].deptName);
+	 	            $('#empName'+i).val(obj[i].empName);
+	 	            $('#desgName'+i).val(obj[i].desgName);	
+	 	          // $('#example').append('<tr id="addr'+(i+1)+'"></tr>');
+	 	          //$('#_cr').val(i+1);
+	 	          console.log( "'í'"+i);
+	 	          	
+	 	          
+	 	     if( i>0){
+		  
+		    $('#addr'+i).html("<td><input  id='deptCode"+i+"' type='hidden'/> "+
+		    		"<td><input  id='empCode"+i+"' type='hidden'/> "+
+		    		"<td><input  id='deptName"+i+"' type='text'disabled/> "+
+		    		"</td><td><input  id='empName"+i+"' type='text' placeholder='name'disabled>"+
+		    		"</td><td><input  id='desgName"+i+"' type='text'  placeholder='Desi'disabled>"+
+		    		"<td><select class=' form-control input-md' id='modeOfTravel'name='modeOfTravel"+i+"'><option value=' '>Select</option><option value='Day'>Day</option><option value='Night'>Night</option></select></td>"+
+		    		"<td><input  name='shiftCode"+i+"' type='text' size='12' placeholder='Shift '></td>"+
+		    		"<td><input  name='timeIn"+i+"' type='time' placeholder='Shift In'></td>"+
+		    		"<td><input  name='timeOut"+i+"' type='time' placeholder='ShiftIn'></td>"+
+		    		"<td><select class=' form-control input-md' id='modeOfTravel'name='modeOfTravel"+i+"'><option value=' '>Select</option><option value='Day'>Day</option><option value='Night'>Night</option></select></td>"+
+		    		"<td><input  name='aTimeIn"+i+"' type='time' placeholder='Actual Time In'></td>"+
+		    		"<td><input  name='aTimeOut"+i+"' type='time' placeholder='Actual Time Out'></td>"+
+		    		"<td><input  name='overTime"+i+"' type='text' placeholder='Over Time '></td>"+
+		    		"<td><select class=' form-control input-md' id='modeOfTravel'name='modeOfTravel"+i+"'><option value=' '>Select</option><option value='Y'>Yes</option><option value='N'>No</option></select></td>"+
+		    		"");
+			 $('#deptCode'+i).val(obj[i].departmentCode);
+		        $('#empCode'+i).val(obj[i].empCode);
+	 		   $('#deptName'+i).val(obj[i].deptName);
+	            $('#empName'+i).val(obj[i].empName);
+	            $('#desgName'+i).val(obj[i].desgName);
+	            
+	            $('#example').append('<tr id="addr'+(i+1)+'"></tr>');
+	 		    $('#_cr').val(i+1);
+	 	          
+	            }
+	 	  
+	            }
+	          
+	            $("#delete_row").click(function(){
+	         	   
+	       	  	 if(i>1){
+	       			 $("#addr"+(i-1)).html('');
+	       			 $('#_cr').val(i - 1);
+	       			 i--;
+	       			 
+	       			 }
+	       		 });
+	            
+	        
+	        }
+	        else{
+	            console.error("some error occured");
+	        }
+		
+	    }
+	    xhr.send();
+	}
+
+
+	
+	
+	
+	</script>
+	
+
+
+
+
+
+
+	<script>
+		$('#loading').show();
+		$.ajax({
+			// Other ajax parameters
+			success : function() {
+				// hiding the image here
+				//debugger;
+				$('#loading').hide();
+			}
+		});
+	</script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"lang="en">
+
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/modern.css}" />
+<script src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-7"></script>
+
+<script type="text/javascript" th:src="@{/js/myJavaScript.js}"></script>
+<style>
+body {
+	opacity: 0;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+</style>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-120946860-7');
+</script>
+<head>
+<meta charset="utf-8" />
+<title>HRMS</title>
+</head>
+
+<body>
+
+	<div class="wrapper">
+
+
+		<!--  nav start -->
+		<nav id="sidebar" class="sidebar"aria-label="Site sidebar">
+			<div th:replace="/fragments/sidebar :: div"></div>
+		</nav>
+		<!-- nav end  -->
+
+
+		<!-- main start here  -->
+		<div class="main">
+
+			<div th:replace="/fragments/header ::div"></div>
+
+			<!-- content div start  -->
+			<main class="content">
+
+				<!-- container div start -->
+				<div class="container-fluid">
+
+
+					<!-- header div  -->
+					<div class="header">
+						<h1 class="header-title">Master</h1>
+
+						<nav aria-label="breadcrumb"></nav>
+					</div>
+					<!-- header div end  -->
+
+
+					<!-- main row div  -->
+					<div class="row">
+
+						<!-- div column start  -->
+						<div class="col-12">
+
+							<!-- card start  -->
+							<div class="card">
+
+								<!-- card header  -->
+								<div class="card-header"style="background:#f4f7fc;">
+
+									<h5 class="card-title"style="text-decoration: underline;color:#dc2eaf;">Tour Plan Approval</h5>
+
+									<!-- div start  -->
+									<div class="alert-outline">
+										<div th:if="${message}" th:text="${message}"
+											style="color: red"></div>
+									</div>
+									<!-- div end -->
+
+								</div>
+								<!-- card header end  -->
+
+
+								<!--  card body start  -->
+								<div class="card-body">
+
+								
+									<form>
+
+										<div id="validation-step-3">
+											<table id="itemList" aria-describedby="example"
+												class="table table-striped display" style="width: 100%">
+												<thead>
+													<tr>
+														<th scope="col">Tour Plan Id</th>
+														<th scope="col">Tour plan Date</th>
+														<th scope="col">Employee Name</th>
+														<th scope="col">Department Name</th>
+															<th scope="col">Tour plan  Start Date</th>
+															<th scope="col">Tour plan End  Date</th>
+														<th scope="col">Approval Status </th>
+												        <th scope="col">View  </th>
+												
+													
+
+													</tr>
+												</thead>
+												
+													<tbody>
+														<tr th:each="tour:${ListTourPlan}">
+														<td th:text="${tour.tourPlanId}">Tour Plan Id</td>
+														<td th:text="${#dates.format(tour.tourPlanDate,'dd-MM-yyyy')}"></td>
+														<td th:text="${tour.empCode.empName}"></td>
+														<td th:text="${tour.departmentCode.deptName}"></td>
+														
+															<td id='a' class='ax' th:text="${tour.tourStartDate}"></td>
+															<td id='b' class='bx' th:text="${tour.tourEndDate}"></td>
+														
+														<td>
+
+													<div class="dropdown">
+														<button class="btn btn-primary dropdown-toggle"
+															type="button" data-toggle="dropdown">
+															Approved Action 
+														</button>
+														<ul class="dropdown-menu">
+															<li><a class="dropdown-item"th:href="@{/approvedTourPlan/{id}/(id=${tour.tourPlanId})}">Approved</a></li>
+															<li><a  class="dropdown-item active" href="#"> Not Approved </a></li>
+														</ul>
+													</div> 
+                           							  </td>
+                            <td>
+                               <a th:href="@{/viewTourPlan/{id}/(id=${tour.tourPlanId})}"class="btn btn-success"><em class="fa fa-eye"></em></a>
+                            </td>
+													</tr>
+
+													</tbody>
+												
+
+											</table>
+										</div>
+									</form>
+
+
+									<!-- form end  -->
+
+
+								</div>
+
+								<!-- card body end  -->
+							</div>
+							<!-- card end  -->
+						</div>
+
+						<!-- div card end -->
+
+
+
+
+					</div>
+					<!-- container div end  -->
+
+				</div>
+
+				<!-- content div  end  -->
+
+			</main>
+
+			<!-- main close  -->
+
+			<footer class="footer">
+				<div th:replace="/fragments/footer :: div"></div>
+			</footer>
+		</div>
+	</div>
+	
+	
+	
+	<script>
+	
+		$(document).ready(
+				function() {
+					var datatablesButtons = $('#example').DataTable({
+						"scrollY" : 200,
+						"scrollX" : true,
+						deferRender : true,
+						lengthChange : false,
+						buttons : [ 'copy', 'csv', 'excel', 'pdf', 'print' ],
+						scrollCollapse : true,
+
+					});
+
+					datatablesButtons.buttons().container().appendTo(
+							"#example_wrapper .col-md-6:eq(0)")
+
+				});
+
+		//var dd=$(".ax").attr('value');
+/* 		$(".ax").text(function(){
+		    var a = $(this).text();
+		    
+		    
+		    var effScheduleDate=(new Date(a)).toISOString().split('T')[0]; 
+		    
+		       $('#ax').val(effScheduleDate);
+			alert(effScheduleDate);
+		});
+	 */
+	
+		
+		let obj = "";
+		var leaveRequestId = "";
+		var leaveApplyDate = "";
+		var leaveEmpCode = "";
+		 
+		
+		//get record by department
+		function getAllLeaveRequestBydepartment() {
+
+			var table = document.getElementById("itemList");
+			
+			deleteRows();
+			//wait(2000);
+			
+			
+			var deptValue = document.getElementById("deptName").value;
+			//console.log("dept value is : "+deptValue);
+
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', 'http://localhost:8181/leaverequest/' + deptValue);
+			xhr.getResponseHeader('content-type', 'application/json');
+
+			xhr.onload = function() {
+				if (this.status === 200) {
+					obj = JSON.parse(this.responseText);
+					//console.log(obj[0].deptCode);
+					
+					console.log(obj);
+					
+					for(var i=0;i<obj.length;i++){
+						var rows = "";
+						leaveRequestId = obj[i].leaveRequestId;
+						leaveEmpCode = obj[i].empCode;
+						leaveApplyDate = obj[i].applyDate;
+						
+						rows += "<tr><td>" + i + "</td><td>"
+								+ obj[i].empCode  + "</td><td>" + obj[i].empName
+								+ "</td><td>" + obj[i].deptName + "</td><td>" + obj[i].deptName + "</td><td>"
+								+ "NULL"  + "</td><td>" + obj[i].leaveFor
+								+ "</td><td>" +obj[i].fromDate + "</td><td>" + obj[i].toDate + "</td>"
+								+ "<td>" 
+								+ "<a href='#' onclick='approveLeaveRequest()'>Approve</a>" 
+								+ "</td><td>" 
+								+ "<a href=/viewLeaveRequest/" +leaveEmpCode+"/" +leaveApplyDate+ "  "
+								+">View</a>" + "</td></tr>";
+								
+						$(rows).appendTo("#itemList tbody");
+					}
+					
+				} else {
+					console.error("some error occured");
+				}
+
+			}
+
+			xhr.send();
+		}
+		
+		function viewLeaveRequest(){
+			
+			href = "viewLeaveRequest/'+leaveEmpCode+"/"+leaveApplyDate";
+			
+			/* const xhr = new XMLHttpRequest();
+			xhr.open('GET', 'http://localhost:8181/viewLeaveRequest/'+leaveEmpCode+"/"+leaveApplyDate,true); 
+			xhr.getResponseHeader('content-type', 'application/json');
+
+			xhr.onload = function() {
+				if (this.status === 200) {
+					//obj = JSON.parse(this.responseText);	
+					console.log("successfull");
+					//getAllLeaveRequestBydepartment();
+				} else {
+					console.error("some error occured");
+				}
+			}
+			xhr.send(); */
+		}
+		
+		
+		
+		function approveLeaveRequest(){
+			console.log("calling");
+			var leaveRequest = "";
+			
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', 'approveLeaveRequest/' + leaveRequestId);
+			xhr.getResponseHeader('content-type', 'application/json');
+
+			xhr.onload = function() {
+				if (this.status === 200) {
+					//obj = JSON.parse(this.responseText);	
+					console.log("successfull");
+					getAllLeaveRequestBydepartment();
+				} else {
+					console.error("some error occured");
+				}
+			}
+			xhr.send();
+		}
+		
+		
+		function deleteRows(){
+			
+			for(var i=0;i<obj.length;i++){
+				var table = document.getElementById('itemList');
+				var rowCount = table.rows.length;
+				if(rowCount > '1'){
+					var row = table.deleteRow(rowCount-1);
+					rowCount--;
+				}
+				/* else{
+					alert('There should be atleast one row');
+				} */
+			}
+			
+		}
+		
+		
+		
+		
+		
+	</script>
+	
+</body>
+</html>
